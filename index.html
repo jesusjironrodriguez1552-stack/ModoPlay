@@ -260,6 +260,47 @@
             color: #e0e0e0;
         }
 
+        .contact-info {
+            background: rgba(0, 212, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+            text-align: center;
+        }
+
+        .contact-info p {
+            margin-bottom: 1rem;
+            color: #b0b0b0;
+        }
+
+        .contact-info .email {
+            color: #00d4ff;
+            font-weight: bold;
+            background: rgba(0, 212, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+
+        .premium-info {
+            background: rgba(123, 104, 238, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-top: 1rem;
+            border: 1px solid rgba(123, 104, 238, 0.3);
+            text-align: center;
+        }
+
+        .premium-info h3 {
+            color: #7b68ee;
+            margin-bottom: 1rem;
+        }
+
+        .premium-info p {
+            color: #b0b0b0;
+        }
+
         .gallery {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -292,6 +333,24 @@
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #b0b0b0;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #00d4ff;
+        }
+
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2rem;
@@ -313,6 +372,10 @@
 
             .gallery {
                 grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+
+            .footer-links {
+                gap: 1rem;
             }
         }
 
@@ -418,8 +481,66 @@
         </div>
     </div>
 
+    <!-- Modal de Soporte -->
+    <div id="support" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('support')">&times;</span>
+            <h2>🛠️ Soporte Técnico</h2>
+            <div class="contact-info">
+                <p>¿Tienes problemas con el juego o necesitas ayuda?</p>
+                <p>Contáctanos para recibir asistencia técnica:</p>
+                <div class="email">support@modoplay.com</div>
+                <p style="margin-top: 1rem; font-size: 0.9rem;">
+                    Responderemos en un plazo de 24-48 horas
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Donaciones -->
+    <div id="donation" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('donation')">&times;</span>
+            <h2>💝 Apoya el Proyecto</h2>
+            <div class="contact-info">
+                <p>¿Te gusta nuestro trabajo? ¡Ayúdanos a seguir creando!</p>
+                <p>Puedes hacer una donación a través de PayPal:</p>
+                <div class="email">tu-email@paypal.com</div>
+                <p style="margin-top: 1rem; font-size: 0.9rem;">
+                    Cada donación nos ayuda a mejorar y crear más contenido
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Premium -->
+    <div id="premium" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('premium')">&times;</span>
+            <h2>⭐ ModoPlay Premium</h2>
+            <div class="premium-info">
+                <h3>🚧 Próximamente</h3>
+                <p>Estamos trabajando en características exclusivas para nuestros usuarios premium:</p>
+                <ul style="text-align: left; margin-top: 1rem; color: #b0b0b0;">
+                    <li>Acceso anticipado a nuevos juegos</li>
+                    <li>Contenido exclusivo y DLCs</li>
+                    <li>Soporte prioritario</li>
+                    <li>Comunidad VIP</li>
+                </ul>
+                <p style="margin-top: 1.5rem;">
+                    ¡Mantente atento para más información!
+                </p>
+            </div>
+        </div>
+    </div>
+
     <footer id="contacto">
         <div class="container">
+            <div class="footer-links">
+                <a href="#" onclick="openModal('support')">🛠️ Soporte</a>
+                <a href="#" onclick="openModal('donation')">💝 Donación</a>
+                <a href="#" onclick="openModal('premium')">⭐ Premium</a>
+            </div>
             <p>&copy; 2025 ModoPlay. Todos los derechos reservados.</p>
         </div>
     </footer>
@@ -428,7 +549,8 @@
         // URLs definidas en el código
         const URLS = {
             download: 'https://mega.nz/file/example123',
-            support: 'https://discord.gg/modoplay',
+            support: 'support@modoplay.com',
+            donation: 'tu-email@paypal.com',
             website: 'https://modoplay.com',
             gallery: 'https://imgur.com/gallery/modoplay'
         };
