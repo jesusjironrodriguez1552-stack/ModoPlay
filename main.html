@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ModoPlay - Tu Portal de Juegos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4));
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            color: #fff;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+        }
+
+        .games-section {
+            padding: 4rem 0;
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .game-image {
+            width: 100%;
+            height: 250px;
+            border-radius: 15px;
+            object-fit: cover;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .game-image:hover {
+            transform: scale(1.02);
+        }
+
+        .game-info h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: #4ecdc4;
+        }
+
+        .game-description {
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+            line-height: 1.7;
+        }
+
+        .game-actions {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            color: #fff;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 5% auto;
+            padding: 2rem;
+            border-radius: 20px;
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            color: #fff;
+            float: right;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            right: 1rem;
+            top: 1rem;
+        }
+
+        .close:hover {
+            opacity: 0.7;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .gallery-image {
+            width: 100%;
+            height: 150px;
+            border-radius: 10px;
+            object-fit: cover;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .gallery-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .instructions {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-top: 1rem;
+        }
+
+        .instructions ol {
+            padding-left: 2rem;
+        }
+
+        .instructions li {
+            margin-bottom: 0.5rem;
+        }
+
+        .instructions h3 {
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            color: #4ecdc4;
+        }
+
+        .instructions h3:first-child {
+            margin-top: 0;
+        }
+
+        .stats-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #4ecdc4;
+        }
+
+        .stat-label {
+            margin-top: 0.5rem;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .game-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+                max-height: 85vh;
+            }
+
+            .gallery {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">🎮 ModoPlay</div>
+            <ul class="nav-links">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="#juegos">Juegos</a></li>
+                <li><a href="#estadisticas">Estadísticas</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="inicio" class="hero">
+        <div class="container">
+            <h1 class="pulse">Bienvenido a ModoPlay</h1>
+            <p>Tu destino definitivo para los mejores juegos. Descarga, juega y disfruta de una experiencia gaming única.</p>
+            <a href="#juegos" class="cta-button">Explorar Juegos</a>
+        </div>
+    </section>
+
+    <section id="estadisticas" class="stats-section">
+        <div class="container">
+            <h2>🏆 Nuestros Números</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Juegos Disponibles</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">10K+</div>
+                    <div class="stat-label">Descargas</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">Satisfacción</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Soporte</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="juegos" class="games-section">
+        <div class="container">
+            <h2 class="section-title">Nuestros Juegos Destacados</h2>
+            
+            <!-- Juego de Ejemplo 1 -->
+            <div class="game-card fade-in">
+                <div class="game-content">
+                    <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&h=250&fit=crop&crop=center" alt="Aventura Épica" class="game-image">
+                    <div class="game-info">
+                        <h3>🗡️ Aventura Épica</h3>
+                        <p class="game-description">
+                            Embárcate en una aventura épica llena de misterios, criaturas fantásticas y tesoros ocultos. 
+                            Explora vastos mundos, mejora tus habilidades y conviértete en el héroe que el reino necesita. 
+                            Con gráficos impresionantes y una historia envolvente que te mantendrá jugando durante horas.
+                        </p>
+                        <div class="game-actions">
+                            <a href="#" class="btn btn-primary">📥 Descargar Juego</a>
+                            <button class="btn btn-secondary" onclick="openModal('modal1')">📋 Ver Instrucciones</button>
+                            <button class="btn btn-secondary" onclick="openModal('gallery1')">🖼️ Ver Galería</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Juego de Ejemplo 2 -->
+            <div class="game-card fade-in">
+                <div class="game-content">
+                    <img src="https://images.unsplash.com/photo-1552820728-8b83bb6b773f?w=400&h=250&fit=crop&crop=center" alt="Carrera Extrema" class="game-image">
+                    <div class="game-info">
+                        <h3>🏎️ Carrera Extrema</h3>
+                        <p class="game-description">
+                            Acelera al máximo en las pistas más desafiantes del mundo. Personaliza tu vehículo, 
+                            compite contra pilotos de élite y conquista el campeonato mundial. 
+                            Física realista, múltiples modos de juego y una experiencia de conducción increíble.
+                        </p>
+                        <div class="game-actions">
+                            <a href="#" class="btn btn-primary">📥 Descargar Juego</a>
+                            <button class="btn btn-secondary" onclick="openModal('modal2')">📋 Ver Instrucciones</button>
+                            <button class="btn btn-secondary" onclick="openModal('gallery2')">🖼️ Ver Galería</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Juego de Ejemplo 3 -->
+            <div class="game-card fade-in">
+                <div class="game-content">
+                    <img src="https://images.unsplash.com/photo-1606092195730-5d7b9af1efc5?w=400&h=250&fit=crop&crop=center" alt="Puzzle Master" class="game-image">
+                    <div class="game-info">
+                        <h3>🧩 Puzzle Master</h3>
+                        <p class="game-description">
+                            Desafía tu mente con los puzzles más ingeniosos y creativos. Desde rompecabezas clásicos 
+                            hasta desafíos de lógica avanzados. Perfecta para ejercitar el cerebro y pasar horas 
+                            de entretenimiento intelectual. ¡Demuestra que eres el maestro de los puzzles!
+                        </p>
+                        <div class="game-actions">
+                            <a href="#" class="btn btn-primary">📥 Descargar Juego</a>
+                            <button class="btn btn-secondary" onclick="openModal('modal3')">📋 Ver Instrucciones</button>
+                            <button class="btn btn-secondary" onclick="openModal('gallery3')">🖼️ Ver Galería</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Juego de Ejemplo 4 -->
+            <div class="game-card fade-in">
+                <div class="game-content">
+                    <img src="https://images.unsplash.com/photo-1560419015-7c427e8ae5ba?w=400&h=250&fit=crop&crop=center" alt="Estrategia Galáctica" class="game-image">
+                    <div class="game-info">
+                        <h3>🚀 Estrategia Galáctica</h3>
+                        <p class="game-description">
+                            Conquista la galaxia en este épico juego de estrategia espacial. Construye tu imperio, 
+                            forma alianzas y lidera batallas épicas entre las estrellas. Gestiona recursos, 
+                            desarrolla tecnologías avanzadas y convierte tu civilización en la más poderosa del universo.
+                        </p>
+                        <div class="game-actions">
+                            <a href="#" class="btn btn-primary">📥 Descargar Juego</a>
+                            <button class="btn btn-secondary" onclick="openModal('modal4')">📋 Ver Instrucciones</button>
+                            <button class="btn btn-secondary" onclick="openModal('gallery4')">🖼️ Ver Galería</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modales para Instrucciones -->
+    <div id="modal1" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal1')">&times;</span>
+            <h2>📋 Instrucciones - Aventura Épica</h2>
+            <div class="instructions">
+                <h3>🔧 Requisitos del Sistema:</h3>
+                <ul>
+                    <li>Windows 10 o superior</li>
+                    <li>4GB RAM mínimo (8GB recomendado)</li>
+                    <li>Tarjeta gráfica DirectX 11</li>
+                    <li>2GB espacio libre</li>
+                    <li>Conexión a internet para actualizaciones</li>
+                </ul>
+                
+                <h3>📥 Cómo Descargar:</h3>
+                <ol>
+                    <li>Haz clic en "Descargar Juego"</li>
+                    <li>Guarda el archivo en tu carpeta Descargas</li>
+                    <li>Ejecuta el instalador como administrador</li>
+                    <li>Sigue las instrucciones del instalador</li>
+                    <li>Crea tu perfil de jugador</li>
+                    <li>¡Disfruta del juego!</li>
+                </ol>
+
+                <h3>🎮 Controles Básicos:</h3>
+                <ul>
+                    <li><strong>WASD:</strong> Movimiento del personaje</li>
+                    <li><strong>Espacio:</strong> Saltar/Esquivar</li>
+                    <li><strong>Click Izq:</strong> Atacar/Usar arma</li>
+                    <li><strong>Click Der:</strong> Bloquear/Aim</li>
+                    <li><strong>E:</strong> Interactuar con objetos</li>
+                    <li><strong>I:</strong> Inventario</li>
+                    <li><strong>M:</strong> Mapa</li>
+                    <li><strong>ESC:</strong> Menú principal</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal2" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal2')">&times;</span>
+            <h2>📋 Instrucciones - Carrera Extrema</h2>
+            <div class="instructions">
+                <h3>🔧 Requisitos del Sistema:</h3>
+                <ul>
+                    <li>Windows 10 o superior</li>
+                    <li>6GB RAM mínimo (12GB recomendado)</li>
+                    <li>Tarjeta gráfica GTX 1060 o equivalente</li>
+                    <li>5GB espacio libre</li>
+                    <li>Compatible con volantes de carreras</li>
+                </ul>
+                
+                <h3>📥 Cómo Descargar:</h3>
+                <ol>
+                    <li>Haz clic en "Descargar Juego"</li>
+                    <li>Espera a que termine la descarga (aprox. 10 min)</li>
+                    <li>Descomprime el archivo ZIP</li>
+                    <li>Ejecuta "Setup.exe" como administrador</li>
+                    <li>Instala DirectX si es necesario</li>
+                    <li>Configura tus controles preferidos</li>
+                    <li>¡A correr!</li>
+                </ol>
+
+                <h3>🎮 Controles de Conducción:</h3>
+                <ul>
+                    <li><strong>Flechas/WASD:</strong> Dirección y aceleración</li>
+                    <li><strong>Espacio:</strong> Freno de mano</li>
+                    <li><strong>Shift:</strong> Boost/Nitro</li>
+                    <li><strong>R:</strong> Reiniciar posición</li>
+                    <li><strong>C:</strong> Cambiar cámara</li>
+                    <li><strong>TAB:</strong> Mapa de la pista</li>
+                    <li><strong>ESC:</strong> Menú de pausa</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal3" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal3')">&times;</span>
+            <h2>📋 Instrucciones - Puzzle Master</h2>
+            <div class="instructions">
+                <h3>🔧 Requisitos del Sistema:</h3>
+                <ul>
+                    <li>Windows 7 o superior</li>
+                    <li>2GB RAM mínimo</li>
+                    <li>Cualquier tarjeta gráfica</li>
+                    <li>500MB espacio libre</li>
+                    <li>Opcional: Tablet o touchscreen</li>
+                </ul>
+                
+                <h3>📥 Cómo Descargar:</h3>
+                <ol>
+                    <li>Haz clic en "Descargar Juego"</li>
+                    <li>El archivo es muy ligero (menos de 100MB)</li>
+                    <li>Ejecuta directamente el archivo .exe</li>
+                    <li>No requiere instalación completa</li>
+                    <li>Se crea acceso directo automáticamente</li>
+                    <li>¡Comienza a resolver puzzles!</li>
+                </ol>
+
+                <h3>🎮 Cómo Jugar:</h3>
+                <ul>
+                    <li><strong>Click:</strong> Seleccionar pieza</li>
+                    <li><strong>Arrastrar:</strong> Mover pieza seleccionada</li>
+                    <li><strong>Click Derecho:</strong> Rotar pieza</li>
+                    <li><strong>H:</strong> Mostrar pista</li>
+                    <li><strong>U:</strong> Deshacer último movimiento</li>
+                    <li><strong>R:</strong> Reiniciar nivel actual</li>
+                    <li><strong>N:</strong> Siguiente nivel</li>
+                    <li><strong>ESC:</strong> Menú principal</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal4" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('modal4')">&times;</span>
+            <h2>📋 Instrucciones - Estrategia Galáctica</h2>
+            <div class="instructions">
+                <h3>🔧 Requisitos del Sistema:</h3>
+                <ul>
+                    <li>Windows 10 o superior</li>
+                    <li>8GB RAM mínimo (16GB recomendado)</li>
+                    <li>Tarjeta gráfica GTX 1050 o equivalente</li>
+                    <li>4GB espacio libre</li>
+                    <li>Conexión a internet para multijugador</li>
+                </ul>
+                
+                <h3>📥 Cómo Descargar:</h3>
+                <ol>
+                    <li>Haz clic en "Descargar Juego"</li>
+                    <li>Descarga el cliente de juego (2GB)</li>
+                    <li>Instala siguiendo el asistente</li>
+                    <li>Crea tu cuenta de comandante</li>
+                    <li>Completa el tutorial obligatorio</li>
+                    <li>¡Comienza tu conquista galáctica!</li>
+                </ol>
+
+                <h3>🎮 Controles Básicos:</h3>
+                <ul>
+                    <li><strong>Click:</strong> Seleccionar unidades/edificios</li>
+                    <li><strong>Click Der:</strong> Mover/Atacar</li>
+                    <li><strong>Arrastrar:</strong> Selección múltiple</li>
+                    <li><strong>WASD:</strong> Mover cámara</li>
+                    <li><strong>Scroll:</strong> Zoom</li>
+                    <li><strong>Espacio:</strong> Centrar en base</li>
+                    <li><strong>TAB:</strong> Estadísticas del imperio</li>
+                    <li><strong>ESC:</strong> Menú de opciones</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modales para Galerías -->
+    <div id="gallery1" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('gallery1')">&times;</span>
+            <h2>🖼️ Galería - Aventura Épica</h2>
+            <div class="gallery">
+                <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=300&h=200&fit=crop" alt="Captura 1" class="gallery-image">
+                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300&h=200&fit=crop" alt="Captura 2" class="gallery-image">
+                <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=300&h=200&fit=crop" alt="Captura 3" class="gallery-image">
+                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=300&h=200&fit=crop" alt="Captura 4" class="gallery-image">
+                <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?w=300&h=200&fit=crop" alt="Captura 5" class="gallery-image">
+                <img src="https://images.unsplash.com/photo-1579952363873-27d3bfad9c0d?w=300&h=200&fit=crop" alt="Captura 6" class="gallery-image">
+            </div>
+        </div>
+    </div>
+
+    <div id="gallery2" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('gallery2')">&times;</span>
+            <h2>🖼️ Galería - Carrera Extrema</h2>
+            <div class="gallery">
+                <img src="https://images.unsplash.com/photo-1552820728-8
