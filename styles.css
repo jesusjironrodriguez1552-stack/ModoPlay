@@ -6,13 +6,11 @@ body {
     padding: 20px;
     background-color: #f5f5f5;
 }
-
 h1 {
     text-align: center;
     color: #333;
     margin-bottom: 30px;
 }
-
 /* Información del juego */
 .game-info {
     background-color: white;
@@ -21,17 +19,14 @@ h1 {
     margin-bottom: 20px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-
 .game-info h2 {
     margin: 0 0 10px 0;
     color: #444;
 }
-
 .game-info p {
     margin: 0;
     font-weight: bold;
 }
-
 /* Vidas */
 .lives-container {
     background-color: white;
@@ -42,11 +37,60 @@ h1 {
     display: flex;
     justify-content: space-around;
 }
-
 .lives-container p {
     margin: 0;
     font-size: 18px;
     font-weight: bold;
+}
+
+/* Sección de armas */
+.weapons-section {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: center;
+}
+.weapons-section h3 {
+    margin-top: 0;
+    color: #333;
+}
+#selected-weapons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+.weapon-item {
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    min-width: 120px;
+    text-align: center;
+}
+.weapon-item.used {
+    opacity: 0.5;
+    background-color: #e0e0e0;
+    border-color: #bbb;
+}
+.weapon-item button {
+    background-color: #FF6B35;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 5px;
+    font-size: 12px;
+}
+.weapon-item button:hover:not(:disabled) {
+    background-color: #E55A2B;
+}
+.weapon-item button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
 }
 
 /* Sección de pastillas */
@@ -58,16 +102,13 @@ h1 {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     text-align: center;
 }
-
 .pills-section h3 {
     margin-top: 0;
     color: #333;
 }
-
 #pills-container {
     margin: 20px 0;
 }
-
 #pills-container button {
     font-size: 30px;
     margin: 5px;
@@ -77,23 +118,31 @@ h1 {
     background-color: #f9f9f9;
     cursor: pointer;
     transition: all 0.3s ease;
+    position: relative;
 }
-
 #pills-container button:hover:not(:disabled) {
     background-color: #e9e9e9;
     border-color: #ccc;
 }
-
 #pills-container button:disabled {
     opacity: 0.3;
     cursor: not-allowed;
 }
-
 #pills-container button.selected {
     background-color: yellow;
     border-color: #ffa500;
 }
-
+#pills-container button.broken {
+    background-color: #ff4444;
+    color: white;
+}
+#pills-container button.broken:after {
+    content: "💥";
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-size: 16px;
+}
 #take-pill-btn {
     background-color: #4CAF50;
     color: white;
@@ -105,13 +154,68 @@ h1 {
     font-weight: bold;
     transition: background-color 0.3s ease;
 }
-
 #take-pill-btn:hover:not(:disabled) {
     background-color: #45a049;
 }
-
 #take-pill-btn:disabled {
     background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* Selección de armas en modal */
+#weapons-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+.weapon-option {
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+.weapon-option:hover {
+    background-color: #e9e9e9;
+    border-color: #ccc;
+}
+.weapon-option.selected {
+    background-color: #e3f2fd;
+    border-color: #2196F3;
+}
+.weapon-option .emoji {
+    font-size: 30px;
+    display: block;
+    margin-bottom: 10px;
+}
+.weapon-option .name {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.weapon-option .description {
+    font-size: 12px;
+    color: #666;
+    line-height: 1.3;
+}
+#confirm-weapons-btn {
+    background-color: #2196F3;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 15px;
+}
+#confirm-weapons-btn:hover:not(:disabled) {
+    background-color: #1976D2;
+}
+#confirm-weapons-btn:disabled {
+    background-color: #ccc;
     cursor: not-allowed;
 }
 
@@ -122,12 +226,10 @@ h1 {
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-
 .log-section h3 {
     margin-top: 0;
     color: #333;
 }
-
 #game-log {
     border: 1px solid #ddd;
     height: 200px;
@@ -139,7 +241,6 @@ h1 {
     font-size: 14px;
     line-height: 1.4;
 }
-
 #game-log div {
     margin-bottom: 5px;
     padding: 2px 0;
@@ -156,30 +257,28 @@ h1 {
     height: 100%;
     background-color: rgba(0,0,0,0.5);
 }
-
 .modal-content {
     background-color: white;
-    margin: 15% auto;
+    margin: 5% auto;
     padding: 30px;
     border-radius: 12px;
-    width: 80%;
-    max-width: 400px;
+    width: 90%;
+    max-width: 600px;
     text-align: center;
     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    max-height: 80vh;
+    overflow-y: auto;
 }
-
 .modal-content h2 {
     margin-top: 0;
     color: #333;
     font-size: 24px;
 }
-
 .modal-content p {
     margin: 20px 0;
     font-size: 16px;
     color: #666;
 }
-
 #restart-btn {
     background-color: #2196F3;
     color: white;
@@ -191,7 +290,6 @@ h1 {
     font-weight: bold;
     transition: background-color 0.3s ease;
 }
-
 #restart-btn:hover {
     background-color: #1976D2;
 }
@@ -218,8 +316,17 @@ h1 {
     }
     
     .modal-content {
-        width: 90%;
-        margin: 20% auto;
+        width: 95%;
+        margin: 10% auto;
         padding: 20px;
+    }
+    
+    #selected-weapons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    #weapons-container {
+        grid-template-columns: 1fr;
     }
 }
