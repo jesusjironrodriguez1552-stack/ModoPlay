@@ -6,7 +6,45 @@ let gameState = {
     aiLives: 5,
     pills: [],
     selectedPill: null,
-    gameOver: false
+    gameOver: false,
+    selectedWeapons: [],
+    usedWeapons: [],
+    syringeActive: false,
+    waitingForWeaponSelection: true
+};
+
+// Definición de armas
+const weapons = {
+    poisonVial: {
+        id: 'poisonVial',
+        name: 'Vaso de Veneno',
+        emoji: '🧪',
+        description: 'Duplica el efecto del veneno (4 vidas en lugar de 2)'
+    },
+    hammer: {
+        id: 'hammer',
+        name: 'Martillo',
+        emoji: '🔨',
+        description: 'Rompe una pastilla en tu turno'
+    },
+    detector: {
+        id: 'detector',
+        name: 'Detector',
+        emoji: '🔍',
+        description: 'Revela cuál pastilla contiene veneno'
+    },
+    candy: {
+        id: 'candy',
+        name: 'Caramelo',
+        emoji: '🍬',
+        description: 'Salta tu turno sin tomar pastilla'
+    },
+    syringe: {
+        id: 'syringe',
+        name: 'Jeringa',
+        emoji: '💉',
+        description: 'Inmunidad al veneno (se pierde si tomas pastilla sin veneno)'
+    }
 };
 
 // Elementos del DOM
@@ -21,7 +59,13 @@ const elements = {
     gameOverModal: document.getElementById('game-over-modal'),
     gameResult: document.getElementById('game-result'),
     finalMessage: document.getElementById('final-message'),
-    restartBtn: document.getElementById('restart-btn')
+    restartBtn: document.getElementById('restart-btn'),
+    weaponSelectionModal: document.getElementById('weapon-selection-modal'),
+    weaponsContainer: document.getElementById('weapons-container'),
+    selectedWeaponsDiv: document.getElementById('selected-weapons'),
+    confirmWeaponsBtn: document.getElementById('confirm-weapons-btn'),
+    weaponRound: document.getElementById('weapon-round'),
+    selectionCounter: document.getElementById('selection-counter')
 };
 
 // Generar pastillas para cada ronda
@@ -35,7 +79,8 @@ function generatePills() {
         gameState.pills.push({
             id: i,
             type: type,
-            taken: false
+            taken: false,
+            broken: false
         });
     }
     
@@ -44,6 +89,181 @@ function generatePills() {
         const j = Math.floor(Math.random() * (i + 1));
         [gameState.pills[i], gameState.pills[j]] = [gameState.pills[j], gameState.pills[i]];
     }
+}
+
+// Mostrar selección de armas
+function showWeaponSelection() {
+    gameState.waitingForWeaponSelection = true;
+    gameState.selectedWeapons = [];
+    elements.weaponRound.textContent = gameState.currentRound;
+    
+    elements.weaponsContainer.innerHTML = '';
+    Object.values(weapons).forEach(weapon => {
+        const weaponDiv = document.createElement('div');
+        weaponDiv.className = 'weapon-option';
+        weaponDiv.innerHTML = `
+            <div class="emoji">${weapon.emoji}</div>
+            <div class="name">${weapon.name}</div>
+            <div class="description">${weapon.description}</div>
+        `;
+        weaponDiv.onclick = () => selectWeapon(weapon.id, weaponDiv);
+        elements.weaponsContainer.appendChild(weaponDiv);
+    });
+    
+    updateSelectionCounter();
+    elements.weaponSelectionModal.style.display = 'block';
+}
+
+// Seleccionar arma
+function selectWeapon(weaponId, element) {
+    const index = gameState.selectedWeapons.indexOf(weaponId);
+    
+    if (index > -1) {
+        // Deseleccionar arma
+        gameState.selectedWeapons.splice(index, 1);
+        element.classList.remove('selected');
+    } else if (gameState.selectedWeapons.length < 2) {
+        // Seleccionar arma
+        gameState.selectedWeapons.push(weaponId);
+        element.classList.add('selected');
+    }
+    
+    updateSelectionCounter();
+}
+
+// Actualizar contador de selección
+function updateSelectionCounter() {
+    elements.selectionCounter.textContent = `Armas seleccionadas: ${gameState.selectedWeapons.length}/2`;
+    elements.confirmWeaponsBtn.disabled = gameState.selectedWeapons.length !== 2;
+}
+
+// Confirmar selección de armas
+function confirmWeaponSelection() {
+    gameState.waitingForWeaponSelection = false;
+    gameState.usedWeapons = [];
+    elements.weaponSelectionModal.style.display = 'none';
+    
+    logMessage(`🎯 Armas seleccionadas: ${gameState.selectedWeapons.map(id => weapons[id].name).join(', ')}`);
+    updateSelectedWeaponsDisplay();
+    updateUI();
+}
+
+// Actualizar display de armas seleccionadas
+function updateSelectedWeaponsDisplay() {
+    elements.selectedWeaponsDiv.innerHTML = '';
+    
+    gameState.selectedWeapons.forEach(weaponId => {
+        const weapon = weapons[weaponId];
+        const isUsed = gameState.usedWeapons.includes(weaponId);
+        
+        const weaponDiv = document.createElement('div');
+        weaponDiv.className = `weapon-item ${isUsed ? 'used' : ''}`;
+        
+        weaponDiv.innerHTML = `
+            <div style="font-size: 24px; margin-bottom: 5px;">${weapon.emoji}</div>
+            <div style="font-weight: bold; font-size: 12px;">${weapon.name}</div>
+            <button onclick="useWeapon('${weaponId}')" ${isUsed || !gameState.isPlayerTurn ? 'disabled' : ''}>
+                ${isUsed ? 'Usada' : 'Usar'}
+            </button>
+        `;
+        
+        elements.selectedWeaponsDiv.appendChild(weaponDiv);
+    });
+}
+
+// Usar arma
+function useWeapon(weaponId) {
+    if (gameState.usedWeapons.includes(weaponId) || !gameState.isPlayerTurn) return;
+    
+    const weapon = weapons[weaponId];
+    gameState.usedWeapons.push(weaponId);
+    
+    logMessage(`⚔️ Jugador usa: ${weapon.name}`);
+    
+    switch (weaponId) {
+        case 'hammer':
+            useHammer();
+            break;
+        case 'detector':
+            useDetector();
+            break;
+        case 'candy':
+            useCandy();
+            break;
+        case 'syringe':
+            useSyringe();
+            break;
+        case 'poisonVial':
+            logMessage('🧪 Vaso de veneno activado: el próximo veneno será doble');
+            break;
+    }
+    
+    updateSelectedWeaponsDisplay();
+}
+
+// Usar martillo
+function useHammer() {
+    const availablePills = gameState.pills.filter(pill => !pill.taken && !pill.broken);
+    if (availablePills.length === 0) {
+        logMessage('❌ No hay pastillas disponibles para romper');
+        return;
+    }
+    
+    logMessage('🔨 Selecciona una pastilla para romper');
+    
+    // Habilitar modo selección para romper
+    const pillButtons = elements.pillsContainer.children;
+    for (let i = 0; i < pillButtons.length; i++) {
+        if (!gameState.pills[i].taken && !gameState.pills[i].broken) {
+            pillButtons[i].onclick = () => breakPill(i);
+            pillButtons[i].style.cursor = 'pointer';
+            pillButtons[i].style.border = '3px solid orange';
+        }
+    }
+}
+
+// Romper pastilla
+function breakPill(index) {
+    const pill = gameState.pills[index];
+    pill.broken = true;
+    
+    logMessage(`💥 Pastilla rota: Era ${pill.type === 'poison' ? 'veneno ☠️' : pill.type === 'correct' ? 'correcta ✅' : 'neutral ➖'}`);
+    
+    // Restaurar eventos normales de pastillas
+    renderPills();
+    updateUI();
+}
+
+// Usar detector
+function useDetector() {
+    const poisonPill = gameState.pills.find(pill => pill.type === 'poison' && !pill.taken);
+    if (poisonPill) {
+        const index = gameState.pills.indexOf(poisonPill);
+        logMessage(`🔍 ¡Detector activado! La pastilla ${index + 1} contiene veneno`);
+        
+        // Resaltar la pastilla venenosa
+        setTimeout(() => {
+            const pillButtons = elements.pillsContainer.children;
+            if (pillButtons[index]) {
+                pillButtons[index].style.border = '4px solid red';
+                pillButtons[index].style.animation = 'pulse 1s infinite';
+            }
+        }, 500);
+    } else {
+        logMessage('🔍 Detector activado: No hay veneno disponible');
+    }
+}
+
+// Usar caramelo
+function useCandy() {
+    logMessage('🍬 Caramelo usado: Turno saltado');
+    setTimeout(switchTurn, 1000);
+}
+
+// Usar jeringa
+function useSyringe() {
+    gameState.syringeActive = true;
+    logMessage('💉 Jeringa activada: Inmune al veneno hasta tomar pastilla sin veneno');
 }
 
 // Mostrar las pastillas en la interfaz
@@ -59,7 +279,11 @@ function renderPills() {
         if (pill.taken) {
             pillElement.disabled = true;
             pillElement.style.opacity = '0.3';
-        } else if (gameState.isPlayerTurn) {
+        } else if (pill.broken) {
+            pillElement.disabled = true;
+            pillElement.classList.add('broken');
+            pillElement.textContent = '💥';
+        } else if (gameState.isPlayerTurn && !gameState.waitingForWeaponSelection) {
             pillElement.onclick = () => selectPill(index);
             if (gameState.selectedPill === index) {
                 pillElement.classList.add('selected');
@@ -72,6 +296,8 @@ function renderPills() {
 
 // Seleccionar una pastilla
 function selectPill(index) {
+    if (gameState.pills[index].broken) return;
+    
     gameState.selectedPill = index;
     elements.takePillBtn.disabled = false;
     renderPills();
@@ -96,20 +322,41 @@ function processPillEffect(pill, isPlayer) {
     switch (pill.type) {
         case 'correct':
             logMessage(`✅ ¡Era correcta! ${isPlayer ? 'Jugador' : 'IA'} está a salvo.`);
+            if (isPlayer && gameState.syringeActive) {
+                gameState.syringeActive = false;
+                logMessage('💉 Jeringa perdida: tomaste pastilla sin veneno');
+            }
             break;
             
         case 'poison':
-            logMessage(`☠️ ¡Era veneno! ${isPlayer ? 'Jugador' : 'IA'} pierde 2 vidas.`);
-            if (isPlayer) {
-                gameState.playerLives -= 2;
+            if (isPlayer && gameState.syringeActive) {
+                logMessage(`💉 ¡Era veneno pero la jeringa te protegió!`);
+                gameState.syringeActive = false;
+                logMessage('💉 Jeringa consumida');
             } else {
-                gameState.aiLives -= 2;
+                let damage = 2;
+                if (isPlayer && gameState.usedWeapons.includes('poisonVial')) {
+                    damage = 4;
+                    logMessage(`🧪☠️ ¡Era veneno DUPLICADO! ${isPlayer ? 'Jugador' : 'IA'} pierde ${damage} vidas.`);
+                } else {
+                    logMessage(`☠️ ¡Era veneno! ${isPlayer ? 'Jugador' : 'IA'} pierde ${damage} vidas.`);
+                }
+                
+                if (isPlayer) {
+                    gameState.playerLives -= damage;
+                } else {
+                    gameState.aiLives -= damage;
+                }
             }
             setTimeout(endRound, 1000);
             return;
             
         case 'neutral':
             logMessage(`➖ Era neutral. Sin efecto.`);
+            if (isPlayer && gameState.syringeActive) {
+                gameState.syringeActive = false;
+                logMessage('💉 Jeringa perdida: tomaste pastilla sin veneno');
+            }
             break;
     }
     
@@ -129,7 +376,7 @@ function switchTurn() {
 
 // Turno de la IA (selección aleatoria)
 function aiTurn() {
-    const availablePills = gameState.pills.filter(pill => !pill.taken);
+    const availablePills = gameState.pills.filter(pill => !pill.taken && !pill.broken);
     if (availablePills.length > 0) {
         const randomPill = availablePills[Math.floor(Math.random() * availablePills.length)];
         const pillIndex = gameState.pills.indexOf(randomPill);
@@ -158,8 +405,10 @@ function endRound() {
 function setupRound() {
     generatePills();
     gameState.selectedPill = null;
-    updateUI();
+    gameState.syringeActive = false;
+    
     logMessage(`🆕 Ronda ${gameState.currentRound} iniciada.`);
+    showWeaponSelection();
 }
 
 // Terminar el juego y mostrar resultado
@@ -185,52 +434,3 @@ function endGame() {
             message = 'Ambos terminaron con las mismas vidas.';
         }
     }
-    
-    elements.gameResult.textContent = result;
-    elements.finalMessage.textContent = message;
-    elements.gameOverModal.style.display = 'block';
-}
-
-// Actualizar la interfaz de usuario
-function updateUI() {
-    elements.currentRound.textContent = gameState.currentRound;
-    elements.currentTurn.textContent = gameState.isPlayerTurn ? 'Jugador' : 'IA';
-    elements.playerLives.textContent = gameState.playerLives;
-    elements.aiLives.textContent = gameState.aiLives;
-    elements.takePillBtn.disabled = !gameState.isPlayerTurn || gameState.selectedPill === null;
-    renderPills();
-}
-
-// Añadir un mensaje al log del juego
-function logMessage(message) {
-    const logElement = document.createElement('div');
-    logElement.textContent = message;
-    elements.gameLog.appendChild(logElement);
-    elements.gameLog.scrollTop = elements.gameLog.scrollHeight;
-}
-
-// Event Listeners
-elements.takePillBtn.addEventListener('click', () => {
-    if (gameState.selectedPill !== null && gameState.isPlayerTurn) {
-        takePill(gameState.selectedPill);
-    }
-});
-
-elements.restartBtn.addEventListener('click', () => {
-    gameState = {
-        currentRound: 1,
-        isPlayerTurn: true,
-        playerLives: 5,
-        aiLives: 5,
-        pills: [],
-        selectedPill: null,
-        gameOver: false
-    };
-    elements.gameOverModal.style.display = 'none';
-    setupRound();
-    logMessage('¡Nuevo juego iniciado!');
-});
-
-// Inicializar el juego
-setupRound();
-logMessage('¡Bienvenido al duelo de pastillas!');
