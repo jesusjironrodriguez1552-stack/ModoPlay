@@ -4,279 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Duelo de Pastillas</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <h1>Duelo de Pastillas</h1>
     
     <!-- Info del juego -->
-    <div>
+    <div class="game-info">
         <h2>Ronda: <span id="current-round">1</span>/3</h2>
         <p>Turno: <span id="current-turn">Jugador</span></p>
     </div>
     
     <!-- Vidas -->
-    <div>
+    <div class="lives-container">
         <p>Jugador: <span id="player-lives">5</span> ❤️</p>
         <p>IA: <span id="ai-lives">5</span> ❤️</p>
     </div>
     
     <!-- Pastillas -->
-    <div>
+    <div class="pills-section">
         <h3>Elige una pastilla:</h3>
         <div id="pills-container"></div>
         <button id="take-pill-btn" disabled>Tomar Pastilla</button>
     </div>
     
     <!-- Log -->
-    <div>
+    <div class="log-section">
         <h3>Log del juego:</h3>
-        <div id="game-log" style="border: 1px solid black; height: 200px; overflow-y: scroll; padding: 10px;"></div>
+        <div id="game-log"></div>
     </div>
     
     <!-- Modal fin de juego -->
-    <div id="game-over-modal" style="display: none;">
-        <h2 id="game-result"></h2>
-        <p id="final-message"></p>
-        <button id="restart-btn">Reiniciar</button>
+    <div id="game-over-modal" class="modal">
+        <div class="modal-content">
+            <h2 id="game-result"></h2>
+            <p id="final-message"></p>
+            <button id="restart-btn">Reiniciar</button>
+        </div>
     </div>
 
-    <script>
-        // Configuración simple
-        let gameState = {
-            currentRound: 1,
-            isPlayerTurn: true,
-            playerLives: 5,
-            aiLives: 5,
-            pills: [],
-            selectedPill: null,
-            gameOver: false
-        };
-
-        // Elementos del DOM
-        const elements = {
-            currentRound: document.getElementById('current-round'),
-            currentTurn: document.getElementById('current-turn'),
-            playerLives: document.getElementById('player-lives'),
-            aiLives: document.getElementById('ai-lives'),
-            pillsContainer: document.getElementById('pills-container'),
-            takePillBtn: document.getElementById('take-pill-btn'),
-            gameLog: document.getElementById('game-log'),
-            gameOverModal: document.getElementById('game-over-modal'),
-            gameResult: document.getElementById('game-result'),
-            finalMessage: document.getElementById('final-message'),
-            restartBtn: document.getElementById('restart-btn')
-        };
-
-        // Generar pastillas
-        function generatePills() {
-            gameState.pills = [];
-            for (let i = 0; i < 4; i++) {
-                let type = 'neutral';
-                if (i === 0) type = 'correct';
-                else if (i === 1) type = 'poison';
-                
-                gameState.pills.push({
-                    id: i,
-                    type: type,
-                    taken: false
-                });
-            }
-            
-            // Mezclar
-            for (let i = gameState.pills.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [gameState.pills[i], gameState.pills[j]] = [gameState.pills[j], gameState.pills[i]];
-            }
-        }
-
-        // Mostrar pastillas
-        function renderPills() {
-            elements.pillsContainer.innerHTML = '';
-            gameState.pills.forEach((pill, index) => {
-                const pillElement = document.createElement('button');
-                pillElement.textContent = '💊';
-                pillElement.style.fontSize = '30px';
-                pillElement.style.margin = '5px';
-                pillElement.style.padding = '10px';
-                
-                if (pill.taken) {
-                    pillElement.disabled = true;
-                    pillElement.style.opacity = '0.3';
-                } else if (gameState.isPlayerTurn) {
-                    pillElement.onclick = () => selectPill(index);
-                    if (gameState.selectedPill === index) {
-                        pillElement.style.background = 'yellow';
-                    }
-                }
-                
-                elements.pillsContainer.appendChild(pillElement);
-            });
-        }
-
-        // Seleccionar pastilla
-        function selectPill(index) {
-            gameState.selectedPill = index;
-            elements.takePillBtn.disabled = false;
-            renderPills();
-            updateUI();
-        }
-
-        // Tomar pastilla
-        function takePill(pillIndex) {
-            const pill = gameState.pills[pillIndex];
-            pill.taken = true;
-            const isPlayer = gameState.isPlayerTurn;
-            
-            logMessage(`${isPlayer ? 'Jugador' : 'IA'} tomó una pastilla...`);
-            
-            setTimeout(() => {
-                processPillEffect(pill, isPlayer);
-            }, 1000);
-        }
-
-        // Procesar efecto de la pastilla
-        function processPillEffect(pill, isPlayer) {
-            switch (pill.type) {
-                case 'correct':
-                    logMessage(`✅ ¡Era correcta! ${isPlayer ? 'Jugador' : 'IA'} está a salvo.`);
-                    break;
-                    
-                case 'poison':
-                    logMessage(`☠️ ¡Era veneno! ${isPlayer ? 'Jugador' : 'IA'} pierde 2 vidas.`);
-                    if (isPlayer) {
-                        gameState.playerLives -= 2;
-                    } else {
-                        gameState.aiLives -= 2;
-                    }
-                    setTimeout(endRound, 1000);
-                    return;
-                    
-                case 'neutral':
-                    logMessage(`➖ Era neutral. Sin efecto.`);
-                    break;
-            }
-            
-            setTimeout(switchTurn, 1000);
-        }
-
-        // Cambiar turno
-        function switchTurn() {
-            gameState.isPlayerTurn = !gameState.isPlayerTurn;
-            gameState.selectedPill = null;
-            updateUI();
-            
-            if (!gameState.isPlayerTurn) {
-                setTimeout(aiTurn, 1500);
-            }
-        }
-
-        // Turno de la IA
-        function aiTurn() {
-            const availablePills = gameState.pills.filter(pill => !pill.taken);
-            if (availablePills.length > 0) {
-                const randomPill = availablePills[Math.floor(Math.random() * availablePills.length)];
-                const pillIndex = gameState.pills.indexOf(randomPill);
-                takePill(pillIndex);
-            }
-        }
-
-        // Terminar ronda
-        function endRound() {
-            if (gameState.playerLives <= 0 || gameState.aiLives <= 0) {
-                endGame();
-                return;
-            }
-            
-            gameState.currentRound++;
-            if (gameState.currentRound > 3) {
-                endGame();
-                return;
-            }
-            
-            gameState.isPlayerTurn = true;
-            setTimeout(setupRound, 2000);
-        }
-
-        // Configurar nueva ronda
-        function setupRound() {
-            generatePills();
-            gameState.selectedPill = null;
-            updateUI();
-            logMessage(`🆕 Ronda ${gameState.currentRound} iniciada.`);
-        }
-
-        // Terminar juego
-        function endGame() {
-            gameState.gameOver = true;
-            
-            let result, message;
-            if (gameState.playerLives <= 0) {
-                result = 'DERROTA';
-                message = 'La IA ganó el duelo.';
-            } else if (gameState.aiLives <= 0) {
-                result = 'VICTORIA';
-                message = '¡Ganaste el duelo!';
-            } else {
-                if (gameState.playerLives > gameState.aiLives) {
-                    result = 'VICTORIA';
-                    message = `Ganaste por supervivencia: ${gameState.playerLives} vs ${gameState.aiLives}`;
-                } else if (gameState.aiLives > gameState.playerLives) {
-                    result = 'DERROTA';
-                    message = `IA ganó por supervivencia: ${gameState.aiLives} vs ${gameState.playerLives}`;
-                } else {
-                    result = 'EMPATE';
-                    message = 'Ambos terminaron con las mismas vidas.';
-                }
-            }
-            
-            elements.gameResult.textContent = result;
-            elements.finalMessage.textContent = message;
-            elements.gameOverModal.style.display = 'block';
-        }
-
-        // Actualizar interfaz
-        function updateUI() {
-            elements.currentRound.textContent = gameState.currentRound;
-            elements.currentTurn.textContent = gameState.isPlayerTurn ? 'Jugador' : 'IA';
-            elements.playerLives.textContent = gameState.playerLives;
-            elements.aiLives.textContent = gameState.aiLives;
-            elements.takePillBtn.disabled = !gameState.isPlayerTurn || gameState.selectedPill === null;
-            renderPills();
-        }
-
-        // Añadir mensaje al log
-        function logMessage(message) {
-            const logElement = document.createElement('div');
-            logElement.textContent = message;
-            elements.gameLog.appendChild(logElement);
-            elements.gameLog.scrollTop = elements.gameLog.scrollHeight;
-        }
-
-        // Event listeners
-        elements.takePillBtn.addEventListener('click', () => {
-            if (gameState.selectedPill !== null && gameState.isPlayerTurn) {
-                takePill(gameState.selectedPill);
-            }
-        });
-
-        elements.restartBtn.addEventListener('click', () => {
-            gameState = {
-                currentRound: 1,
-                isPlayerTurn: true,
-                playerLives: 5,
-                aiLives: 5,
-                pills: [],
-                selectedPill: null,
-                gameOver: false
-            };
-            elements.gameOverModal.style.display = 'none';
-            setupRound();
-            logMessage('¡Nuevo juego iniciado!');
-        });
-
-        // Inicializar juego
-        setupRound();
-        logMessage('¡Bienvenido al duelo de pastillas!');
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
