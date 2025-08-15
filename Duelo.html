@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escoge la Pastilla Correcta: Duelo 1 vs 1</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="game-container">
+        <!-- HUD Superior -->
+        <div class="hud">
+            <div class="player-info">
+                <h3>JUGADOR</h3>
+                <div class="lives">
+                    <span>Vidas: </span>
+                    <div class="hearts" id="player-hearts">
+                        <div class="heart"></div>
+                        <div class="heart"></div>
+                        <div class="heart"></div>
+                        <div class="heart"></div>
+                        <div class="heart"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="round-info">
+                <h2>RONDA <span id="current-round">1</span>/5</h2>
+                <div class="turn-indicator" id="turn-indicator">
+                    <span id="current-turn">Tu turno</span>
+                </div>
+            </div>
+            
+            <div class="ai-info">
+                <h3>IA</h3>
+                <div class="lives">
+                    <span>Vidas: </span>
+                    <div class="hearts" id="ai-hearts">
+                        <div class="heart"></div>
+                        <div class="heart"></div>
+                        <div class="heart"></div>
+                        <div class="heart"></div>
+                        <div class="heart"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mesa de Duelo -->
+        <div class="duel-table">
+            <!-- Zona de la IA -->
+            <div class="player-zone ai-zone">
+                <div class="player-avatar ai-avatar">🤖</div>
+                <div class="items-zone" id="ai-items">
+                    <!-- Items de la IA se generan aquí -->
+                </div>
+            </div>
+
+            <!-- Centro de la mesa con pastillas -->
+            <div class="pills-area">
+                <div class="pills-container" id="pills-container">
+                    <!-- Las pastillas se generan aquí -->
+                </div>
+            </div>
+
+            <!-- Zona del Jugador -->
+            <div class="player-zone human-zone">
+                <div class="player-avatar human-avatar">👤</div>
+                <div class="items-zone" id="player-items">
+                    <!-- Items del jugador se generan aquí -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel de Control -->
+        <div class="control-panel">
+            <button id="take-pill-btn" class="action-btn" disabled>Tomar Pastilla</button>
+            <div class="game-log" id="game-log">
+                <div class="log-message">¡Bienvenido al duelo! Elige un ítem o toma una pastilla.</div>
+            </div>
+        </div>
+
+        <!-- Modal de Fin de Juego -->
+        <div id="game-over-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2 id="game-result">¡Fin del Juego!</h2>
+                <p id="final-message">Resultado del duelo</p>
+                <button id="restart-btn" class="action-btn">Jugar de Nuevo</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
