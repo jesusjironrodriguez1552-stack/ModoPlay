@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ModoPlay - Tu Portal de Juegos</title>
+    <title>Menú Principal</title>
     <style>
         * {
             margin: 0;
@@ -12,597 +12,168 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-            color: #e0e0e0;
-            line-height: 1.6;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        header {
-            background: rgba(15, 15, 35, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.8rem;
-            font-weight: bold;
-            background: linear-gradient(45deg, #00d4ff, #7b68ee, #ff6b6b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 1.5rem;
-        }
-
-        .nav-links a {
-            color: #e0e0e0;
-            text-decoration: none;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            transition: all 0.3s ease;
-            border: 1px solid transparent;
-        }
-
-        .nav-links a:hover {
-            background: rgba(0, 212, 255, 0.1);
-            border-color: rgba(0, 212, 255, 0.3);
-            transform: translateY(-2px);
-        }
-
-        .hero {
-            text-align: center;
-            padding: 3rem 0;
-            background: rgba(15, 15, 35, 0.8);
-            margin: 2rem 0;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: #e0e0e0;
-            background: linear-gradient(45deg, #00d4ff, #7b68ee);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero p {
-            font-size: 1.1rem;
-            margin-bottom: 1.5rem;
-            color: #b0b0b0;
-        }
-
-        .game-section {
-            padding: 2rem 0;
-        }
-
-        .game-card {
-            background: rgba(15, 15, 35, 0.9);
-            border-radius: 15px;
-            padding: 2rem;
-            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.4);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .game-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 40px rgba(0, 212, 255, 0.2);
-            border-color: rgba(0, 212, 255, 0.3);
-        }
-
-        .game-content {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .game-image {
-            width: 100%;
-            height: 200px;
-            border-radius: 10px;
-            object-fit: cover;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .game-info h2 {
-            font-size: 1.8rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, #00d4ff, #7b68ee);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .game-description {
-            margin-bottom: 1.5rem;
-            color: #b0b0b0;
-            line-height: 1.6;
-        }
-
-        .game-actions {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 0.8rem 1.5rem;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            font-size: 0.9rem;
-            display: inline-block;
-        }
-
-        .btn-primary {
-            background: linear-gradient(45deg, #00d4ff, #7b68ee);
-            color: white;
-            box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);
-        }
-
-        .btn-secondary {
-            background: rgba(0, 212, 255, 0.1);
-            color: #00d4ff;
-            border: 2px solid rgba(0, 212, 255, 0.3);
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 212, 255, 0.4);
-        }
-
-        .btn-secondary:hover {
-            background: rgba(0, 212, 255, 0.2);
-            border-color: rgba(0, 212, 255, 0.6);
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(3px);
-        }
-
-        .modal-content {
-            background: #0f0f23;
-            margin: 5% auto;
-            padding: 2rem;
-            border-radius: 15px;
-            width: 80%;
-            max-width: 600px;
-            position: relative;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .close {
-            color: #b0b0b0;
-            float: right;
-            font-size: 1.8rem;
-            font-weight: bold;
-            cursor: pointer;
-            position: absolute;
-            right: 1rem;
-            top: 1rem;
-            transition: color 0.3s ease;
-        }
-
-        .close:hover {
-            color: #00d4ff;
-        }
-
-        .instructions {
-            background: rgba(0, 212, 255, 0.05);
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin-top: 1rem;
-            border: 1px solid rgba(0, 212, 255, 0.1);
-        }
-
-        .instructions h3 {
-            margin-top: 1.5rem;
-            margin-bottom: 1rem;
-            color: #00d4ff;
-        }
-
-        .instructions h3:first-child {
-            margin-top: 0;
-        }
-
-        .instructions ol, .instructions ul {
-            padding-left: 1.5rem;
-            color: #b0b0b0;
-        }
-
-        .instructions li {
-            margin-bottom: 0.5rem;
-        }
-
-        .instructions strong {
-            color: #e0e0e0;
-        }
-
-        .contact-info {
-            background: rgba(0, 212, 255, 0.05);
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin-top: 1rem;
-            border: 1px solid rgba(0, 212, 255, 0.1);
-            text-align: center;
-        }
-
-        .contact-info p {
-            margin-bottom: 1rem;
-            color: #b0b0b0;
-        }
-
-        .contact-info .email {
-            color: #00d4ff;
-            font-weight: bold;
-            background: rgba(0, 212, 255, 0.1);
-            padding: 0.5rem 1rem;
-            border-radius: 10px;
-            border: 1px solid rgba(0, 212, 255, 0.3);
-        }
-
-        .premium-info {
-            background: rgba(123, 104, 238, 0.1);
-            padding: 1.5rem;
-            border-radius: 10px;
-            margin-top: 1rem;
-            border: 1px solid rgba(123, 104, 238, 0.3);
-            text-align: center;
-        }
-
-        .premium-info h3 {
-            color: #7b68ee;
-            margin-bottom: 1rem;
-        }
-
-        .premium-info p {
-            color: #b0b0b0;
-        }
-
-        .gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 1rem;
-            margin: 1.5rem 0;
-        }
-
-        .gallery-image {
-            width: 100%;
-            height: 120px;
-            border-radius: 8px;
-            object-fit: cover;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .gallery-image:hover {
-            transform: scale(1.03);
-            box-shadow: 0 5px 20px rgba(0, 212, 255, 0.4);
-            border: 2px solid rgba(0, 212, 255, 0.5);
-        }
-
-        footer {
-            background: rgba(15, 15, 35, 0.9);
-            text-align: center;
-            padding: 2rem 0;
-            margin-top: 3rem;
-            color: #b0b0b0;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .footer-links {
             display: flex;
             justify-content: center;
-            gap: 2rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
+            align-items: center;
         }
 
-        .footer-links a {
-            color: #b0b0b0;
+        .menu-container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            min-width: 300px;
+        }
+
+        h1 {
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            font-weight: 300;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .menu-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .menu-item {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .menu-item:nth-child(1) { animation-delay: 0.1s; }
+        .menu-item:nth-child(2) { animation-delay: 0.2s; }
+        .menu-item:nth-child(3) { animation-delay: 0.3s; }
+        .menu-item:nth-child(4) { animation-delay: 0.4s; }
+
+        .menu-link {
+            display: block;
+            color: white;
             text-decoration: none;
-            transition: color 0.3s ease;
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            font-weight: 500;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
         }
 
-        .footer-links a:hover {
-            color: #00d4ff;
+        .menu-link:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
         }
 
-        @media (max-width: 768px) {
-            .hero h1 {
+        .menu-link:hover:before {
+            left: 100%;
+        }
+
+        .menu-link:hover {
+            transform: translateY(-3px);
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .duelo-link {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-weight: 600;
+            position: relative;
+        }
+
+        .duelo-link:hover {
+            background: linear-gradient(45deg, #ff5252, #d63031);
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 25px;
+            font-size: 1rem;
+            font-weight: 300;
+        }
+
+        @media (max-width: 480px) {
+            .menu-container {
+                margin: 20px;
+                padding: 30px 20px;
+            }
+            
+            h1 {
                 font-size: 2rem;
             }
-
-            .nav-links {
-                display: none;
-            }
-
-            .game-content {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-
-            .modal-content {
-                width: 95%;
-                margin: 10% auto;
-            }
-
-            .gallery {
-                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            }
-
-            .footer-links {
-                gap: 1rem;
-            }
-        }
-
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
         }
     </style>
 </head>
 <body>
-    <header>
-        <nav class="container">
-            <div class="logo">🎮 ModoPlay</div>
-            <ul class="nav-links">
-                <li><a href="#" onclick="openModal('support')">🛠️ Soporte</a></li>
-                <li><a href="#" onclick="openModal('donation')">💝 Donación</a></li>
-                <li><a href="#" onclick="openModal('premium')">⭐ Premium</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <section id="inicio" class="hero">
-        <div class="container">
-            <h1>Bienvenido a ModoPlay</h1>
-            <p>Descarga y disfruta de nuestro increíble juego de aventuras</p>
-        </div>
-    </section>
-
-    <section id="juego" class="game-section">
-        <div class="container">
-            <div class="game-card fade-in">
-                <div class="game-content">
-                    <img src="https://drive.google.com/file/d/1thb9IC-3LYzPazeew_j0PiiqiCW4dedp/view?usp=sharing" alt="Aventura Épica" class="game-image">
-                    <div class="game-info">
-                        <h2>🗡️ Aventura Épica</h2>
-                        <p class="game-description">
-                            Embárcate en una aventura épica llena de misterios, criaturas fantásticas y tesoros ocultos. 
-                            Explora vastos mundos, mejora tus habilidades y conviértete en el héroe que el reino necesita.
-                        </p>
-                        <div class="game-actions">
-                            <a href="#" class="btn btn-primary" onclick="redirectToDownload()">📥 Descargar Juego</a>
-                            <button class="btn btn-secondary" onclick="openModal('instructions')">📋 Instrucciones</button>
-                            <button class="btn btn-secondary" onclick="openModal('gallery')">🖼️ Capturas</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Modal de Instrucciones -->
-    <div id="instructions" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('instructions')">&times;</span>
-            <h2>📋 Cómo Descargar e Instalar</h2>
-            <div class="instructions">
-                <h3>🔧 Requisitos Mínimos:</h3>
-                <ul>
-                    <li>Windows 10 o superior</li>
-                    <li>4GB RAM</li>
-                    <li>2GB espacio libre</li>
-                    <li>Tarjeta gráfica DirectX 11</li>
-                </ul>
-                
-                <h3>📥 Pasos de Instalación:</h3>
-                <ol>
-                    <li>Haz clic en "Descargar Juego"</li>
-                    <li>Guarda el archivo en tu computadora</li>
-                    <li>Ejecuta el instalador</li>
-                    <li>Sigue las instrucciones en pantalla</li>
-                    <li>¡Disfruta del juego!</li>
-                </ol>
-
-                <h3>🎮 Controles Básicos:</h3>
-                <ul>
-                    <li><strong>WASD:</strong> Movimiento</li>
-                    <li><strong>Espacio:</strong> Saltar</li>
-                    <li><strong>Click:</strong> Atacar</li>
-                    <li><strong>E:</strong> Interactuar</li>
-                    <li><strong>ESC:</strong> Menú</li>
-                </ul>
-            </div>
-        </div>
+    <div class="menu-container">
+        <h1>Menú Principal</h1>
+        <p class="subtitle">Selecciona una opción</p>
+        
+        <ul class="menu-list">
+            <li class="menu-item">
+                <a href="#" class="menu-link">Inicio</a>
+            </li>
+            <li class="menu-item">
+                <a href="Duelo.html" class="menu-link duelo-link">🎯 Duelo</a>
+            </li>
+            <li class="menu-item">
+                <a href="#" class="menu-link">Configuración</a>
+            </li>
+            <li class="menu-item">
+                <a href="#" class="menu-link">Acerca de</a>
+            </li>
+        </ul>
     </div>
-
-    <!-- Modal de Galería -->
-    <div id="gallery" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('gallery')">&times;</span>
-            <h2>🖼️ Capturas del Juego</h2>
-            <div class="gallery">
-                <img src="https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=300&h=200&fit=crop" alt="Captura 1" class="gallery-image">
-                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=300&h=200&fit=crop" alt="Captura 2" class="gallery-image">
-                <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?w=300&h=200&fit=crop" alt="Captura 3" class="gallery-image">
-                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=300&h=200&fit=crop" alt="Captura 4" class="gallery-image">
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Soporte -->
-    <div id="support" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('support')">&times;</span>
-            <h2>🛠️ Soporte Técnico</h2>
-            <div class="contact-info">
-                <p>¿Tienes problemas con el juego o necesitas ayuda?</p>
-                <p>Contáctanos para recibir asistencia técnica:</p>
-                <div class="email">support@modoplay.com</div>
-                <p style="margin-top: 1rem; font-size: 0.9rem;">
-                    Responderemos en un plazo de 24-48 horas
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Donaciones -->
-    <div id="donation" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('donation')">&times;</span>
-            <h2>💝 Apoya el Proyecto</h2>
-            <div class="contact-info">
-                <p>¿Te gusta nuestro trabajo? ¡Ayúdanos a seguir creando!</p>
-                <p>Puedes hacer una donación a través de PayPal:</p>
-                <div class="email">tu-email@paypal.com</div>
-                <p style="margin-top: 1rem; font-size: 0.9rem;">
-                    Cada donación nos ayuda a mejorar y crear más contenido
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Premium -->
-    <div id="premium" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal('premium')">&times;</span>
-            <h2>⭐ ModoPlay Premium</h2>
-            <div class="premium-info">
-                <h3>🚧 Próximamente</h3>
-                <p>Estamos trabajando en características exclusivas para nuestros usuarios premium:</p>
-                <ul style="text-align: left; margin-top: 1rem; color: #b0b0b0;">
-                    <li>Acceso anticipado a nuevos juegos</li>
-                    <li>Contenido exclusivo y DLCs</li>
-                    <li>Soporte prioritario</li>
-                    <li>Comunidad VIP</li>
-                </ul>
-                <p style="margin-top: 1.5rem;">
-                    ¡Mantente atento para más información!
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <footer id="contacto">
-        <div class="container">
-            <div class="footer-links">
-                <a href="#" onclick="openModal('support')">🛠️ Soporte</a>
-                <a href="#" onclick="openModal('donation')">💝 Donación</a>
-                <a href="#" onclick="openModal('premium')">⭐ Premium</a>
-            </div>
-            <p>&copy; 2025 ModoPlay. Todos los derechos reservados.</p>
-        </div>
-    </footer>
 
     <script>
-        // URLs definidas en el código
-        const URLS = {
-            download: 'https://mega.nz/file/example123',
-            support: 'support@modoplay.com',
-            donation: 'tu-email@paypal.com',
-            website: 'https://modoplay.com',
-            gallery: 'https://imgur.com/gallery/modoplay'
-        };
-
-        function redirectToDownload() {
-            window.open(URLS.download, '_blank');
-        }
-
-        function openModal(modalId) {
-            document.getElementById(modalId).style.display = 'block';
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-
-        // Cerrar modal al hacer click fuera
-        window.onclick = function(event) {
-            if (event.target.classList.contains('modal')) {
-                event.target.style.display = 'none';
-            }
-        }
-
-        // Animación de entrada
-        window.addEventListener('load', function() {
-            const fadeElements = document.querySelectorAll('.fade-in');
-            fadeElements.forEach(el => {
-                setTimeout(() => {
-                    el.classList.add('visible');
-                }, 300);
-            });
-        });
-
-        // Scroll suave para navegación
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth'
-                    });
+        // Agregar efecto de click
+        document.querySelectorAll('.menu-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                // Solo prevenir el comportamiento por defecto para los enlaces que no van a Duelo.html
+                if (this.getAttribute('href') === '#') {
+                    e.preventDefault();
+                    
+                    // Efecto visual de click
+                    this.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 150);
+                    
+                    // Mostrar mensaje para enlaces de ejemplo
+                    alert('Esta es una opción de ejemplo. Solo "Duelo" te llevará a Duelo.html');
                 }
             });
         });
-
-        // Función adicional para otros botones que necesiten redirección
-        function redirectTo(urlKey) {
-            if (URLS[urlKey]) {
-                window.open(URLS[urlKey], '_blank');
-            }
-        }
     </script>
 </body>
 </html>
