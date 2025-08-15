@@ -20,6 +20,12 @@
         <p>Jugador: <span id="player-lives">5</span> ❤️</p>
         <p>IA: <span id="ai-lives">5</span> ❤️</p>
     </div>
+
+    <!-- Armas seleccionadas -->
+    <div class="weapons-section">
+        <h3>Tus armas:</h3>
+        <div id="selected-weapons"></div>
+    </div>
     
     <!-- Pastillas -->
     <div class="pills-section">
@@ -34,6 +40,16 @@
         <div id="game-log"></div>
     </div>
     
+    <!-- Modal selección de armas -->
+    <div id="weapon-selection-modal" class="modal">
+        <div class="modal-content">
+            <h2>Selecciona 2 armas para la ronda <span id="weapon-round">1</span></h2>
+            <div id="weapons-container"></div>
+            <p id="selection-counter">Armas seleccionadas: 0/2</p>
+            <button id="confirm-weapons-btn" disabled>Confirmar Selección</button>
+        </div>
+    </div>
+    
     <!-- Modal fin de juego -->
     <div id="game-over-modal" class="modal">
         <div class="modal-content">
@@ -42,7 +58,6 @@
             <button id="restart-btn">Reiniciar</button>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
