@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Menú Principal</title>
+    <title>GAMEPE</title>
     <style>
         * {
             margin: 0;
@@ -13,167 +13,136 @@
 
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #e0e0e0;
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            padding: 20px;
         }
 
-        .menu-container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            text-align: center;
-            min-width: 300px;
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
         }
 
         h1 {
-            color: white;
-            margin-bottom: 30px;
-            font-size: 2.5rem;
-            font-weight: 300;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: #00ff88;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+            letter-spacing: 3px;
         }
 
-        .menu-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+        .welcome {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 15px;
+            border: 1px solid #333;
         }
 
-        .menu-item {
-            opacity: 0;
-            animation: fadeInUp 0.6s ease forwards;
+        .welcome p {
+            font-size: 1.2em;
+            line-height: 1.6;
+            margin-bottom: 10px;
         }
 
-        .menu-item:nth-child(1) { animation-delay: 0.1s; }
-        .menu-item:nth-child(2) { animation-delay: 0.2s; }
-        .menu-item:nth-child(3) { animation-delay: 0.3s; }
-        .menu-item:nth-child(4) { animation-delay: 0.4s; }
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
 
-        .menu-link {
-            display: block;
-            color: white;
-            text-decoration: none;
-            padding: 15px 25px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
+        .game-card {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid #333;
             transition: all 0.3s ease;
-            font-size: 1.1rem;
-            font-weight: 500;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            position: relative;
             overflow: hidden;
         }
 
-        .menu-link:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
+        .game-card:hover {
+            transform: translateY(-5px);
+            border-color: #00ff88;
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.2);
+        }
+
+        .game-cover {
             width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.5s;
+            height: 200px;
+            background: #222;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 14px;
         }
 
-        .menu-link:hover:before {
-            left: 100%;
+        .game-title {
+            color: #00ff88;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            text-align: center;
         }
 
-        .menu-link:hover {
-            transform: translateY(-3px);
-            background: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        .download-btn {
+            width: 100%;
+            background: linear-gradient(45deg, #ff6b00, #ff8533);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: block;
+            text-align: center;
         }
 
-        .duelo-link {
-            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            font-weight: 600;
-            position: relative;
-        }
-
-        .duelo-link:hover {
-            background: linear-gradient(45deg, #ff5252, #d63031);
-            transform: translateY(-3px) scale(1.05);
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .subtitle {
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 25px;
-            font-size: 1rem;
-            font-weight: 300;
-        }
-
-        @media (max-width: 480px) {
-            .menu-container {
-                margin: 20px;
-                padding: 30px 20px;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 107, 0, 0.4);
         }
     </style>
 </head>
 <body>
-    <div class="menu-container">
-        <h1>Menú Principal</h1>
-        <p class="subtitle">Selecciona una opción</p>
+    <div class="container">
+        <h1>GAMEPE</h1>
         
-        <ul class="menu-list">
-            <li class="menu-item">
-                <a href="#" class="menu-link">Inicio</a>
-            </li>
-            <li class="menu-item">
-                <a href="Duelo.html" class="menu-link duelo-link">🎯 Duelo</a>
-            </li>
-            <li class="menu-item">
-                <a href="#" class="menu-link">Configuración</a>
-            </li>
-            <li class="menu-item">
-                <a href="#" class="menu-link">Acerca de</a>
-            </li>
-        </ul>
-    </div>
+        <div class="welcome">
+            <p>¡Bienvenido a GAMEPE!</p>
+            <p>Todos los juegos están libres de virus y son creados por mí =)</p>
+        </div>
 
-    <script>
-        // Agregar efecto de click
-        document.querySelectorAll('.menu-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                // Solo prevenir el comportamiento por defecto para los enlaces que no van a Duelo.html
-                if (this.getAttribute('href') === '#') {
-                    e.preventDefault();
-                    
-                    // Efecto visual de click
-                    this.style.transform = 'scale(0.95)';
-                    setTimeout(() => {
-                        this.style.transform = '';
-                    }, 150);
-                    
-                    // Mostrar mensaje para enlaces de ejemplo
-                    alert('Esta es una opción de ejemplo. Solo "Duelo" te llevará a Duelo.html');
-                }
-            });
-        });
-    </script>
+        <div class="games-grid">
+            <!-- PARA AGREGAR JUEGOS, COPIA Y PEGA ESTE BLOQUE Y CAMBIA LOS VALORES -->
+            
+            <div class="game-card">
+                <div class="game-cover" style="background-image: url('URL_DE_LA_PORTADA_AQUI')">
+                    Sin portada
+                </div>
+                <div class="game-title">Nombre del Juego</div>
+                <a href="URL_DE_DESCARGA_AQUI" class="download-btn" target="_blank">Descargar</a>
+            </div>
+            
+            <!-- EJEMPLO DE JUEGO (puedes borrarlo) -->
+            <div class="game-card">
+                <div class="game-cover" style="background-image: url('https://via.placeholder.com/300x200/333333/00ff88?text=Mi+Juego')">
+                </div>
+                <div class="game-title">Mi Primer Juego</div>
+                <a href="https://ejemplo.com/descarga" class="download-btn" target="_blank">Descargar</a>
+            </div>
+
+        </div>
+    </div>
 </body>
 </html>
