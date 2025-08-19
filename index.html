@@ -123,6 +123,36 @@
         .download-btn:active {
             transform: translateY(0);
         }
+
+        /* Estilos para anuncios */
+        .ad-container {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            border: 1px solid #333;
+        }
+
+        .ad-container.top-banner {
+            margin: 20px 0 40px 0;
+        }
+
+        .ad-container.mid-content {
+            margin: 40px 0;
+        }
+
+        .ad-container.bottom-banner {
+            margin: 40px 0 20px 0;
+        }
+
+        .ad-label {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
         
         /* Responsive design */
         @media (max-width: 768px) {
@@ -135,6 +165,10 @@
             .game-card {
                 padding: 20px;
             }
+            .ad-container {
+                padding: 15px;
+                margin: 20px 0;
+            }
         }
     </style>
 </head>
@@ -142,9 +176,31 @@
     <div class="container">
         <h1>GAMEPE</h1>
         
+        <!-- Anuncio superior - Banner horizontal -->
+        <div class="ad-container top-banner">
+            <div class="ad-label">Publicidad</div>
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : 'a6c29732eed562ce6c743af0a3b60273',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/a6c29732eed562ce6c743af0a3b60273/invoke.js"></script>
+        </div>
+        
         <div class="welcome">
             <p>¡Bienvenido a GAMEPE!</p>
             <p>Todos los juegos están libres de virus y son creados por mí =)</p>
+        </div>
+        
+        <!-- Anuncio medio - Contenido dinámico -->
+        <div class="ad-container mid-content">
+            <div class="ad-label">Publicidad</div>
+            <script async="async" data-cfasync="false" src="//pl27458414.profitableratecpm.com/2cab1d61c2dc9d7d47e9cefc513235df/invoke.js"></script>
+            <div id="container-2cab1d61c2dc9d7d47e9cefc513235df"></div>
         </div>
         
         <div class="games-grid">
@@ -158,6 +214,12 @@
             
             <!-- Aquí puedes agregar más juegos copiando el bloque de arriba -->
             
+        </div>
+
+        <!-- Anuncio inferior -->
+        <div class="ad-container bottom-banner">
+            <div class="ad-label">Publicidad</div>
+            <script type='text/javascript' src='//pl27458422.profitableratecpm.com/9f/ad/aa/9fadaacd147b7764a274c4d38f00b281.js'></script>
         </div>
     </div>
 </body>
