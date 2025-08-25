@@ -3,224 +3,388 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GAMEPE</title>
+    <title>Bracket Octavos Champions League</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
-            color: #e0e0e0;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: white;
             min-height: 100vh;
             padding: 20px;
+            overflow-x: auto;
         }
-        .container {
-            max-width: 1200px;
+
+        .bracket-container {
+            min-width: 1400px;
             margin: 0 auto;
+            padding: 40px 20px;
         }
+
         h1 {
             text-align: center;
-            font-size: 3em;
-            margin-bottom: 20px;
-            color: #00ff88;
-            text-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
-            letter-spacing: 3px;
-        }
-        .welcome {
-            text-align: center;
+            font-size: 2.5em;
             margin-bottom: 40px;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-            border: 1px solid #333;
+            background: linear-gradient(45deg, #00d4ff, #0099cc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
-        .welcome p {
-            font-size: 1.2em;
-            line-height: 1.6;
-            margin-bottom: 10px;
-        }
-        .games-grid {
+
+        .bracket {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 25px;
-            margin-top: 30px;
-        }
-        .game-card {
-            background: rgba(0, 0, 0, 0.6);
-            border-radius: 15px;
-            padding: 25px;
-            border: 1px solid #333;
-            transition: all 0.3s ease;
-            overflow: hidden;
-        }
-        .game-card:hover {
-            transform: translateY(-5px);
-            border-color: #00ff88;
-            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.2);
-        }
-        .game-cover {
-            width: 100%;
-            height: 220px;
-            background: linear-gradient(45deg, #222, #333);
-            border-radius: 10px;
-            margin-bottom: 20px;
-            display: flex;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 20px;
             align-items: center;
-            justify-content: center;
             position: relative;
-            overflow: hidden;
-            border: 2px solid #444;
         }
-        .game-cover img {
-            width: 192px;
-            height: 192px;
-            object-fit: contain;
-            border-radius: 8px;
+
+        .round {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
         }
-        .game-cover .placeholder {
-            color: #00ff88;
-            font-size: 18px;
-            font-weight: bold;
+
+        .round h3 {
             text-align: center;
-            padding: 20px;
-            background: rgba(0, 255, 136, 0.1);
-            border-radius: 8px;
-            border: 2px dashed #00ff88;
-        }
-        .game-title {
-            color: #00ff88;
-            font-size: 1.5em;
             margin-bottom: 20px;
-            text-align: center;
-            font-weight: bold;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            font-size: 1.2em;
+            color: #00d4ff;
         }
-        .download-btn {
-            width: 100%;
-            background: linear-gradient(45deg, #ff6b00, #ff8533);
-            color: white;
-            border: none;
-            padding: 15px 20px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
+
+        .match {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            overflow: hidden;
+            min-width: 180px;
+            position: relative;
+            backdrop-filter: blur(10px);
             transition: all 0.3s ease;
-            text-decoration: none;
-            display: block;
+        }
+
+        .match:hover {
+            border-color: #00d4ff;
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+        }
+
+        .team {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 50px;
+        }
+
+        .team:last-child {
+            border-bottom: none;
+        }
+
+        .team-name {
+            font-weight: bold;
+            color: white;
+            flex-grow: 1;
+        }
+
+        .team-score {
+            background: rgba(0, 212, 255, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-weight: bold;
+            min-width: 25px;
             text-align: center;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .download-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(255, 107, 0, 0.4);
-            background: linear-gradient(45deg, #ff8533, #ffaa66);
-        }
-        .download-btn:active {
-            transform: translateY(0);
+            margin-left: 10px;
         }
 
-        /* Estilos para anuncios */
-        .ad-container {
-            text-align: center;
-            margin: 30px 0;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-            border: 1px solid #333;
+        /* Espaciado específico para semifinales y final */
+        .round-sf1, .round-sf2 {
+            margin-top: 100px;
         }
 
-        .ad-container.top-banner {
-            margin: 20px 0 40px 0;
+        .round-final {
+            margin-top: 200px;
         }
 
-        .ad-container.mid-content {
-            margin: 40px 0;
+        /* Líneas de conexión decorativas */
+        .bracket::before,
+        .bracket::after {
+            content: '';
+            position: absolute;
+            background: rgba(0, 212, 255, 0.5);
+            z-index: -1;
         }
 
-        .ad-container.bottom-banner {
-            margin: 40px 0 20px 0;
+        /* Líneas horizontales */
+        .bracket::before {
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
         }
 
-        .ad-label {
-            font-size: 12px;
-            color: #888;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        /* Responsive design */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5em;
+        /* Espaciado responsivo */
+        @media (max-width: 1200px) {
+            .bracket-container {
+                min-width: 1200px;
             }
-            .games-grid {
-                grid-template-columns: 1fr;
+            
+            .match {
+                min-width: 160px;
             }
-            .game-card {
-                padding: 20px;
-            }
-            .ad-container {
-                padding: 15px;
-                margin: 20px 0;
-            }
+        }
+
+        .placeholder {
+            color: rgba(255, 255, 255, 0.5);
+            font-style: italic;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>GAMEPE</h1>
+    <div class="bracket-container">
+        <h1>🏆 BRACKET OCTAVOS DE FINAL</h1>
         
-        <!-- Anuncio superior - Banner horizontal -->
-        <div class="ad-container top-banner">
-            <div class="ad-label">Publicidad</div>
-            <script type="text/javascript">
-                atOptions = {
-                    'key' : 'a6c29732eed562ce6c743af0a3b60273',
-                    'format' : 'iframe',
-                    'height' : 90,
-                    'width' : 728,
-                    'params' : {}
-                };
-            </script>
-            <script type="text/javascript" src="//www.highperformanceformat.com/a6c29732eed562ce6c743af0a3b60273/invoke.js"></script>
-        </div>
-        
-        <div class="welcome">
-            <p>¡Bienvenido a GAMEPE!</p>
-            <p>Todos los juegos están libres de virus y son creados por mí =)</p>
-        </div>
-        
-        <!-- Anuncio medio - Contenido dinámico -->
-        <div class="ad-container mid-content">
-            <div class="ad-label">Publicidad</div>
-            <script async="async" data-cfasync="false" src="//pl27458414.profitableratecpm.com/2cab1d61c2dc9d7d47e9cefc513235df/invoke.js"></script>
-            <div id="container-2cab1d61c2dc9d7d47e9cefc513235df"></div>
-        </div>
-        
-        <div class="games-grid">
-            <div class="game-card">
-                <div class="game-cover">
-                    <img src="ICON.png" alt="Destino Mortal">
+        <div class="bracket">
+            <!-- OCTAVOS IZQUIERDA -->
+            <div class="round">
+                <h3>OCTAVOS IZQ</h3>
+                
+                <!-- Partido 1 -->
+                <div class="match">
+                    <div class="team">
+                        <span class="team-name" id="r16l-1-home">Equipo ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                    <div class="team">
+                        <span class="team-name" id="r16l-1-away">Equipo ___</span>
+                        <span class="team-score">—</span>
+                    </div>
                 </div>
-                <div class="game-title">Destino Mortal</div>
-                <a href="https://www.mediafire.com/file/i0sgkgwratxc156/DestinoMortal.apk/file" class="download-btn" target="_blank">Descargar</a>
-            </div>
-            
-            <!-- Aquí puedes agregar más juegos copiando el bloque de arriba -->
-            
-        </div>
 
-        <!-- Anuncio inferior -->
-        <div class="ad-container bottom-banner">
-            <div class="ad-label">Publicidad</div>
-            <script type='text/javascript' src='//pl27458422.profitableratecpm.com/9f/ad/aa/9fadaacd147b7764a274c4d38f00b281.js'></script>
+                <!-- Partido 2 -->
+                <div class="match">
+                    <div class="team">
+                        <span class="team-name" id="r16l-2-home">Equipo ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                    <div class="team">
+                        <span class="team-name" id="r16l-2-away">Equipo ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                </div>
+
+                <!-- Partido 3 -->
+                <div class="match">
+                    <div class="team">
+                        <span class="team-name" id="r16l-3-home">Equipo ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                    <div class="team">
+                        <span class="team-name" id="r16l-3-away">Equipo ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                </div>
+
+                <!-- Partido 4 -->
+                <div class="match">
+                    <div class="team">
+                        <span class="team-name" id="r16l-4-home">Equipo ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                    <div class="team">
+                        <span class="team-name" id="r16l-4-away">Equipo ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CUARTOS IZQUIERDA -->
+            <div class="round">
+                <h3>CUARTOS IZQ</h3>
+                
+                <!-- Partido 1 -->
+                <div class="match">
+                    <div class="team">
+                        <span class="team-name" id="qfl-1-home">Ganador ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                    <div class="team">
+                        <span class="team-name" id="qfl-1-away">Ganador ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                </div>
+
+                <!-- Partido 2 -->
+                <div class="match">
+                    <div class="team">
+                        <span class="team-name" id="qfl-2-home">Ganador ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                    <div class="team">
+                        <span class="team-name" id="qfl-2-away">Ganador ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEMIFINAL IZQUIERDA -->
+            <div class="round round-sf1">
+                <h3>SEMIFINAL</h3>
+                
+                <div class="match">
+                    <div class="team">
+                        <span class="team-name" id="sf1-home">Ganador ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                    <div class="team">
+                        <span class="team-name" id="sf1-away">Ganador ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FINAL -->
+            <div class="round round-final">
+                <h3>🏆 FINAL</h3>
+                
+                <div class="match">
+                    <div class="team">
+                        <span class="team-name" id="final-home">Finalista ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                    <div class="team">
+                        <span class="team-name" id="final-away">Finalista ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SEMIFINAL DERECHA -->
+            <div class="round round-sf2">
+                <h3>SEMIFINAL</h3>
+                
+                <div class="match">
+                    <div class="team">
+                        <span class="team-name" id="sf2-home">Ganador ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                    <div class="team">
+                        <span class="team-name" id="sf2-away">Ganador ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CUARTOS DERECHA -->
+            <div class="round">
+                <h3>CUARTOS DER</h3>
+                
+                <!-- Partido 3 -->
+                <div class="match">
+                    <div class="team">
+                        <span class="team-name" id="qfr-1-home">Ganador ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                    <div class="team">
+                        <span class="team-name" id="qfr-1-away">Ganador ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                </div>
+
+                <!-- Partido 4 -->
+                <div class="match">
+                    <div class="team">
+                        <span class="team-name" id="qfr-2-home">Ganador ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                    <div class="team">
+                        <span class="team-name" id="qfr-2-away">Ganador ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- OCTAVOS DERECHA -->
+            <div class="round">
+                <h3>OCTAVOS DER</h3>
+                
+                <!-- Partido 5 -->
+                <div class="match">
+                    <div class="team">
+                        <span class="team-name" id="r16r-1-home">Equipo ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                    <div class="team">
+                        <span class="team-name" id="r16r-1-away">Equipo ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                </div>
+
+                <!-- Partido 6 -->
+                <div class="match">
+                    <div class="team">
+                        <span class="team-name" id="r16r-2-home">Equipo ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                    <div class="team">
+                        <span class="team-name" id="r16r-2-away">Equipo ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                </div>
+
+                <!-- Partido 7 -->
+                <div class="match">
+                    <div class="team">
+                        <span class="team-name" id="r16r-3-home">Equipo ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                    <div class="team">
+                        <span class="team-name" id="r16r-3-away">Equipo ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                </div>
+
+                <!-- Partido 8 -->
+                <div class="match">
+                    <div class="team">
+                        <span class="team-name" id="r16r-4-home">Equipo ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                    <div class="team">
+                        <span class="team-name" id="r16r-4-away">Equipo ___</span>
+                        <span class="team-score">—</span>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- INSTRUCCIONES DE EDICIÓN (COMENTARIO HTML) -->
+    <!--
+    INSTRUCCIONES PARA EDITAR:
+    
+    1. Para cambiar equipos: busca el ID correspondiente y cambia el texto
+       Ejemplo: <span id="r16l-1-home">Real Madrid</span>
+    
+    2. Para cambiar marcadores: cambia el contenido de <span class="team-score">
+       Ejemplo: <span class="team-score">2</span>
+    
+    3. CÓDIGOS DE IDENTIFICACIÓN:
+       - r16l-X-home/away = Octavos izquierda (X del 1 al 4)
+       - qfl-X-home/away = Cuartos izquierda (X del 1 al 2) 
+       - sf1-home/away = Semifinal izquierda
+       - final-home/away = Final
+       - sf2-home/away = Semifinal derecha
+       - qfr-X-home/away = Cuartos derecha (X del 1 al 2)
+       - r16r-X-home/away = Octavos derecha (X del 1 al 4)
+    
+    4. Guarda el archivo después de cada cambio
+    -->
 </body>
 </html>
