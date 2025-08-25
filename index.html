@@ -129,10 +129,98 @@
             height: 2px;
         }
 
-        /* Espaciado responsivo */
-        @media (max-width: 1200px) {
+        /* Adaptación para móviles */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
             .bracket-container {
+                min-width: auto;
+                padding: 20px 10px;
+                overflow-x: auto;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+                margin-bottom: 20px;
+            }
+            
+            .bracket {
                 min-width: 1200px;
+                gap: 15px;
+            }
+            
+            .match {
+                min-width: 140px;
+            }
+            
+            .team {
+                padding: 8px 10px;
+                min-height: 40px;
+            }
+            
+            .team-name {
+                font-size: 0.9em;
+            }
+            
+            .team-score {
+                font-size: 0.8em;
+                padding: 3px 6px;
+                min-width: 20px;
+            }
+            
+            .round h3 {
+                font-size: 1em;
+                margin-bottom: 10px;
+            }
+            
+            .round {
+                gap: 25px;
+            }
+            
+            .round-sf1, .round-sf2 {
+                margin-top: 60px;
+            }
+            
+            .round-final {
+                margin-top: 120px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5em;
+            }
+            
+            .match {
+                min-width: 120px;
+            }
+            
+            .team {
+                padding: 6px 8px;
+                min-height: 35px;
+            }
+            
+            .team-name {
+                font-size: 0.8em;
+            }
+            
+            .team-score {
+                font-size: 0.7em;
+                padding: 2px 4px;
+                min-width: 18px;
+            }
+            
+            .round h3 {
+                font-size: 0.9em;
+            }
+        }
+
+        /* Espaciado para tablets */
+        @media (max-width: 1200px) and (min-width: 769px) {
+            .bracket-container {
+                min-width: 1000px;
             }
             
             .match {
@@ -167,7 +255,7 @@
         <div class="bracket">
             <!-- OCTAVOS IZQUIERDA -->
             <div class="round">
-                <h3>OCTAVOS </h3>
+                <h3>OCTAVOS</h3>
                 
                 <!-- Partido 1 -->
                 <div class="match">
@@ -220,7 +308,7 @@
 
             <!-- CUARTOS IZQUIERDA -->
             <div class="round">
-                <h3>CUARTOS IZQ</h3>
+                <h3>CUARTOS</h3>
                 
                 <!-- Partido 1 -->
                 <div class="match">
@@ -297,7 +385,7 @@
 
             <!-- CUARTOS DERECHA -->
             <div class="round">
-                <h3>CUARTOS </h3>
+                <h3>CUARTOS</h3>
                 
                 <!-- Partido 3 -->
                 <div class="match">
@@ -326,7 +414,7 @@
 
             <!-- OCTAVOS DERECHA -->
             <div class="round">
-                <h3>OCTAVOS </h3>
+                <h3>OCTAVOS</h3>
                 
                 <!-- Partido 5 -->
                 <div class="match">
