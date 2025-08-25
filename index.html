@@ -5,232 +5,112 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Champions League Efootball 2025</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Arial', sans-serif;
+            font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #1a1a2e, #16213e);
             color: white;
-            min-height: 100vh;
-            padding: 20px;
-            overflow-x: auto;
+            padding: 10px;
         }
 
-        .bracket-container {
-            min-width: 1400px;
-            margin: 0 auto;
-            padding: 40px 20px;
+        .container {
+            max-width: 100%;
+            overflow-x: auto;
+            padding: 20px 10px;
         }
 
         h1 {
             text-align: center;
-            font-size: 2.5em;
-            margin-bottom: 40px;
+            font-size: 1.8em;
+            margin-bottom: 30px;
             background: linear-gradient(45deg, #00d4ff, #0099cc);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         .bracket {
             display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 20px;
+            grid-template-columns: repeat(7, minmax(120px, 1fr));
+            gap: 15px;
+            min-width: 900px;
             align-items: center;
-            position: relative;
         }
 
         .round {
             display: flex;
             flex-direction: column;
-            gap: 40px;
+            gap: 20px;
         }
 
         .round h3 {
             text-align: center;
-            margin-bottom: 20px;
-            font-size: 1.2em;
+            margin-bottom: 15px;
+            font-size: 0.9em;
             color: #00d4ff;
         }
 
         .match {
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: 8px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
             overflow: hidden;
-            min-width: 180px;
-            position: relative;
             backdrop-filter: blur(10px);
             transition: all 0.3s ease;
         }
 
         .match:hover {
             border-color: #00d4ff;
-            box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
         }
 
         .team {
-            padding: 12px 15px;
+            padding: 8px 10px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            min-height: 50px;
+            min-height: 35px;
         }
 
-        .team:last-child {
-            border-bottom: none;
-        }
+        .team:last-child { border-bottom: none; }
 
         .team-name {
             font-weight: bold;
             color: white;
+            font-size: 0.85em;
             flex-grow: 1;
         }
 
         .team-score {
             background: rgba(0, 212, 255, 0.8);
             color: white;
-            padding: 4px 8px;
-            border-radius: 6px;
+            padding: 2px 6px;
+            border-radius: 4px;
             font-weight: bold;
-            min-width: 25px;
+            font-size: 0.8em;
+            min-width: 20px;
             text-align: center;
-            margin-left: 10px;
+            margin-left: 8px;
         }
 
-        /* Espaciado específico para semifinales y final */
-        .round-sf1, .round-sf2 {
-            margin-top: 100px;
-        }
+        /* Espaciado para semifinales y final */
+        .round:nth-child(3) { margin-top: 50px; }
+        .round:nth-child(4) { margin-top: 100px; }
+        .round:nth-child(5) { margin-top: 50px; }
 
-        .round-final {
-            margin-top: 200px;
-        }
-
-        /* Líneas de conexión decorativas */
-        .bracket::before,
-        .bracket::after {
-            content: '';
-            position: absolute;
-            background: rgba(0, 212, 255, 0.5);
-            z-index: -1;
-        }
-
-        /* Líneas horizontales */
-        .bracket::before {
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 2px;
-        }
-
-        /* Adaptación para móviles */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            
-            .bracket-container {
-                min-width: auto;
-                padding: 20px 10px;
-                overflow-x: auto;
-            }
-            
-            h1 {
-                font-size: 1.8em;
-                margin-bottom: 20px;
-            }
-            
-            .bracket {
-                min-width: 1200px;
-                gap: 15px;
-            }
-            
-            .match {
-                min-width: 140px;
-            }
-            
-            .team {
-                padding: 8px 10px;
-                min-height: 40px;
-            }
-            
-            .team-name {
-                font-size: 0.9em;
-            }
-            
-            .team-score {
-                font-size: 0.8em;
-                padding: 3px 6px;
-                min-width: 20px;
-            }
-            
-            .round h3 {
-                font-size: 1em;
-                margin-bottom: 10px;
-            }
-            
-            .round {
-                gap: 25px;
-            }
-            
-            .round-sf1, .round-sf2 {
-                margin-top: 60px;
-            }
-            
-            .round-final {
-                margin-top: 120px;
-            }
-        }
-        
+        /* Responsive para pantallas muy pequeñas */
         @media (max-width: 480px) {
-            h1 {
-                font-size: 1.5em;
-            }
-            
-            .match {
-                min-width: 120px;
-            }
-            
-            .team {
-                padding: 6px 8px;
-                min-height: 35px;
-            }
-            
-            .team-name {
-                font-size: 0.8em;
-            }
-            
-            .team-score {
-                font-size: 0.7em;
-                padding: 2px 4px;
-                min-width: 18px;
-            }
-            
-            .round h3 {
-                font-size: 0.9em;
-            }
-        }
-
-        /* Espaciado para tablets */
-        @media (max-width: 1200px) and (min-width: 769px) {
-            .bracket-container {
-                min-width: 1000px;
-            }
-            
-            .match {
-                min-width: 160px;
-            }
-        }
-
-        .placeholder {
-            color: rgba(255, 255, 255, 0.5);
-            font-style: italic;
+            h1 { font-size: 1.4em; margin-bottom: 20px; }
+            .bracket { min-width: 800px; gap: 10px; grid-template-columns: repeat(7, 110px); }
+            .round { gap: 15px; }
+            .round h3 { font-size: 0.8em; margin-bottom: 10px; }
+            .team { padding: 6px 8px; min-height: 30px; }
+            .team-name { font-size: 0.75em; }
+            .team-score { font-size: 0.7em; padding: 2px 4px; }
+            .round:nth-child(3) { margin-top: 30px; }
+            .round:nth-child(4) { margin-top: 60px; }
+            .round:nth-child(5) { margin-top: 30px; }
         }
     </style>
 </head>
@@ -249,219 +129,102 @@
         <script type="text/javascript" src="//www.highperformanceformat.com/a6c29732eed562ce6c743af0a3b60273/invoke.js"></script>
     </div>
 
-    <div class="bracket-container">
+    <div class="container">
         <h1>🏆 Champions League Efootball 2025</h1>
         
         <div class="bracket">
             <!-- OCTAVOS IZQUIERDA -->
             <div class="round">
                 <h3>OCTAVOS</h3>
-                
-                <!-- Partido 1 -->
                 <div class="match">
-                    <div class="team">
-                        <span class="team-name" id="r16l-1-home">Equipo ___</span>
-                        <span class="team-score">—</span>
-                    </div>
-                    <div class="team">
-                        <span class="team-name" id="r16l-1-away">Equipo ___</span>
-                        <span class="team-score">—</span>
-                    </div>
+                    <div class="team"><span class="team-name">Equipo A</span><span class="team-score">—</span></div>
+                    <div class="team"><span class="team-name">Equipo B</span><span class="team-score">—</span></div>
                 </div>
-
-                <!-- Partido 2 -->
                 <div class="match">
-                    <div class="team">
-                        <span class="team-name" id="r16l-2-home">Equipo ___</span>
-                        <span class="team-score">—</span>
-                    </div>
-                    <div class="team">
-                        <span class="team-name" id="r16l-2-away">Equipo ___</span>
-                        <span class="team-score">—</span>
-                    </div>
+                    <div class="team"><span class="team-name">Equipo C</span><span class="team-score">—</span></div>
+                    <div class="team"><span class="team-name">Equipo D</span><span class="team-score">—</span></div>
                 </div>
-
-                <!-- Partido 3 -->
                 <div class="match">
-                    <div class="team">
-                        <span class="team-name" id="r16l-3-home">Equipo ___</span>
-                        <span class="team-score">—</span>
-                    </div>
-                    <div class="team">
-                        <span class="team-name" id="r16l-3-away">Equipo ___</span>
-                        <span class="team-score">—</span>
-                    </div>
+                    <div class="team"><span class="team-name">Equipo E</span><span class="team-score">—</span></div>
+                    <div class="team"><span class="team-name">Equipo F</span><span class="team-score">—</span></div>
                 </div>
-
-                <!-- Partido 4 -->
                 <div class="match">
-                    <div class="team">
-                        <span class="team-name" id="r16l-4-home">Equipo ___</span>
-                        <span class="team-score">—</span>
-                    </div>
-                    <div class="team">
-                        <span class="team-name" id="r16l-4-away">Equipo ___</span>
-                        <span class="team-score">—</span>
-                    </div>
+                    <div class="team"><span class="team-name">Equipo G</span><span class="team-score">—</span></div>
+                    <div class="team"><span class="team-name">Equipo H</span><span class="team-score">—</span></div>
                 </div>
             </div>
 
             <!-- CUARTOS IZQUIERDA -->
             <div class="round">
                 <h3>CUARTOS</h3>
-                
-                <!-- Partido 1 -->
                 <div class="match">
-                    <div class="team">
-                        <span class="team-name" id="qfl-1-home">Ganador ___</span>
-                        <span class="team-score">—</span>
-                    </div>
-                    <div class="team">
-                        <span class="team-name" id="qfl-1-away">Ganador ___</span>
-                        <span class="team-score">—</span>
-                    </div>
+                    <div class="team"><span class="team-name">Ganador A/B</span><span class="team-score">—</span></div>
+                    <div class="team"><span class="team-name">Ganador C/D</span><span class="team-score">—</span></div>
                 </div>
-
-                <!-- Partido 2 -->
                 <div class="match">
-                    <div class="team">
-                        <span class="team-name" id="qfl-2-home">Ganador ___</span>
-                        <span class="team-score">—</span>
-                    </div>
-                    <div class="team">
-                        <span class="team-name" id="qfl-2-away">Ganador ___</span>
-                        <span class="team-score">—</span>
-                    </div>
+                    <div class="team"><span class="team-name">Ganador E/F</span><span class="team-score">—</span></div>
+                    <div class="team"><span class="team-name">Ganador G/H</span><span class="team-score">—</span></div>
                 </div>
             </div>
 
             <!-- SEMIFINAL IZQUIERDA -->
-            <div class="round round-sf1">
+            <div class="round">
                 <h3>SEMIFINAL</h3>
-                
                 <div class="match">
-                    <div class="team">
-                        <span class="team-name" id="sf1-home">Ganador ___</span>
-                        <span class="team-score">—</span>
-                    </div>
-                    <div class="team">
-                        <span class="team-name" id="sf1-away">Ganador ___</span>
-                        <span class="team-score">—</span>
-                    </div>
+                    <div class="team"><span class="team-name">Semifinalista 1</span><span class="team-score">—</span></div>
+                    <div class="team"><span class="team-name">Semifinalista 2</span><span class="team-score">—</span></div>
                 </div>
             </div>
 
             <!-- FINAL -->
-            <div class="round round-final">
+            <div class="round">
                 <h3>🏆 FINAL</h3>
-                
                 <div class="match">
-                    <div class="team">
-                        <span class="team-name" id="final-home">Finalista ___</span>
-                        <span class="team-score">—</span>
-                    </div>
-                    <div class="team">
-                        <span class="team-name" id="final-away">Finalista ___</span>
-                        <span class="team-score">—</span>
-                    </div>
+                    <div class="team"><span class="team-name">Finalista 1</span><span class="team-score">—</span></div>
+                    <div class="team"><span class="team-name">Finalista 2</span><span class="team-score">—</span></div>
                 </div>
             </div>
 
             <!-- SEMIFINAL DERECHA -->
-            <div class="round round-sf2">
+            <div class="round">
                 <h3>SEMIFINAL</h3>
-                
                 <div class="match">
-                    <div class="team">
-                        <span class="team-name" id="sf2-home">Ganador ___</span>
-                        <span class="team-score">—</span>
-                    </div>
-                    <div class="team">
-                        <span class="team-name" id="sf2-away">Ganador ___</span>
-                        <span class="team-score">—</span>
-                    </div>
+                    <div class="team"><span class="team-name">Semifinalista 3</span><span class="team-score">—</span></div>
+                    <div class="team"><span class="team-name">Semifinalista 4</span><span class="team-score">—</span></div>
                 </div>
             </div>
 
             <!-- CUARTOS DERECHA -->
             <div class="round">
                 <h3>CUARTOS</h3>
-                
-                <!-- Partido 3 -->
                 <div class="match">
-                    <div class="team">
-                        <span class="team-name" id="qfr-1-home">Ganador ___</span>
-                        <span class="team-score">—</span>
-                    </div>
-                    <div class="team">
-                        <span class="team-name" id="qfr-1-away">Ganador ___</span>
-                        <span class="team-score">—</span>
-                    </div>
+                    <div class="team"><span class="team-name">Ganador I/J</span><span class="team-score">—</span></div>
+                    <div class="team"><span class="team-name">Ganador K/L</span><span class="team-score">—</span></div>
                 </div>
-
-                <!-- Partido 4 -->
                 <div class="match">
-                    <div class="team">
-                        <span class="team-name" id="qfr-2-home">Ganador ___</span>
-                        <span class="team-score">—</span>
-                    </div>
-                    <div class="team">
-                        <span class="team-name" id="qfr-2-away">Ganador ___</span>
-                        <span class="team-score">—</span>
-                    </div>
+                    <div class="team"><span class="team-name">Ganador M/N</span><span class="team-score">—</span></div>
+                    <div class="team"><span class="team-name">Ganador O/P</span><span class="team-score">—</span></div>
                 </div>
             </div>
 
             <!-- OCTAVOS DERECHA -->
             <div class="round">
                 <h3>OCTAVOS</h3>
-                
-                <!-- Partido 5 -->
                 <div class="match">
-                    <div class="team">
-                        <span class="team-name" id="r16r-1-home">Equipo ___</span>
-                        <span class="team-score">—</span>
-                    </div>
-                    <div class="team">
-                        <span class="team-name" id="r16r-1-away">Equipo ___</span>
-                        <span class="team-score">—</span>
-                    </div>
+                    <div class="team"><span class="team-name">Equipo I</span><span class="team-score">—</span></div>
+                    <div class="team"><span class="team-name">Equipo J</span><span class="team-score">—</span></div>
                 </div>
-
-                <!-- Partido 6 -->
                 <div class="match">
-                    <div class="team">
-                        <span class="team-name" id="r16r-2-home">Equipo ___</span>
-                        <span class="team-score">—</span>
-                    </div>
-                    <div class="team">
-                        <span class="team-name" id="r16r-2-away">Equipo ___</span>
-                        <span class="team-score">—</span>
-                    </div>
+                    <div class="team"><span class="team-name">Equipo K</span><span class="team-score">—</span></div>
+                    <div class="team"><span class="team-name">Equipo L</span><span class="team-score">—</span></div>
                 </div>
-
-                <!-- Partido 7 -->
                 <div class="match">
-                    <div class="team">
-                        <span class="team-name" id="r16r-3-home">Equipo ___</span>
-                        <span class="team-score">—</span>
-                    </div>
-                    <div class="team">
-                        <span class="team-name" id="r16r-3-away">Equipo ___</span>
-                        <span class="team-score">—</span>
-                    </div>
+                    <div class="team"><span class="team-name">Equipo M</span><span class="team-score">—</span></div>
+                    <div class="team"><span class="team-name">Equipo N</span><span class="team-score">—</span></div>
                 </div>
-
-                <!-- Partido 8 -->
                 <div class="match">
-                    <div class="team">
-                        <span class="team-name" id="r16r-4-home">Equipo ___</span>
-                        <span class="team-score">—</span>
-                    </div>
-                    <div class="team">
-                        <span class="team-name" id="r16r-4-away">Equipo ___</span>
-                        <span class="team-score">—</span>
-                    </div>
+                    <div class="team"><span class="team-name">Equipo O</span><span class="team-score">—</span></div>
+                    <div class="team"><span class="team-name">Equipo P</span><span class="team-score">—</span></div>
                 </div>
             </div>
         </div>
@@ -477,27 +240,5 @@
             <div id="container-2cab1d61c2dc9d7d47e9cefc513235df"></div>
         </div>
     </div>
-
-    <!-- INSTRUCCIONES DE EDICIÓN (COMENTARIO HTML) -->
-    <!--
-    INSTRUCCIONES PARA EDITAR:
-    
-    1. Para cambiar equipos: busca el ID correspondiente y cambia el texto
-       Ejemplo: <span id="r16l-1-home">Real Madrid</span>
-    
-    2. Para cambiar marcadores: cambia el contenido de <span class="team-score">
-       Ejemplo: <span class="team-score">2</span>
-    
-    3. CÓDIGOS DE IDENTIFICACIÓN:
-       - r16l-X-home/away = Octavos izquierda (X del 1 al 4)
-       - qfl-X-home/away = Cuartos izquierda (X del 1 al 2) 
-       - sf1-home/away = Semifinal izquierda
-       - final-home/away = Final
-       - sf2-home/away = Semifinal derecha
-       - qfr-X-home/away = Cuartos derecha (X del 1 al 2)
-       - r16r-X-home/away = Octavos derecha (X del 1 al 4)
-    
-    4. Guarda el archivo después de cada cambio
-    -->
 </body>
 </html>
