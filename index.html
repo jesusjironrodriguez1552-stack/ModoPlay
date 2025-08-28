@@ -238,24 +238,6 @@
             color: white;
         }
 
-        .score-input {
-            width: 40px;
-            height: 35px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(0, 255, 135, 0.3);
-            border-radius: 6px;
-            color: white;
-            text-align: center;
-            font-weight: bold;
-            font-size: 1em;
-        }
-
-        .score-input:focus {
-            outline: none;
-            border-color: #00ff87;
-            box-shadow: 0 0 10px rgba(0, 255, 135, 0.3);
-        }
-
         .champion-crown {
             position: relative;
             display: inline-block;
@@ -336,20 +318,20 @@
     <div class="container">
         <div class="header">
             <h1>🏆 Liga Efootball 2025</h1>
-            <p>Sistema de Ida y Vuelta • 11 Equipos • 20 Jornadas • 110 Partidos</p>
+            <p>Sistema de Ida y Vuelta • <span id="totalTeams">11</span> Equipos • <span id="totalRounds">20</span> Jornadas • <span id="totalMatches">110</span> Partidos</p>
         </div>
 
         <div class="stats-grid">
             <div class="stat-card">
-                <span class="stat-number">11</span>
+                <span class="stat-number" id="teamsCount">11</span>
                 <div class="stat-label">Equipos</div>
             </div>
             <div class="stat-card">
-                <span class="stat-number">110</span>
+                <span class="stat-number" id="matchesCount">110</span>
                 <div class="stat-label">Partidos Total</div>
             </div>
             <div class="stat-card">
-                <span class="stat-number">20</span>
+                <span class="stat-number" id="roundsCount">20</span>
                 <div class="stat-label">Jornadas</div>
             </div>
             <div class="stat-card">
@@ -408,47 +390,64 @@
         </div>
     </div>
 
+    <!-- CARGAR ARCHIVO DE EQUIPOS -->
+    <script src="clubes.js"></script>
+    
     <script>
-        const teams = [
-            { name: "Royyer10", club: "Inter", played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0, points: 0 },
-            { name: "Benny Caballero", club: "FC Barcelona", played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0, points: 0 },
-            { name: "LW🐉", club: "AC Milan", played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0, points: 0 },
-            { name: "the Andres", club: "Real Madrid", played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0, points: 0 },
-            { name: "alexander", club: "Santos", played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0, points: 0 },
-            { name: "399633", club: "Newcastle", played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0, points: 0 },
-            { name: "ElianVz17", club: "Venezuela", played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0, points: 0 },
-            { name: "JLesme", club: "Equipo disponible", played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0, points: 0 },
-            { name: "Ever Gutierrez", club: "SC Corinthians", played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0, points: 0 },
-            { name: "Santislowly", club: "Club América", played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0, points: 0 },
-            { name: "Máx", club: "Botafogo", played: 0, won: 0, drawn: 0, lost: 0, goalsFor: 0, goalsAgainst: 0, points: 0 }
-        ];
+        // Variables globales
+        let teams = [];
+        let fixtures = [];
 
         // RESULTADOS OFICIALES DEL TORNEO
-        // Para agregar un resultado, cambia los valores null por los goles de cada equipo
-        // Formato: { jornada: X, local: "Nombre del jugador", visitante: "Nombre del jugador", golesLocal: X, golesVisitante: X }
         const matchResults = [
             // PRIMERA VUELTA (JORNADAS 1-10)
             // { jornada: 1, local: "Royyer10", visitante: "Benny Caballero", golesLocal: 2, golesVisitante: 1 },
-            // { jornada: 1, local: "LW🐉", visitante: "the Andres", golesLocal: 0, golesVisitante: 3 },
             
             // SEGUNDA VUELTA (JORNADAS 11-20) - SE INVIERTEN LOS LOCALES
             // { jornada: 11, local: "Benny Caballero", visitante: "Royyer10", golesLocal: 1, golesVisitante: 0 },
-            // { jornada: 11, local: "the Andres", visitante: "LW🐉", golesLocal: 2, golesVisitante: 2 },
-            
-            // AGREGAR MÁS RESULTADOS AQUÍ...
         ];
 
-        const fixtures = [];
-        
-        // Generar todos los enfrentamientos (110 partidos: 55 de ida + 55 de vuelta)
+        // Inicializar equipos desde clubes.js
+        function initializeTeams() {
+            if (typeof clubes === 'undefined') {
+                console.error('Error: No se pudo cargar el archivo clubes.js');
+                return;
+            }
+            
+            teams = clubes.map(club => ({
+                ...club,
+                played: 0, won: 0, drawn: 0, lost: 0, 
+                goalsFor: 0, goalsAgainst: 0, points: 0
+            }));
+            
+            updateTeamCounts();
+        }
+
+        function updateTeamCounts() {
+            const teamCount = teams.length;
+            const totalMatches = teamCount * (teamCount - 1);
+            const totalRounds = (teamCount - 1) * 2;
+            
+            document.getElementById('totalTeams').textContent = teamCount;
+            document.getElementById('teamsCount').textContent = teamCount;
+            document.getElementById('totalMatches').textContent = totalMatches;
+            document.getElementById('matchesCount').textContent = totalMatches;
+            document.getElementById('totalRounds').textContent = totalRounds;
+            document.getElementById('roundsCount').textContent = totalRounds;
+        }
+
         function generateFixtures() {
-            // Primera vuelta (Jornadas 1-10)
-            const firstLeg = [[], [], [], [], [], [], [], [], [], []];
+            fixtures = [];
+            const numTeams = teams.length;
+            const roundsFirstLeg = numTeams - 1;
+            
+            // Primera vuelta
+            const firstLeg = Array.from({length: roundsFirstLeg}, () => []);
             let matchIndex = 0;
             
-            for (let i = 0; i < teams.length; i++) {
-                for (let j = i + 1; j < teams.length; j++) {
-                    const roundIndex = matchIndex % 10;
+            for (let i = 0; i < numTeams; i++) {
+                for (let j = i + 1; j < numTeams; j++) {
+                    const roundIndex = matchIndex % roundsFirstLeg;
                     firstLeg[roundIndex].push({
                         home: i,
                         away: j,
@@ -461,16 +460,16 @@
                 }
             }
             
-            // Segunda vuelta (Jornadas 11-20) - Se invierten local y visitante
-            const secondLeg = [[], [], [], [], [], [], [], [], [], []];
+            // Segunda vuelta
+            const secondLeg = Array.from({length: roundsFirstLeg}, () => []);
             matchIndex = 0;
             
-            for (let i = 0; i < teams.length; i++) {
-                for (let j = i + 1; j < teams.length; j++) {
-                    const roundIndex = matchIndex % 10;
+            for (let i = 0; i < numTeams; i++) {
+                for (let j = i + 1; j < numTeams; j++) {
+                    const roundIndex = matchIndex % roundsFirstLeg;
                     secondLeg[roundIndex].push({
-                        home: j, // Se invierte: el que era visitante ahora es local
-                        away: i, // Se invierte: el que era local ahora es visitante
+                        home: j,
+                        away: i,
                         homeScore: null,
                         awayScore: null,
                         played: false,
@@ -491,13 +490,12 @@
             
             secondLeg.forEach((round, index) => {
                 fixtures.push({
-                    round: index + 11,
+                    round: index + roundsFirstLeg + 1,
                     matches: round,
                     phase: "Segunda Vuelta"
                 });
             });
             
-            // Aplicar resultados desde el array de resultados
             applyResults();
         }
 
@@ -507,7 +505,6 @@
                 const awayIndex = teams.findIndex(team => team.name === result.visitante);
                 
                 if (homeIndex !== -1 && awayIndex !== -1) {
-                    // Encontrar el partido correspondiente
                     fixtures.forEach(round => {
                         if (round.round === result.jornada) {
                             const match = round.matches.find(m => 
@@ -515,7 +512,7 @@
                                 (m.home === awayIndex && m.away === homeIndex)
                             );
                             
-                            if (match) {
+                            if (match && !match.played) {
                                 if (match.home === homeIndex) {
                                     match.homeScore = result.golesLocal;
                                     match.awayScore = result.golesVisitante;
@@ -524,60 +521,13 @@
                                     match.awayScore = result.golesLocal;
                                 }
                                 
-                                if (!match.played) {
-                                    processMatch(match);
-                                    match.played = true;
-                                }
+                                processMatch(match);
+                                match.played = true;
                             }
                         }
                     });
                 }
             });
-        }
-
-        function renderFixtures() {
-            const container = document.getElementById('fixturesContainer');
-            container.innerHTML = '';
-            
-            fixtures.forEach(round => {
-                const roundDiv = document.createElement('div');
-                roundDiv.className = 'fixture-round';
-                
-                const roundHeader = document.createElement('div');
-                roundHeader.className = 'round-header';
-                roundHeader.innerHTML = `Jornada ${round.round} <span style="font-size: 0.8em; opacity: 0.8;">(${round.phase})</span>`;
-                roundDiv.appendChild(roundHeader);
-                
-                round.matches.forEach((match, matchIndex) => {
-                    const matchDiv = document.createElement('div');
-                    matchDiv.className = 'match';
-                    
-                    const homeScore = match.homeScore !== null ? match.homeScore : '—';
-                    const awayScore = match.awayScore !== null ? match.awayScore : '—';
-                    const matchStatus = match.played ? 'played' : 'pending';
-                    
-                    matchDiv.innerHTML = `
-                        <div class="match-teams">
-                            <div class="team">${teams[match.home].name}</div>
-                            <span class="vs">vs</span>
-                            <div class="team">${teams[match.away].name}</div>
-                        </div>
-                        <div class="match-score">
-                            <span class="score-display ${matchStatus}">${homeScore}</span>
-                            <span style="margin: 0 8px; color: #a0a9b8;">-</span>
-                            <span class="score-display ${matchStatus}">${awayScore}</span>
-                        </div>
-                    `;
-                    
-                    roundDiv.appendChild(matchDiv);
-                });
-                
-                container.appendChild(roundDiv);
-            });
-        }
-
-        function updateMatch(roundNum, matchIndex, side, score) {
-            // Esta función ya no se usa, los resultados se manejan desde el código
         }
 
         function processMatch(match) {
@@ -608,38 +558,50 @@
             }
         }
 
-        function revertMatch(match) {
-            const homeTeam = teams[match.home];
-            const awayTeam = teams[match.away];
+        function renderFixtures() {
+            const container = document.getElementById('fixturesContainer');
+            container.innerHTML = '';
             
-            homeTeam.played--;
-            awayTeam.played--;
-            
-            homeTeam.goalsFor -= match.homeScore;
-            homeTeam.goalsAgainst -= match.awayScore;
-            awayTeam.goalsFor -= match.awayScore;
-            awayTeam.goalsAgainst -= match.homeScore;
-            
-            if (match.homeScore > match.awayScore) {
-                homeTeam.won--;
-                homeTeam.points -= 3;
-                awayTeam.lost--;
-            } else if (match.homeScore < match.awayScore) {
-                awayTeam.won--;
-                awayTeam.points -= 3;
-                homeTeam.lost--;
-            } else {
-                homeTeam.drawn--;
-                homeTeam.points -= 1;
-                awayTeam.drawn--;
-                awayTeam.points -= 1;
-            }
+            fixtures.forEach(round => {
+                const roundDiv = document.createElement('div');
+                roundDiv.className = 'fixture-round';
+                
+                const roundHeader = document.createElement('div');
+                roundHeader.className = 'round-header';
+                roundHeader.innerHTML = `Jornada ${round.round} <span style="font-size: 0.8em; opacity: 0.8;">(${round.phase})</span>`;
+                roundDiv.appendChild(roundHeader);
+                
+                round.matches.forEach(match => {
+                    const matchDiv = document.createElement('div');
+                    matchDiv.className = 'match';
+                    
+                    const homeScore = match.homeScore !== null ? match.homeScore : '—';
+                    const awayScore = match.awayScore !== null ? match.awayScore : '—';
+                    const matchStatus = match.played ? 'played' : 'pending';
+                    
+                    matchDiv.innerHTML = `
+                        <div class="match-teams">
+                            <div class="team">${teams[match.home].name}</div>
+                            <span class="vs">vs</span>
+                            <div class="team">${teams[match.away].name}</div>
+                        </div>
+                        <div class="match-score">
+                            <span class="score-display ${matchStatus}">${homeScore}</span>
+                            <span style="margin: 0 8px; color: #a0a9b8;">-</span>
+                            <span class="score-display ${matchStatus}">${awayScore}</span>
+                        </div>
+                    `;
+                    
+                    roundDiv.appendChild(matchDiv);
+                });
+                
+                container.appendChild(roundDiv);
+            });
         }
 
         function updateStandings() {
             const tbody = document.getElementById('standingsBody');
             
-            // Ordenar equipos por puntos, diferencia de goles, goles a favor
             const sortedTeams = [...teams].map((team, index) => ({...team, originalIndex: index}))
                 .sort((a, b) => {
                     if (b.points !== a.points) return b.points - a.points;
@@ -652,7 +614,8 @@
             tbody.innerHTML = '';
             sortedTeams.forEach((team, index) => {
                 const row = document.createElement('tr');
-                const isChampion = index === 0 && team.played === 20; // Campeón si tiene todos los partidos jugados
+                const totalRounds = (teams.length - 1) * 2;
+                const isChampion = index === 0 && team.played === totalRounds;
                 
                 row.innerHTML = `
                     <td class="position">${index + 1}</td>
@@ -678,37 +641,40 @@
                 tbody.appendChild(row);
             });
             
-            // Actualizar partidos completados
             const completedMatches = fixtures.reduce((total, round) => 
                 total + round.matches.filter(match => match.played).length, 0);
             document.getElementById('completedMatches').textContent = completedMatches;
             
-            // Mostrar fase actual
             updateCurrentPhase(completedMatches);
         }
 
         function updateCurrentPhase(completed) {
             const header = document.querySelector('.header p');
+            const totalMatches = teams.length * (teams.length - 1);
+            const halfMatches = totalMatches / 2;
             let phaseText = "";
             
             if (completed === 0) {
                 phaseText = "🚀 ¡Liga por comenzar!";
-            } else if (completed <= 55) {
-                phaseText = `🏃‍♂️ Primera Vuelta en curso (${completed}/55 partidos)`;
-            } else if (completed <= 110) {
-                phaseText = `🔥 Segunda Vuelta en curso (${completed - 55}/55 partidos)`;
+            } else if (completed <= halfMatches) {
+                phaseText = `🏃‍♂️ Primera Vuelta en curso (${completed}/${halfMatches} partidos)`;
+            } else if (completed <= totalMatches) {
+                phaseText = `🔥 Segunda Vuelta en curso (${completed - halfMatches}/${halfMatches} partidos)`;
             } else {
                 phaseText = "🏆 ¡Liga completada!";
             }
             
-            header.innerHTML = `Sistema de Ida y Vuelta • 11 Equipos • 20 Jornadas • 110 Partidos<br><small style="color: #00ff87;">${phaseText}</small>`;
-        }
+            const baseText = header.innerHTML.split('<br>')[0];
+            header.innerHTML = `${baseText}<br><small style="color: #00ff87;">${phaseText}</small>`;
         }
 
-        // Inicializar
-        generateFixtures();
-        renderFixtures();
-        updateStandings();
+        // Inicialización
+        window.addEventListener('load', () => {
+            initializeTeams();
+            generateFixtures();
+            renderFixtures();
+            updateStandings();
+        });
     </script>
 </body>
 </html>
