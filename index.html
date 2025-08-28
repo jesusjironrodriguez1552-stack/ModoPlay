@@ -40,11 +40,16 @@
         </table>
     </div>
 
-    <script src="clubes.js"></script>
-    <script src="fixtures.js"></script>
-    
     <script>
         console.log('Script starting...');
+        
+        // Check what global variables exist
+        function checkGlobalVariables() {
+            console.log('Global variables check:');
+            console.log('window.customFixtures:', window.customFixtures);
+            console.log('window.clubes:', window.clubes);
+            console.log('window.fixtureHelper:', window.fixtureHelper);
+        }
         
         // Debug function to check what's loaded
         function checkLoadedData() {
@@ -76,7 +81,21 @@
             } else {
                 console.log('FixtureHelper NOT loaded');
             }
+            
+            checkGlobalVariables();
         }
+        
+        // Check for script load errors
+        window.addEventListener('error', function(e) {
+            console.error('Script error:', e.filename, e.lineno, e.message);
+            document.getElementById('debug-info').innerHTML += `<p style="color: red;">Error loading: ${e.filename} - ${e.message}</p>`;
+        });
+    </script>
+    
+    <script src="clubes.js" onerror="console.error('Failed to load clubes.js'); document.getElementById('clubes-status').textContent = 'Load Error ✗';"></script>
+    <script src="fixtures.js" onerror="console.error('Failed to load fixtures.js'); document.getElementById('fixtures-status').textContent = 'Load Error ✗';"></script>
+    
+    <script>
         
         function displayTeams() {
             if (typeof clubes === 'undefined') return;
