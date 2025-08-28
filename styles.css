@@ -1,0 +1,324 @@
+/* Liga Efootball 2025 - Debug Styles */
+
+/* Reset y base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Contenedor principal */
+h1 {
+    text-align: center;
+    color: white;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    font-weight: 300;
+    letter-spacing: 2px;
+}
+
+/* Secciones */
+div[id$="-section"], #debug-info, #fixture-helper-demo {
+    background: rgba(255, 255, 255, 0.95);
+    margin: 20px auto;
+    max-width: 1200px;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Títulos de sección */
+h2 {
+    color: #4a5568;
+    border-bottom: 3px solid #667eea;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+/* Debug info */
+#debug-info p {
+    margin: 8px 0;
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: #f7fafc;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+}
+
+#debug-info span {
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 4px;
+    color: white;
+}
+
+/* Status indicators */
+#clubes-status, #fixtures-status {
+    background: #48bb78 !important;
+    color: white !important;
+}
+
+#teams-count, #fixtures-count {
+    background: #4299e1 !important;
+    color: white !important;
+}
+
+/* Lista de equipos */
+#teams-list {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+}
+
+#teams-list li {
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    padding: 15px;
+    border-radius: 10px;
+    border-left: 4px solid #667eea;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+#teams-list li:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-left-color: #764ba2;
+}
+
+#teams-list li strong {
+    color: #2d3748;
+    font-size: 1.1rem;
+}
+
+#teams-list li small {
+    color: #718096;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: block;
+}
+
+/* Fixtures */
+#fixtures-list > p {
+    text-align: center;
+    font-size: 1.2rem;
+    color: #4a5568;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: #e6fffa;
+    border-radius: 8px;
+    border: 1px solid #81e6d9;
+}
+
+#fixtures-list > div {
+    background: linear-gradient(135deg, #f0fff4 0%, #f7fafc 100%) !important;
+    border: 1px solid #c6f6d5 !important;
+    border-radius: 12px !important;
+    margin: 15px 0 !important;
+    padding: 20px !important;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+}
+
+#fixtures-list > div:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+#fixtures-list h3 {
+    color: #2f855a;
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    text-align: center;
+    background: #c6f6d5;
+    padding: 8px;
+    border-radius: 8px;
+}
+
+#fixtures-list div[style*="marginLeft"] {
+    background: white !important;
+    margin: 10px 0 !important;
+    margin-left: 20px !important;
+    padding: 12px !important;
+    border-radius: 8px !important;
+    border-left: 3px solid #667eea !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05) !important;
+}
+
+/* Tabla de posiciones */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+td {
+    padding: 12px 15px;
+    border-bottom: 1px solid #e2e8f0;
+    transition: background-color 0.3s ease;
+}
+
+tr:hover td {
+    background-color: #f7fafc;
+}
+
+tr:last-child td {
+    border-bottom: none;
+}
+
+/* Botón de test */
+button {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    font-weight: 500;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+}
+
+button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Resultados del helper */
+#helper-results {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f7fafc;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+}
+
+#helper-results h3 {
+    color: #2d3748;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+#helper-results ul {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #4299e1;
+}
+
+#helper-results li {
+    margin: 5px 0;
+    color: #4a5568;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.9rem;
+}
+
+/* Mensajes de error */
+p[style*="color: red"] {
+    background: #fed7d7 !important;
+    color: #c53030 !important;
+    padding: 10px !important;
+    border-radius: 8px !important;
+    border-left: 4px solid #e53e3e !important;
+    margin: 10px 0 !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    h1 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+    }
+    
+    div[id$="-section"], #debug-info, #fixture-helper-demo {
+        margin: 15px auto;
+        padding: 15px;
+    }
+    
+    #teams-list {
+        grid-template-columns: 1fr;
+    }
+    
+    table {
+        font-size: 0.9rem;
+    }
+    
+    th, td {
+        padding: 8px 10px;
+    }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+div[id$="-section"], #debug-info, #fixture-helper-demo {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(102, 126, 234, 0.6);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(102, 126, 234, 0.8);
+}
