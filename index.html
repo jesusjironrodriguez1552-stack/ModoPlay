@@ -148,21 +148,35 @@
             results.innerHTML = '<h3>Testing FixtureHelper Functions:</h3>';
             
             try {
-                // Probar obtener partidos por fecha
+                // Mostrar qué funciones están disponibles en fixtureHelper
+                results.innerHTML += '<p><strong>Available functions in fixtureHelper:</strong></p>';
+                results.innerHTML += '<ul>';
+                for (let key in fixtureHelper) {
+                    if (typeof fixtureHelper[key] === 'function') {
+                        results.innerHTML += `<li>${key}()</li>`;
+                    }
+                }
+                results.innerHTML += '</ul>';
+                
+                // Probar obtener estadísticas si hay fixtures disponibles
                 if (customFixtures && customFixtures.length > 0) {
                     const primeraFecha = customFixtures[0].fecha;
-                    const partidosPartidos = fixtureHelper.obtenerPartidosPorFecha(primeraFecha);
-                    results.innerHTML += `<p><strong>Partidos de la fecha ${primeraFecha}:</strong> ${partidosPartidos ? partidosPartidos.length : 0} partidos</p>`;
+                    results.innerHTML += `<p><strong>Testing with fecha ${primeraFecha}:</strong></p>`;
                     
-                    // Probar obtener estadísticas
-                    if (partidosPartidos && partidosPartidos.length > 0) {
-                        const primerPartido = partidosPartidos[0];
+                    // Obtener el primer partido de la primera fecha
+                    const primerPartido = customFixtures[0].partidos[0];
+                    if (primerPartido) {
+                        results.innerHTML += `<p>Trying to get stats for: ${primerPartido.local} vs ${primerPartido.visitante}</p>`;
+                        
                         const estadisticas = fixtureHelper.obtenerEstadisticasPartido(primeraFecha, primerPartido.local);
-                        results.innerHTML += `<p><strong>Estadísticas del partido ${primerPartido.local} vs ${primerPartido.visitante}:</strong> ${estadisticas ? 'Disponibles' : 'No disponibles'}</p>`;
+                        results.innerHTML += `<p><strong>Estadísticas result:</strong> ${estadisticas ? JSON.stringify(estadisticas, null, 2) : 'null/undefined'}</p>`;
                     }
+                } else {
+                    results.innerHTML += '<p>No fixtures available for testing</p>';
                 }
             } catch (error) {
                 results.innerHTML += `<p style="color: red;">Error testing fixtureHelper: ${error.message}</p>`;
+                console.error('Full error:', error);
             }
         };
         
