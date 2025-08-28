@@ -301,37 +301,23 @@
     </style>
 </head>
 <body>
-    <!-- PUBLICIDAD SUPERIOR -->
-    <div style="text-align: center; margin: 20px 0;">
-        <script type="text/javascript">
-            atOptions = {
-                'key' : 'a6c29732eed562ce6c743af0a3b60273',
-                'format' : 'iframe',
-                'height' : 90,
-                'width' : 728,
-                'params' : {}
-            };
-        </script>
-        <script type="text/javascript" src="//www.highperformanceformat.com/a6c29732eed562ce6c743af0a3b60273/invoke.js"></script>
-    </div>
-
     <div class="container">
         <div class="header">
             <h1>🏆 Liga Efootball 2025</h1>
-            <p>Fixture Personalizado • <span id="totalTeams">11</span> Equipos • <span id="totalRounds">22</span> Jornadas • <span id="totalMatches">110</span> Partidos</p>
+            <p>Fixture Personalizado • <span id="totalTeams">0</span> Equipos • <span id="totalRounds">0</span> Jornadas • <span id="totalMatches">0</span> Partidos</p>
         </div>
 
         <div class="stats-grid">
             <div class="stat-card">
-                <span class="stat-number" id="teamsCount">11</span>
+                <span class="stat-number" id="teamsCount">0</span>
                 <div class="stat-label">Equipos</div>
             </div>
             <div class="stat-card">
-                <span class="stat-number" id="matchesCount">110</span>
+                <span class="stat-number" id="matchesCount">0</span>
                 <div class="stat-label">Partidos Total</div>
             </div>
             <div class="stat-card">
-                <span class="stat-number" id="roundsCount">22</span>
+                <span class="stat-number" id="roundsCount">0</span>
                 <div class="stat-label">Jornadas</div>
             </div>
             <div class="stat-card">
@@ -362,7 +348,7 @@
                         </tr>
                     </thead>
                     <tbody id="standingsBody">
-                        <!-- Equipos se llenarán dinámicamente -->
+                        <!-- Los equipos se cargan dinámicamente -->
                     </tbody>
                 </table>
             </div>
@@ -373,267 +359,29 @@
                     <p>Resultados oficiales del torneo</p>
                 </div>
                 <div id="fixturesContainer">
-                    <!-- Partidos se llenarán dinámicamente -->
+                    <!-- Los partidos se cargan dinámicamente -->
                 </div>
             </div>
         </div>
-
-        <!-- PUBLICIDAD CENTRAL -->
-        <div style="text-align: center; margin: 40px 0;">
-            <script type='text/javascript' src='//pl27458422.profitableratecpm.com/9f/ad/aa/9fadaacd147b7764a274c4d38f00b281.js'></script>
-        </div>
-
-        <!-- PUBLICIDAD INFERIOR -->
-        <div style="text-align: center; margin: 20px 0;">
-            <script async="async" data-cfasync="false" src="//pl27458414.profitableratecpm.com/2cab1d61c2dc9d7d47e9cefc513235df/invoke.js"></script>
-            <div id="container-2cab1d61c2dc9d7d47e9cefc513235df"></div>
-        </div>
     </div>
 
-    <!-- CARGAR ARCHIVOS -->
+    <!-- Cargar archivos JS externos -->
     <script src="clubes.js"></script>
     <script src="fixtures.js"></script>
     
     <script>
         // Variables globales
         let teams = [];
-        let processedFixtures = [];
-
-        // RESULTADOS OFICIALES DEL TORNEO
+        
+        // RESULTADOS OFICIALES - Agregar aquí conforme se jueguen los partidos
         const matchResults = [
-            // Aquí puedes agregar los resultados conforme se vayan jugando
-            // { jornada: 1, local: "Máx", visitante: "Benny Caballero", golesLocal: 2, golesVisitante: 1 },
-            // { jornada: 1, local: "Santislowly", visitante: "LW🐉", golesLocal: 0, golesVisitante: 3 },
-        ];
-
-        // Fixture personalizado (se carga desde fixtures.js)
-        const customFixtures = [
-            {
-                fecha: 1,
-                partidos: [
-                    { local: "Máx", visitante: "Benny Caballero" },
-                    { local: "Santislowly", visitante: "LW🐉" },
-                    { local: "Ever Gutierrez", visitante: "the Andres" },
-                    { local: "JLesme", visitante: "alexander" },
-                    { local: "ElianVz17", visitante: "399633" }
-                ]
-            },
-            {
-                fecha: 2,
-                partidos: [
-                    { local: "Benny Caballero", visitante: "Royyer10" },
-                    { local: "Máx", visitante: "the Andres" },
-                    { local: "Santislowly", visitante: "alexander" },
-                    { local: "Ever Gutierrez", visitante: "399633" },
-                    { local: "JLesme", visitante: "ElianVz17" }
-                ]
-            },
-            {
-                fecha: 3,
-                partidos: [
-                    { local: "LW🐉", visitante: "Royyer10" },
-                    { local: "Benny Caballero", visitante: "the Andres" },
-                    { local: "Máx", visitante: "399633" },
-                    { local: "Santislowly", visitante: "ElianVz17" },
-                    { local: "Ever Gutierrez", visitante: "JLesme" }
-                ]
-            },
-            {
-                fecha: 4,
-                partidos: [
-                    { local: "the Andres", visitante: "Royyer10" },
-                    { local: "LW🐉", visitante: "alexander" },
-                    { local: "Benny Caballero", visitante: "399633" },
-                    { local: "Máx", visitante: "JLesme" },
-                    { local: "Santislowly", visitante: "Ever Gutierrez" }
-                ]
-            },
-            {
-                fecha: 5,
-                partidos: [
-                    { local: "alexander", visitante: "Royyer10" },
-                    { local: "the Andres", visitante: "399633" },
-                    { local: "LW🐉", visitante: "ElianVz17" },
-                    { local: "Benny Caballero", visitante: "JLesme" },
-                    { local: "Máx", visitante: "Santislowly" }
-                ]
-            },
-            {
-                fecha: 6,
-                partidos: [
-                    { local: "399633", visitante: "Royyer10" },
-                    { local: "alexander", visitante: "ElianVz17" },
-                    { local: "the Andres", visitante: "JLesme" },
-                    { local: "LW🐉", visitante: "Ever Gutierrez" },
-                    { local: "Benny Caballero", visitante: "Santislowly" }
-                ]
-            },
-            {
-                fecha: 7,
-                partidos: [
-                    { local: "ElianVz17", visitante: "Royyer10" },
-                    { local: "399633", visitante: "JLesme" },
-                    { local: "alexander", visitante: "Ever Gutierrez" },
-                    { local: "the Andres", visitante: "Santislowly" },
-                    { local: "LW🐉", visitante: "Máx" }
-                ]
-            },
-            {
-                fecha: 8,
-                partidos: [
-                    { local: "JLesme", visitante: "Royyer10" },
-                    { local: "ElianVz17", visitante: "Ever Gutierrez" },
-                    { local: "399633", visitante: "Santislowly" },
-                    { local: "alexander", visitante: "Máx" },
-                    { local: "LW🐉", visitante: "Benny Caballero" }
-                ]
-            },
-            {
-                fecha: 9,
-                partidos: [
-                    { local: "Ever Gutierrez", visitante: "Royyer10" },
-                    { local: "JLesme", visitante: "Santislowly" },
-                    { local: "ElianVz17", visitante: "Máx" },
-                    { local: "alexander", visitante: "Benny Caballero" },
-                    { local: "the Andres", visitante: "LW🐉" }
-                ]
-            },
-            {
-                fecha: 10,
-                partidos: [
-                    { local: "Santislowly", visitante: "Royyer10" },
-                    { local: "Ever Gutierrez", visitante: "Máx" },
-                    { local: "ElianVz17", visitante: "Benny Caballero" },
-                    { local: "399633", visitante: "LW🐉" },
-                    { local: "alexander", visitante: "the Andres" }
-                ]
-            },
-            {
-                fecha: 11,
-                partidos: [
-                    { local: "Máx", visitante: "Royyer10" },
-                    { local: "Ever Gutierrez", visitante: "Benny Caballero" },
-                    { local: "JLesme", visitante: "LW🐉" },
-                    { local: "ElianVz17", visitante: "the Andres" },
-                    { local: "399633", visitante: "alexander" }
-                ]
-            },
-            {
-                fecha: 12,
-                partidos: [
-                    { local: "Benny Caballero", visitante: "Máx" },
-                    { local: "LW🐉", visitante: "Santislowly" },
-                    { local: "the Andres", visitante: "Ever Gutierrez" },
-                    { local: "alexander", visitante: "JLesme" },
-                    { local: "399633", visitante: "ElianVz17" }
-                ]
-            },
-            {
-                fecha: 13,
-                partidos: [
-                    { local: "Royyer10", visitante: "Benny Caballero" },
-                    { local: "the Andres", visitante: "Máx" },
-                    { local: "alexander", visitante: "Santislowly" },
-                    { local: "399633", visitante: "Ever Gutierrez" },
-                    { local: "ElianVz17", visitante: "JLesme" }
-                ]
-            },
-            {
-                fecha: 14,
-                partidos: [
-                    { local: "Royyer10", visitante: "LW🐉" },
-                    { local: "the Andres", visitante: "Benny Caballero" },
-                    { local: "399633", visitante: "Máx" },
-                    { local: "ElianVz17", visitante: "Santislowly" },
-                    { local: "JLesme", visitante: "Ever Gutierrez" }
-                ]
-            },
-            {
-                fecha: 15,
-                partidos: [
-                    { local: "Royyer10", visitante: "the Andres" },
-                    { local: "alexander", visitante: "LW🐉" },
-                    { local: "399633", visitante: "Benny Caballero" },
-                    { local: "JLesme", visitante: "Máx" },
-                    { local: "Ever Gutierrez", visitante: "Santislowly" }
-                ]
-            },
-            {
-                fecha: 16,
-                partidos: [
-                    { local: "Royyer10", visitante: "alexander" },
-                    { local: "399633", visitante: "the Andres" },
-                    { local: "ElianVz17", visitante: "LW🐉" },
-                    { local: "JLesme", visitante: "Benny Caballero" },
-                    { local: "Santislowly", visitante: "Máx" }
-                ]
-            },
-            {
-                fecha: 17,
-                partidos: [
-                    { local: "Royyer10", visitante: "399633" },
-                    { local: "ElianVz17", visitante: "alexander" },
-                    { local: "JLesme", visitante: "the Andres" },
-                    { local: "Ever Gutierrez", visitante: "LW🐉" },
-                    { local: "Santislowly", visitante: "Benny Caballero" }
-                ]
-            },
-            {
-                fecha: 18,
-                partidos: [
-                    { local: "Royyer10", visitante: "ElianVz17" },
-                    { local: "JLesme", visitante: "399633" },
-                    { local: "Ever Gutierrez", visitante: "alexander" },
-                    { local: "Santislowly", visitante: "the Andres" },
-                    { local: "Máx", visitante: "LW🐉" }
-                ]
-            },
-            {
-                fecha: 19,
-                partidos: [
-                    { local: "Royyer10", visitante: "JLesme" },
-                    { local: "Ever Gutierrez", visitante: "ElianVz17" },
-                    { local: "Santislowly", visitante: "399633" },
-                    { local: "Máx", visitante: "alexander" },
-                    { local: "Benny Caballero", visitante: "LW🐉" }
-                ]
-            },
-            {
-                fecha: 20,
-                partidos: [
-                    { local: "Royyer10", visitante: "Ever Gutierrez" },
-                    { local: "Santislowly", visitante: "JLesme" },
-                    { local: "Máx", visitante: "ElianVz17" },
-                    { local: "Benny Caballero", visitante: "alexander" },
-                    { local: "LW🐉", visitante: "the Andres" }
-                ]
-            },
-            {
-                fecha: 21,
-                partidos: [
-                    { local: "Royyer10", visitante: "Santislowly" },
-                    { local: "Máx", visitante: "Ever Gutierrez" },
-                    { local: "Benny Caballero", visitante: "ElianVz17" },
-                    { local: "LW🐉", visitante: "399633" },
-                    { local: "the Andres", visitante: "alexander" }
-                ]
-            },
-            {
-                fecha: 22,
-                partidos: [
-                    { local: "Royyer10", visitante: "Máx" },
-                    { local: "Benny Caballero", visitante: "Ever Gutierrez" },
-                    { local: "LW🐉", visitante: "JLesme" },
-                    { local: "the Andres", visitante: "ElianVz17" },
-                    { local: "alexander", visitante: "399633" }
-                ]
-            }
+            // Ejemplo: { jornada: 1, local: "Máx", visitante: "Benny Caballero", golesLocal: 2, golesVisitante: 1 }
         ];
 
         // Inicializar equipos desde clubes.js
         function initializeTeams() {
             if (typeof clubes === 'undefined') {
-                console.error('Error: No se pudo cargar el archivo clubes.js');
+                console.error('Error: No se pudo cargar clubes.js');
                 return;
             }
             
@@ -643,13 +391,13 @@
                 goalsFor: 0, goalsAgainst: 0, points: 0
             }));
             
-            updateTeamCounts();
+            updateStats();
         }
 
-        function updateTeamCounts() {
+        function updateStats() {
             const teamCount = teams.length;
-            const totalMatches = 110; // Total fijo según tu fixture
-            const totalRounds = 22; // 22 jornadas según tu fixture
+            const totalMatches = fixtures ? fixtures.reduce((total, jornada) => total + jornada.partidos.length, 0) : 0;
+            const totalRounds = fixtures ? fixtures.length : 0;
             
             document.getElementById('totalTeams').textContent = teamCount;
             document.getElementById('teamsCount').textContent = teamCount;
@@ -659,115 +407,82 @@
             document.getElementById('roundsCount').textContent = totalRounds;
         }
 
-        function processCustomFixtures() {
-            processedFixtures = [];
-            
-            customFixtures.forEach(jornada => {
-                const processedRound = {
-                    round: jornada.fecha,
-                    matches: [],
-                    phase: jornada.fecha <= 11 ? "Primera Vuelta" : "Segunda Vuelta"
-                };
-                
-                jornada.partidos.forEach(partido => {
-                    const homeIndex = teams.findIndex(team => team.name === partido.local);
-                    const awayIndex = teams.findIndex(team => team.name === partido.visitante);
-                    
-                    if (homeIndex !== -1 && awayIndex !== -1) {
-                        processedRound.matches.push({
-                            home: homeIndex,
-                            away: awayIndex,
-                            homeScore: null,
-                            awayScore: null,
-                            played: false
-                        });
-                    }
-                });
-                
-                processedFixtures.push(processedRound);
-            });
-            
-            applyResults();
-        }
-
         function applyResults() {
+            if (!fixtures) return;
+            
+            // Reiniciar estadísticas
+            teams.forEach(team => {
+                team.played = 0; team.won = 0; team.drawn = 0; team.lost = 0;
+                team.goalsFor = 0; team.goalsAgainst = 0; team.points = 0;
+            });
+
             matchResults.forEach(result => {
-                const homeIndex = teams.findIndex(team => team.name === result.local);
-                const awayIndex = teams.findIndex(team => team.name === result.visitante);
+                const homeTeam = teams.find(t => t.name === result.local);
+                const awayTeam = teams.find(t => t.name === result.visitante);
                 
-                if (homeIndex !== -1 && awayIndex !== -1) {
-                    processedFixtures.forEach(round => {
-                        if (round.round === result.jornada) {
-                            const match = round.matches.find(m => 
-                                m.home === homeIndex && m.away === awayIndex
-                            );
-                            
-                            if (match && !match.played) {
-                                match.homeScore = result.golesLocal;
-                                match.awayScore = result.golesVisitante;
-                                processMatch(match);
-                                match.played = true;
-                            }
-                        }
-                    });
+                if (homeTeam && awayTeam) {
+                    // Actualizar estadísticas
+                    homeTeam.played++;
+                    awayTeam.played++;
+                    homeTeam.goalsFor += result.golesLocal;
+                    homeTeam.goalsAgainst += result.golesVisitante;
+                    awayTeam.goalsFor += result.golesVisitante;
+                    awayTeam.goalsAgainst += result.golesLocal;
+                    
+                    if (result.golesLocal > result.golesVisitante) {
+                        homeTeam.won++;
+                        homeTeam.points += 3;
+                        awayTeam.lost++;
+                    } else if (result.golesLocal < result.golesVisitante) {
+                        awayTeam.won++;
+                        awayTeam.points += 3;
+                        homeTeam.lost++;
+                    } else {
+                        homeTeam.drawn++;
+                        homeTeam.points++;
+                        awayTeam.drawn++;
+                        awayTeam.points++;
+                    }
                 }
             });
         }
 
-        function processMatch(match) {
-            const homeTeam = teams[match.home];
-            const awayTeam = teams[match.away];
-            
-            homeTeam.played++;
-            awayTeam.played++;
-            
-            homeTeam.goalsFor += match.homeScore;
-            homeTeam.goalsAgainst += match.awayScore;
-            awayTeam.goalsFor += match.awayScore;
-            awayTeam.goalsAgainst += match.homeScore;
-            
-            if (match.homeScore > match.awayScore) {
-                homeTeam.won++;
-                homeTeam.points += 3;
-                awayTeam.lost++;
-            } else if (match.homeScore < match.awayScore) {
-                awayTeam.won++;
-                awayTeam.points += 3;
-                homeTeam.lost++;
-            } else {
-                homeTeam.drawn++;
-                homeTeam.points += 1;
-                awayTeam.drawn++;
-                awayTeam.points += 1;
-            }
+        function getMatchResult(jornada, local, visitante) {
+            return matchResults.find(r => 
+                r.jornada === jornada && r.local === local && r.visitante === visitante
+            );
         }
 
         function renderFixtures() {
+            if (!fixtures) return;
+            
             const container = document.getElementById('fixturesContainer');
             container.innerHTML = '';
             
-            processedFixtures.forEach(round => {
+            fixtures.forEach(jornada => {
                 const roundDiv = document.createElement('div');
                 roundDiv.className = 'fixture-round';
                 
+                const phase = jornada.fecha <= Math.ceil(fixtures.length / 2) ? "Primera Vuelta" : "Segunda Vuelta";
                 const roundHeader = document.createElement('div');
                 roundHeader.className = 'round-header';
-                roundHeader.innerHTML = `Fecha ${round.round} <span style="font-size: 0.8em; opacity: 0.8;">(${round.phase})</span>`;
+                roundHeader.innerHTML = `Fecha ${jornada.fecha} <span style="font-size: 0.8em; opacity: 0.8;">(${phase})</span>`;
                 roundDiv.appendChild(roundHeader);
                 
-                round.matches.forEach(match => {
+                jornada.partidos.forEach(partido => {
+                    const result = getMatchResult(jornada.fecha, partido.local, partido.visitante);
                     const matchDiv = document.createElement('div');
                     matchDiv.className = 'match';
                     
-                    const homeScore = match.homeScore !== null ? match.homeScore : '—';
-                    const awayScore = match.awayScore !== null ? match.awayScore : '—';
-                    const matchStatus = match.played ? 'played' : 'pending';
+                    const homeScore = result ? result.golesLocal : '—';
+                    const awayScore = result ? result.golesVisitante : '—';
+                    const matchStatus = result ? 'played' : 'pending';
                     
                     matchDiv.innerHTML = `
                         <div class="match-teams">
-                            <div class="team">${teams[match.home].name}</div>
+                            <div class="team">${partido.local}</div>
                             <span class="vs">vs</span>
-                            <div class="team">${teams[match.away].name}</div>
+                            <div class="team">${partido.visitante}</div>
                         </div>
                         <div class="match-score">
                             <span class="score-display ${matchStatus}">${homeScore}</span>
@@ -786,19 +501,19 @@
         function updateStandings() {
             const tbody = document.getElementById('standingsBody');
             
-            const sortedTeams = [...teams].map((team, index) => ({...team, originalIndex: index}))
-                .sort((a, b) => {
-                    if (b.points !== a.points) return b.points - a.points;
-                    if ((b.goalsFor - b.goalsAgainst) !== (a.goalsFor - a.goalsAgainst)) {
-                        return (b.goalsFor - b.goalsAgainst) - (a.goalsFor - a.goalsAgainst);
-                    }
-                    return b.goalsFor - a.goalsFor;
-                });
+            // Ordenar equipos por puntos, diferencia de gol, goles a favor
+            const sortedTeams = [...teams].sort((a, b) => {
+                if (b.points !== a.points) return b.points - a.points;
+                if ((b.goalsFor - b.goalsAgainst) !== (a.goalsFor - a.goalsAgainst)) {
+                    return (b.goalsFor - b.goalsAgainst) - (a.goalsFor - a.goalsAgainst);
+                }
+                return b.goalsFor - a.goalsFor;
+            });
             
             tbody.innerHTML = '';
             sortedTeams.forEach((team, index) => {
                 const row = document.createElement('tr');
-                const totalRounds = 22; // Total de jornadas
+                const totalRounds = fixtures ? fixtures.length : 0;
                 const isChampion = index === 0 && team.played === totalRounds;
                 
                 row.innerHTML = `
@@ -817,7 +532,7 @@
                     <td>${team.lost}</td>
                     <td>${team.goalsFor}</td>
                     <td>${team.goalsAgainst}</td>
-                    <td style="color: ${team.goalsFor - team.goalsAgainst >= 0 ? '#00ff87' : '#ff6b6b'}"}>
+                    <td style="color: ${team.goalsFor - team.goalsAgainst >= 0 ? '#00ff87' : '#ff6b6b'}">
                         ${team.goalsFor - team.goalsAgainst >= 0 ? '+' : ''}${team.goalsFor - team.goalsAgainst}
                     </td>
                     <td class="points">${team.points}</td>
@@ -825,37 +540,14 @@
                 tbody.appendChild(row);
             });
             
-            const completedMatches = processedFixtures.reduce((total, round) => 
-                total + round.matches.filter(match => match.played).length, 0);
-            document.getElementById('completedMatches').textContent = completedMatches;
-            
-            updateCurrentPhase(completedMatches);
+            // Actualizar partidos completados
+            document.getElementById('completedMatches').textContent = matchResults.length;
         }
 
-        function updateCurrentPhase(completed) {
-            const header = document.querySelector('.header p');
-            const totalMatches = 110;
-            const halfMatches = 55; // Primera vuelta (fechas 1-11)
-            let phaseText = "";
-            
-            if (completed === 0) {
-                phaseText = "🚀 ¡Liga por comenzar!";
-            } else if (completed <= halfMatches) {
-                phaseText = `🏃‍♂️ Primera Vuelta en curso (${completed}/${halfMatches} partidos)`;
-            } else if (completed <= totalMatches) {
-                phaseText = `🔥 Segunda Vuelta en curso (${completed - halfMatches}/${halfMatches} partidos)`;
-            } else {
-                phaseText = "🏆 ¡Liga completada!";
-            }
-            
-            const baseText = header.innerHTML.split('<br>')[0];
-            header.innerHTML = `${baseText}<br><small style="color: #00ff87;">${phaseText}</small>`;
-        }
-
-        // Inicialización
+        // Inicialización al cargar la página
         window.addEventListener('load', () => {
             initializeTeams();
-            processCustomFixtures();
+            applyResults();
             renderFixtures();
             updateStandings();
         });
