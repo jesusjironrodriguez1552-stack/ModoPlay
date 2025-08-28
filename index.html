@@ -3,431 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liga Efootball 2025</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #0d1421, #1a2332);
-            color: white;
-            min-height: 100vh;
-            padding: 20px;
-        }
-
-        .container { max-width: 1400px; margin: 0 auto; }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            font-size: 2.5em;
-            background: linear-gradient(45deg, #00ff87, #60efff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(0, 255, 135, 0.3);
-            margin-bottom: 10px;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(0, 255, 135, 0.3);
-            border-radius: 12px;
-            padding: 15px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            border-color: #00ff87;
-            transform: translateY(-2px);
-        }
-
-        .stat-number {
-            font-size: 2em;
-            font-weight: bold;
-            color: #00ff87;
-            display: block;
-        }
-
-        .stat-label {
-            color: #a0a9b8;
-            margin-top: 5px;
-            font-size: 0.9em;
-        }
-
-        .main-content {
-            display: grid;
-            grid-template-columns: 1fr 380px;
-            gap: 25px;
-        }
-
-        .section {
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 16px;
-            border: 1px solid rgba(0, 255, 135, 0.2);
-            overflow: hidden;
-            backdrop-filter: blur(15px);
-        }
-
-        .section-header {
-            background: linear-gradient(90deg, rgba(0, 255, 135, 0.2), rgba(96, 239, 255, 0.2));
-            padding: 15px 20px;
-            border-bottom: 1px solid rgba(0, 255, 135, 0.3);
-        }
-
-        .section-header h2 {
-            color: #00ff87;
-            font-size: 1.3em;
-            margin-bottom: 3px;
-        }
-
-        .section-header p {
-            color: #a0a9b8;
-            font-size: 0.85em;
-        }
-
-        .standings-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .standings-table th,
-        .standings-table td {
-            padding: 10px 12px;
-            text-align: left;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.85em;
-        }
-
-        .standings-table th {
-            background: rgba(0, 255, 135, 0.1);
-            font-weight: bold;
-            color: #00ff87;
-            text-transform: uppercase;
-            font-size: 0.8em;
-        }
-
-        .position { font-weight: bold; color: #00ff87; width: 35px; }
-        .team-name { font-weight: bold; color: white; }
-        .points { font-weight: bold; color: #60efff; }
-
-        .fixtures-section {
-            max-height: 750px;
-            overflow-y: auto;
-        }
-
-        .round-header {
-            background: rgba(96, 239, 255, 0.15);
-            padding: 10px 15px;
-            font-weight: bold;
-            color: #60efff;
-            font-size: 0.85em;
-            border-bottom: 1px solid rgba(96, 239, 255, 0.2);
-        }
-
-        .match {
-            padding: 12px 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 0.85em;
-        }
-
-        .match:hover { background: rgba(255, 255, 255, 0.03); }
-
-        .match-teams {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            flex: 1;
-        }
-
-        .team { font-weight: bold; color: white; min-width: 85px; }
-        .vs { color: #a0a9b8; font-size: 0.8em; }
-
-        .match-score {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .score-display {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(96, 239, 255, 0.3);
-            border-radius: 4px;
-            color: #a0a9b8;
-            padding: 5px 8px;
-            font-weight: bold;
-            min-width: 30px;
-            text-align: center;
-            font-size: 0.9em;
-        }
-
-        .score-display.played {
-            background: rgba(0, 255, 135, 0.2);
-            border-color: rgba(0, 255, 135, 0.5);
-            color: white;
-        }
-
-        @media (max-width: 1024px) {
-            .main-content { 
-                grid-template-columns: 1fr; 
-                gap: 20px; 
-            }
-            .fixtures-section { max-height: 500px; }
-        }
-
-        @media (max-width: 768px) {
-            .header h1 { font-size: 2em; }
-            .stats-grid { grid-template-columns: repeat(2, 1fr); }
-            .standings-table th, 
-            .standings-table td { 
-                padding: 8px 10px; 
-                font-size: 0.75em; 
-            }
-            .match { 
-                flex-direction: column; 
-                gap: 8px; 
-                text-align: center;
-            }
-        }
-    </style>
+    <title>Liga Efootball 2025 - Debug</title>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Liga Efootball 2025</h1>
-            <p><span id="totalTeams">0</span> Equipos • <span id="totalRounds">0</span> Jornadas • <span id="totalMatches">0</span> Partidos</p>
-        </div>
-
-        <div class="stats-grid">
-            <div class="stat-card">
-                <span class="stat-number" id="teamsCount">0</span>
-                <div class="stat-label">Equipos</div>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number" id="matchesCount">0</span>
-                <div class="stat-label">Partidos Total</div>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number" id="roundsCount">0</span>
-                <div class="stat-label">Jornadas</div>
-            </div>
-            <div class="stat-card">
-                <span class="stat-number" id="completedMatches">0</span>
-                <div class="stat-label">Partidos Jugados</div>
-            </div>
-        </div>
-
-        <div class="main-content">
-            <div class="section">
-                <div class="section-header">
-                    <h2>Tabla de Posiciones</h2>
-                    <p>Victoria: 3 pts • Empate: 1 pt • Derrota: 0 pts</p>
-                </div>
-                <table class="standings-table">
-                    <thead>
-                        <tr>
-                            <th>Pos</th>
-                            <th>Equipo</th>
-                            <th>PJ</th>
-                            <th>G</th>
-                            <th>E</th>
-                            <th>P</th>
-                            <th>GF</th>
-                            <th>GC</th>
-                            <th>DG</th>
-                            <th>Pts</th>
-                        </tr>
-                    </thead>
-                    <tbody id="standingsBody"></tbody>
-                </table>
-            </div>
-
-            <div class="section fixtures-section">
-                <div class="section-header">
-                    <h2>Fixture de Partidos</h2>
-                    <p>Resultados del torneo</p>
-                </div>
-                <div id="fixturesContainer"></div>
-            </div>
-        </div>
+    <h1>Liga Efootball 2025 - Debug Mode</h1>
+    
+    <div id="debug-info">
+        <h2>Debug Information:</h2>
+        <p>Clubes loaded: <span id="clubes-status">Loading...</span></p>
+        <p>Fixtures loaded: <span id="fixtures-status">Loading...</span></p>
+        <p>Teams count: <span id="teams-count">0</span></p>
+        <p>Fixtures count: <span id="fixtures-count">0</span></p>
     </div>
 
-    <!-- Cargar archivos JS externos -->
+    <div id="teams-section">
+        <h2>Teams List:</h2>
+        <ul id="teams-list"></ul>
+    </div>
+
+    <div id="fixtures-section">
+        <h2>First 2 Fixtures:</h2>
+        <div id="fixtures-list"></div>
+    </div>
+
+    <div id="standings-section">
+        <h2>Standings:</h2>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Team</th>
+                    <th>Played</th>
+                    <th>Points</th>
+                </tr>
+            </thead>
+            <tbody id="standings-body"></tbody>
+        </table>
+    </div>
+
     <script src="clubes.js"></script>
     <script src="fixtures.js"></script>
     
     <script>
-        let teams = [];
+        console.log('Script starting...');
         
-        function initializeTeams() {
-            if (typeof clubes === 'undefined') {
-                console.error('Error: clubes.js no cargado');
-                return;
+        // Debug function to check what's loaded
+        function checkLoadedData() {
+            console.log('Checking loaded data...');
+            
+            // Check clubes
+            if (typeof clubes !== 'undefined') {
+                console.log('Clubes loaded:', clubes);
+                document.getElementById('clubes-status').textContent = 'Loaded ✓';
+                document.getElementById('teams-count').textContent = clubes.length;
+            } else {
+                console.log('Clubes NOT loaded');
+                document.getElementById('clubes-status').textContent = 'NOT loaded ✗';
             }
             
-            teams = clubes.map(club => ({
-                ...club,
-                played: 0, won: 0, drawn: 0, lost: 0, 
-                goalsFor: 0, goalsAgainst: 0, points: 0
-            }));
+            // Check customFixtures
+            if (typeof customFixtures !== 'undefined') {
+                console.log('CustomFixtures loaded:', customFixtures);
+                document.getElementById('fixtures-status').textContent = 'Loaded ✓';
+                document.getElementById('fixtures-count').textContent = customFixtures.length;
+            } else {
+                console.log('CustomFixtures NOT loaded');
+                document.getElementById('fixtures-status').textContent = 'NOT loaded ✗';
+            }
             
-            updateStats();
+            // Check fixtureHelper
+            if (typeof fixtureHelper !== 'undefined') {
+                console.log('FixtureHelper loaded:', fixtureHelper);
+            } else {
+                console.log('FixtureHelper NOT loaded');
+            }
         }
-
-        function updateStats() {
-            const teamCount = teams.length;
-            const totalMatches = customFixtures ? customFixtures.reduce((total, jornada) => total + jornada.partidos.length, 0) : 0;
-            const totalRounds = customFixtures ? customFixtures.length : 0;
+        
+        function displayTeams() {
+            if (typeof clubes === 'undefined') return;
             
-            document.getElementById('totalTeams').textContent = teamCount;
-            document.getElementById('teamsCount').textContent = teamCount;
-            document.getElementById('totalMatches').textContent = totalMatches;
-            document.getElementById('matchesCount').textContent = totalMatches;
-            document.getElementById('totalRounds').textContent = totalRounds;
-            document.getElementById('roundsCount').textContent = totalRounds;
-        }
-
-        function applyResults() {
-            if (!customFixtures) return;
+            const teamsList = document.getElementById('teams-list');
+            teamsList.innerHTML = '';
             
-            teams.forEach(team => {
-                team.played = 0; team.won = 0; team.drawn = 0; team.lost = 0;
-                team.goalsFor = 0; team.goalsAgainst = 0; team.points = 0;
+            clubes.forEach(club => {
+                const li = document.createElement('li');
+                li.textContent = `${club.name} - ${club.club || 'No club info'}`;
+                teamsList.appendChild(li);
             });
-
-            let completedMatches = 0;
-            
-            customFixtures.forEach(jornada => {
-                jornada.partidos.forEach(partido => {
-                    if (partido.resultado.jugado) {
-                        completedMatches++;
-                        const homeTeam = teams.find(t => t.name === partido.local);
-                        const awayTeam = teams.find(t => t.name === partido.visitante);
-                        
-                        if (homeTeam && awayTeam) {
-                            homeTeam.played++;
-                            awayTeam.played++;
-                            homeTeam.goalsFor += partido.resultado.golesLocal;
-                            homeTeam.goalsAgainst += partido.resultado.golesVisitante;
-                            awayTeam.goalsFor += partido.resultado.golesVisitante;
-                            awayTeam.goalsAgainst += partido.resultado.golesLocal;
-                            
-                            if (partido.resultado.golesLocal > partido.resultado.golesVisitante) {
-                                homeTeam.won++;
-                                homeTeam.points += 3;
-                                awayTeam.lost++;
-                            } else if (partido.resultado.golesLocal < partido.resultado.golesVisitante) {
-                                awayTeam.won++;
-                                awayTeam.points += 3;
-                                homeTeam.lost++;
-                            } else {
-                                homeTeam.drawn++;
-                                homeTeam.points++;
-                                awayTeam.drawn++;
-                                awayTeam.points++;
-                            }
-                        }
-                    }
-                });
-            });
-            
-            document.getElementById('completedMatches').textContent = completedMatches;
         }
-
-        function renderFixtures() {
-            if (!customFixtures) return;
+        
+        function displayFixtures() {
+            if (typeof customFixtures === 'undefined') return;
             
-            const container = document.getElementById('fixturesContainer');
-            container.innerHTML = '';
+            const fixturesList = document.getElementById('fixtures-list');
+            fixturesList.innerHTML = '';
             
-            customFixtures.forEach(jornada => {
-                const roundDiv = document.createElement('div');
-                
-                const roundHeader = document.createElement('div');
-                roundHeader.className = 'round-header';
-                roundHeader.textContent = `Fecha ${jornada.fecha}`;
-                roundDiv.appendChild(roundHeader);
+            // Show only first 2 fixtures to avoid clutter
+            customFixtures.slice(0, 2).forEach(jornada => {
+                const div = document.createElement('div');
+                div.innerHTML = `<h3>Fecha ${jornada.fecha}</h3>`;
                 
                 jornada.partidos.forEach(partido => {
                     const matchDiv = document.createElement('div');
-                    matchDiv.className = 'match';
-                    
-                    const homeScore = partido.resultado.jugado ? partido.resultado.golesLocal : '—';
-                    const awayScore = partido.resultado.jugado ? partido.resultado.golesVisitante : '—';
-                    const matchStatus = partido.resultado.jugado ? 'played' : '';
-                    
-                    matchDiv.innerHTML = `
-                        <div class="match-teams">
-                            <div class="team">${partido.local}</div>
-                            <span class="vs">vs</span>
-                            <div class="team">${partido.visitante}</div>
-                        </div>
-                        <div class="match-score">
-                            <span class="score-display ${matchStatus}">${homeScore}</span>
-                            <span style="color: #a0a9b8;">-</span>
-                            <span class="score-display ${matchStatus}">${awayScore}</span>
-                        </div>
-                    `;
-                    
-                    roundDiv.appendChild(matchDiv);
+                    matchDiv.textContent = `${partido.local} vs ${partido.visitante} - Jugado: ${partido.resultado.jugado}`;
+                    div.appendChild(matchDiv);
                 });
                 
-                container.appendChild(roundDiv);
+                fixturesList.appendChild(div);
             });
         }
-
-        function updateStandings() {
-            const tbody = document.getElementById('standingsBody');
+        
+        function displayStandings() {
+            if (typeof clubes === 'undefined') return;
             
-            const sortedTeams = [...teams].sort((a, b) => {
-                if (b.points !== a.points) return b.points - a.points;
-                if ((b.goalsFor - b.goalsAgainst) !== (a.goalsFor - a.goalsAgainst)) {
-                    return (b.goalsFor - b.goalsAgainst) - (a.goalsFor - a.goalsAgainst);
-                }
-                return b.goalsFor - a.goalsFor;
-            });
-            
+            const tbody = document.getElementById('standings-body');
             tbody.innerHTML = '';
-            sortedTeams.forEach((team, index) => {
+            
+            clubes.forEach(club => {
                 const row = document.createElement('tr');
-                
                 row.innerHTML = `
-                    <td class="position">${index + 1}</td>
-                    <td class="team-name">${team.name}</td>
-                    <td>${team.played}</td>
-                    <td>${team.won}</td>
-                    <td>${team.drawn}</td>
-                    <td>${team.lost}</td>
-                    <td>${team.goalsFor}</td>
-                    <td>${team.goalsAgainst}</td>
-                    <td style="color: ${team.goalsFor - team.goalsAgainst >= 0 ? '#00ff87' : '#ff6b6b'}">
-                        ${team.goalsFor - team.goalsAgainst >= 0 ? '+' : ''}${team.goalsFor - team.goalsAgainst}
-                    </td>
-                    <td class="points">${team.points}</td>
+                    <td>${club.name}</td>
+                    <td>0</td>
+                    <td>0</td>
                 `;
                 tbody.appendChild(row);
             });
         }
-
+        
+        // Check immediately
+        checkLoadedData();
+        
+        // Check after a delay to see if files load later
+        setTimeout(() => {
+            console.log('Delayed check...');
+            checkLoadedData();
+            displayTeams();
+            displayFixtures();
+            displayStandings();
+        }, 1000);
+        
+        // Also check on window load
         window.addEventListener('load', () => {
-            initializeTeams();
-            applyResults();
-            renderFixtures();
-            updateStandings();
+            console.log('Window loaded, final check...');
+            checkLoadedData();
+            displayTeams();
+            displayFixtures();
+            displayStandings();
         });
     </script>
 </body>
