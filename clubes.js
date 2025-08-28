@@ -13,7 +13,10 @@ const clubes = [
     { name: "Santislowly", club: "Club América" },
     { name: "Máx", club: "Botafogo" }
 ];
+// ... tu código existente ...
 
+// Exportación por defecto
+export default clubes;
 // NOTA: 
 // - name: Nombre del jugador/usuario
 // - club: Equipo que representa
