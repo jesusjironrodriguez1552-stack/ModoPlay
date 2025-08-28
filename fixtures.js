@@ -7,9 +7,9 @@ const customFixtures = [
                 local: "Máx", 
                 visitante: "Benny Caballero",
                 resultado: {
-                    golesLocal: 4,
-                    golesVisitante: 0,
-                    jugado: verdadero
+                    golesLocal: null,
+                    golesVisitante: null,
+                    jugado: false
                 },
                 estadisticas: {
                     goleadores: [], // {jugador: "nombre", equipo: "local/visitante", minuto: 45}
