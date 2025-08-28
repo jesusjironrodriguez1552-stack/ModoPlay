@@ -73,9 +73,14 @@
                 if (clubes && Array.isArray(clubes) && clubes.length > 0) {
                     document.getElementById('clubes-status').textContent = 'Loaded ✓';
                     document.getElementById('teams-count').textContent = clubes.length;
+                } else if (clubes) {
+                    document.getElementById('clubes-status').textContent = 'Loaded but not an array ⚠️';
+                    document.getElementById('teams-count').textContent = 'N/A';
+                    console.error('Clubes is not an array:', clubes);
                 } else {
-                    document.getElementById('clubes-status').textContent = 'Loaded but empty/invalid ⚠️';
+                    document.getElementById('clubes-status').textContent = 'Import failed - missing export? ❌';
                     document.getElementById('teams-count').textContent = '0';
+                    console.error('Clubes is undefined - check if you have "export { clubes };" in your clubes.js file');
                 }
                 
                 // Importar fixtures y helper
