@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liga Efootball 2025 - Debug</title>
+    <title>Liga Efootball 2025 - Visualizador</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Liga Efootball 2025 - Debug Mode</h1>
+    <h1>Liga Efootball 2025 - Visualizador</h1>
     
     <div id="standings-section">
         <h2>🏆 Tabla de Posiciones</h2>
@@ -43,12 +43,6 @@
         </div>
     </div>
 
-    <div id="fixture-helper-demo">
-        <h2>Fixture Helper Demo:</h2>
-        <button onclick="testFixtureHelper()">Test Fixture Helper Functions</button>
-        <div id="helper-results"></div>
-    </div>
-
     <script type="module">
         console.log('Liga Efootball 2025 starting...');
         
@@ -74,6 +68,7 @@
                 
                 if (clubes && Array.isArray(clubes) && clubes.length > 0) {
                     console.log(`✅ Loaded ${clubes.length} teams`);
+                    console.log('Teams:', clubes.map(c => c.name || c.nombre || c));
                 } else {
                     console.error('❌ Failed to load teams data');
                     return;
@@ -81,6 +76,7 @@
                 
                 if (customFixtures && Array.isArray(customFixtures) && customFixtures.length > 0) {
                     console.log(`✅ Loaded ${customFixtures.length} fixtures`);
+                    console.log('First fixture example:', customFixtures[0]);
                     document.getElementById('total-fechas').textContent = customFixtures.length;
                 } else {
                     console.error('❌ Failed to load fixtures data');
@@ -98,6 +94,10 @@
                     <h2>Error cargando datos</h2>
                     <p>${error.message}</p>
                     <p>Asegúrate de tener los archivos clubes.js y fixtures.js en la misma carpeta.</p>
+                    <details style="text-align: left; margin: 20px;">
+                        <summary>Detalles del error</summary>
+                        <pre>${error.stack}</pre>
+                    </details>
                 </div>`;
             }
         }
@@ -125,43 +125,49 @@
             // Si hay fixtures jugados, calcular estadísticas reales
             if (customFixtures && customFixtures.length > 0) {
                 customFixtures.forEach(fecha => {
-                    fecha.partidos.forEach(partido => {
-                        if (partido.resultado.jugado) {
-                            const localTeam = teamStats.find(team => team.name === partido.local);
-                            const visitanteTeam = teamStats.find(team => team.name === partido.visitante);
+                    if (fecha.partidos && Array.isArray(fecha.partidos)) {
+                        fecha.partidos.forEach(partido => {
+                            // Verificar si el partido está jugado
+                            const jugado = partido.resultado && partido.resultado.jugado === true;
                             
-                            if (localTeam && visitanteTeam) {
-                                const golesLocal = partido.resultado.golesLocal;
-                                const golesVisitante = partido.resultado.golesVisitante;
+                            if (jugado) {
+                                const localTeam = teamStats.find(team => team.name === partido.local);
+                                const visitanteTeam = teamStats.find(team => team.name === partido.visitante);
                                 
-                                // Actualizar estadísticas del local
-                                localTeam.played++;
-                                localTeam.goalsFor += golesLocal;
-                                localTeam.goalsAgainst += golesVisitante;
-                                
-                                // Actualizar estadísticas del visitante
-                                visitanteTeam.played++;
-                                visitanteTeam.goalsFor += golesVisitante;
-                                visitanteTeam.goalsAgainst += golesLocal;
-                                
-                                // Determinar resultado
-                                if (golesLocal > golesVisitante) {
-                                    localTeam.won++;
-                                    localTeam.points += 3;
-                                    visitanteTeam.lost++;
-                                } else if (golesLocal < golesVisitante) {
-                                    visitanteTeam.won++;
-                                    visitanteTeam.points += 3;
-                                    localTeam.lost++;
-                                } else {
-                                    localTeam.drawn++;
-                                    visitanteTeam.drawn++;
-                                    localTeam.points++;
-                                    visitanteTeam.points++;
+                                if (localTeam && visitanteTeam) {
+                                    // Verificar que los goles sean números válidos
+                                    const golesLocal = parseInt(partido.resultado.golesLocal) || 0;
+                                    const golesVisitante = parseInt(partido.resultado.golesVisitante) || 0;
+                                    
+                                    // Actualizar estadísticas del local
+                                    localTeam.played++;
+                                    localTeam.goalsFor += golesLocal;
+                                    localTeam.goalsAgainst += golesVisitante;
+                                    
+                                    // Actualizar estadísticas del visitante
+                                    visitanteTeam.played++;
+                                    visitanteTeam.goalsFor += golesVisitante;
+                                    visitanteTeam.goalsAgainst += golesLocal;
+                                    
+                                    // Determinar resultado
+                                    if (golesLocal > golesVisitante) {
+                                        localTeam.won++;
+                                        localTeam.points += 3;
+                                        visitanteTeam.lost++;
+                                    } else if (golesLocal < golesVisitante) {
+                                        visitanteTeam.won++;
+                                        visitanteTeam.points += 3;
+                                        localTeam.lost++;
+                                    } else {
+                                        localTeam.drawn++;
+                                        visitanteTeam.drawn++;
+                                        localTeam.points++;
+                                        visitanteTeam.points++;
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
+                    }
                 });
                 
                 // Calcular diferencia de goles y ordenar por puntos
@@ -220,34 +226,52 @@
             let partidosJugados = 0;
             let partidosPendientes = 0;
             
-            currentFixture.partidos.forEach(partido => {
-                const matchDiv = document.createElement('div');
-                matchDiv.className = `match-item ${partido.resultado.jugado ? 'played' : 'pending'}`;
-                
-                if (partido.resultado.jugado) {
-                    partidosJugados++;
-                    matchDiv.innerHTML = `
-                        <div class="match-teams">
-                            <span class="team local">${partido.local}</span>
-                            <span class="result">${partido.resultado.golesLocal} - ${partido.resultado.golesVisitante}</span>
-                            <span class="team visitante">${partido.visitante}</span>
-                        </div>
-                        <div class="match-status played">✅ Finalizado</div>
-                    `;
-                } else {
-                    partidosPendientes++;
-                    matchDiv.innerHTML = `
-                        <div class="match-teams">
-                            <span class="team local">${partido.local}</span>
-                            <span class="vs">VS</span>
-                            <span class="team visitante">${partido.visitante}</span>
-                        </div>
-                        <div class="match-status pending">⏳ Pendiente</div>
-                    `;
-                }
-                
-                fechaDiv.appendChild(matchDiv);
-            });
+            if (currentFixture.partidos && Array.isArray(currentFixture.partidos)) {
+                currentFixture.partidos.forEach(partido => {
+                    const matchDiv = document.createElement('div');
+                    
+                    // Verificar el estado del partido
+                    const jugado = partido.resultado && partido.resultado.jugado === true;
+                    const tieneGoles = partido.resultado && 
+                                     partido.resultado.golesLocal !== null && 
+                                     partido.resultado.golesVisitante !== null;
+                    
+                    if (jugado && tieneGoles) {
+                        partidosJugados++;
+                        matchDiv.className = 'match-item played';
+                        
+                        const golesLocal = parseInt(partido.resultado.golesLocal) || 0;
+                        const golesVisitante = parseInt(partido.resultado.golesVisitante) || 0;
+                        
+                        matchDiv.innerHTML = `
+                            <div class="match-teams">
+                                <span class="team local">${partido.local}</span>
+                                <span class="result">${golesLocal} - ${golesVisitante}</span>
+                                <span class="team visitante">${partido.visitante}</span>
+                            </div>
+                            <div class="match-status played">✅ Finalizado</div>
+                            ${partido.estadisticas && partido.estadisticas.goleadores && partido.estadisticas.goleadores.length > 0 ? 
+                                `<div class="match-details">
+                                    <small>⚽ Goleadores: ${partido.estadisticas.goleadores.map(g => `${g.jugador} (${g.minuto}')`).join(', ')}</small>
+                                </div>` : ''
+                            }
+                        `;
+                    } else {
+                        partidosPendientes++;
+                        matchDiv.className = 'match-item pending';
+                        matchDiv.innerHTML = `
+                            <div class="match-teams">
+                                <span class="team local">${partido.local}</span>
+                                <span class="vs">VS</span>
+                                <span class="team visitante">${partido.visitante}</span>
+                            </div>
+                            <div class="match-status pending">⏳ Pendiente</div>
+                        `;
+                    }
+                    
+                    fechaDiv.appendChild(matchDiv);
+                });
+            }
             
             // Agregar resumen de la fecha
             const summaryDiv = document.createElement('div');
@@ -283,30 +307,6 @@
                 currentFechaIndex++;
                 displayCurrentFixture();
                 updateNavigationButtons();
-            }
-        };
-        
-        // Función para probar el fixtureHelper (mantener para debug si es necesario)
-        window.testFixtureHelper = function() {
-            if (!fixtureHelper) {
-                document.getElementById('helper-results').innerHTML = '<p style="color: red;">FixtureHelper not loaded</p>';
-                return;
-            }
-            
-            const results = document.getElementById('helper-results');
-            results.innerHTML = '<h3>Testing FixtureHelper Functions:</h3>';
-            
-            try {
-                results.innerHTML += '<p><strong>Available functions:</strong></p>';
-                results.innerHTML += '<ul>';
-                for (let key in fixtureHelper) {
-                    if (typeof fixtureHelper[key] === 'function') {
-                        results.innerHTML += `<li>${key}()</li>`;
-                    }
-                }
-                results.innerHTML += '</ul>';
-            } catch (error) {
-                results.innerHTML += `<p style="color: red;">Error: ${error.message}</p>`;
             }
         };
         
