@@ -40,65 +40,54 @@
         </table>
     </div>
 
-    <script>
+    <div id="fixture-helper-demo">
+        <h2>Fixture Helper Demo:</h2>
+        <button onclick="testFixtureHelper()">Test Fixture Helper Functions</button>
+        <div id="helper-results"></div>
+    </div>
+
+    <script type="module">
         console.log('Script starting...');
         
-        // Check what global variables exist
-        function checkGlobalVariables() {
-            console.log('Global variables check:');
-            console.log('window.customFixtures:', window.customFixtures);
-            console.log('window.clubes:', window.clubes);
-            console.log('window.fixtureHelper:', window.fixtureHelper);
-        }
+        // Variables globales para almacenar los datos importados
+        let clubes = [];
+        let customFixtures = [];
+        let fixtureHelper = null;
         
-        // Debug function to check what's loaded
-        function checkLoadedData() {
-            console.log('Checking loaded data...');
-            
-            // Check clubes
-            if (typeof clubes !== 'undefined') {
+        // Función para cargar los datos
+        async function loadData() {
+            try {
+                // Importar clubes
+                const clubesModule = await import('./clubes.js');
+                clubes = clubesModule.clubes || clubesModule.default;
                 console.log('Clubes loaded:', clubes);
                 document.getElementById('clubes-status').textContent = 'Loaded ✓';
-                document.getElementById('teams-count').textContent = clubes.length;
-            } else {
-                console.log('Clubes NOT loaded');
-                document.getElementById('clubes-status').textContent = 'NOT loaded ✗';
-            }
-            
-            // Check customFixtures
-            if (typeof customFixtures !== 'undefined') {
+                document.getElementById('teams-count').textContent = clubes ? clubes.length : 0;
+                
+                // Importar fixtures y helper
+                const fixturesModule = await import('./fixtures.js');
+                customFixtures = fixturesModule.customFixtures;
+                fixtureHelper = fixturesModule.fixtureHelper;
                 console.log('CustomFixtures loaded:', customFixtures);
-                document.getElementById('fixtures-status').textContent = 'Loaded ✓';
-                document.getElementById('fixtures-count').textContent = customFixtures.length;
-            } else {
-                console.log('CustomFixtures NOT loaded');
-                document.getElementById('fixtures-status').textContent = 'NOT loaded ✗';
-            }
-            
-            // Check fixtureHelper
-            if (typeof fixtureHelper !== 'undefined') {
                 console.log('FixtureHelper loaded:', fixtureHelper);
-            } else {
-                console.log('FixtureHelper NOT loaded');
+                document.getElementById('fixtures-status').textContent = 'Loaded ✓';
+                document.getElementById('fixtures-count').textContent = customFixtures ? customFixtures.length : 0;
+                
+                // Mostrar los datos cargados
+                displayTeams();
+                displayFixtures();
+                displayStandings();
+                
+            } catch (error) {
+                console.error('Error loading modules:', error);
+                document.getElementById('clubes-status').textContent = 'Load Error ✗';
+                document.getElementById('fixtures-status').textContent = 'Load Error ✗';
+                document.getElementById('debug-info').innerHTML += `<p style="color: red;">Error: ${error.message}</p>`;
             }
-            
-            checkGlobalVariables();
         }
         
-        // Check for script load errors
-        window.addEventListener('error', function(e) {
-            console.error('Script error:', e.filename, e.lineno, e.message);
-            document.getElementById('debug-info').innerHTML += `<p style="color: red;">Error loading: ${e.filename} - ${e.message}</p>`;
-        });
-    </script>
-    
-    <script src="clubes.js" onerror="console.error('Failed to load clubes.js'); document.getElementById('clubes-status').textContent = 'Load Error ✗';"></script>
-    <script src="fixtures.js" onerror="console.error('Failed to load fixtures.js'); document.getElementById('fixtures-status').textContent = 'Load Error ✗';"></script>
-    
-    <script>
-        
         function displayTeams() {
-            if (typeof clubes === 'undefined') return;
+            if (!clubes || clubes.length === 0) return;
             
             const teamsList = document.getElementById('teams-list');
             teamsList.innerHTML = '';
@@ -111,7 +100,7 @@
         }
         
         function displayFixtures() {
-            if (typeof customFixtures === 'undefined') return;
+            if (!customFixtures || customFixtures.length === 0) return;
             
             const fixturesList = document.getElementById('fixtures-list');
             fixturesList.innerHTML = '';
@@ -132,7 +121,7 @@
         }
         
         function displayStandings() {
-            if (typeof clubes === 'undefined') return;
+            if (!clubes || clubes.length === 0) return;
             
             const tbody = document.getElementById('standings-body');
             tbody.innerHTML = '';
@@ -148,26 +137,40 @@
             });
         }
         
-        // Check immediately
-        checkLoadedData();
+        // Función para probar el fixtureHelper
+        window.testFixtureHelper = function() {
+            if (!fixtureHelper) {
+                document.getElementById('helper-results').innerHTML = '<p style="color: red;">FixtureHelper not loaded</p>';
+                return;
+            }
+            
+            const results = document.getElementById('helper-results');
+            results.innerHTML = '<h3>Testing FixtureHelper Functions:</h3>';
+            
+            try {
+                // Probar obtener partidos por fecha
+                if (customFixtures && customFixtures.length > 0) {
+                    const primeraFecha = customFixtures[0].fecha;
+                    const partidosPartidos = fixtureHelper.obtenerPartidosPorFecha(primeraFecha);
+                    results.innerHTML += `<p><strong>Partidos de la fecha ${primeraFecha}:</strong> ${partidosPartidos ? partidosPartidos.length : 0} partidos</p>`;
+                    
+                    // Probar obtener estadísticas
+                    if (partidosPartidos && partidosPartidos.length > 0) {
+                        const primerPartido = partidosPartidos[0];
+                        const estadisticas = fixtureHelper.obtenerEstadisticasPartido(primeraFecha, primerPartido.local);
+                        results.innerHTML += `<p><strong>Estadísticas del partido ${primerPartido.local} vs ${primerPartido.visitante}:</strong> ${estadisticas ? 'Disponibles' : 'No disponibles'}</p>`;
+                    }
+                }
+            } catch (error) {
+                results.innerHTML += `<p style="color: red;">Error testing fixtureHelper: ${error.message}</p>`;
+            }
+        };
         
-        // Check after a delay to see if files load later
-        setTimeout(() => {
-            console.log('Delayed check...');
-            checkLoadedData();
-            displayTeams();
-            displayFixtures();
-            displayStandings();
-        }, 1000);
+        // Cargar los datos cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', loadData);
         
-        // Also check on window load
-        window.addEventListener('load', () => {
-            console.log('Window loaded, final check...');
-            checkLoadedData();
-            displayTeams();
-            displayFixtures();
-            displayStandings();
-        });
+        // También intentar cargar en el evento load de la ventana
+        window.addEventListener('load', loadData);
     </script>
 </body>
 </html>
