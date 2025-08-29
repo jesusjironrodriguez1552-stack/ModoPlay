@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liga A y Liga B - Tabla de Posiciones</title>
+    <title>Liga A - Tabla de Posiciones</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -152,6 +152,88 @@
             width: 35px;
         }
         
+        /* Estilos para posiciones destacadas */
+        .primer-puesto {
+            background-color: #2ecc71 !important;
+            color: white !important;
+            font-weight: bold;
+        }
+        
+        .primer-puesto .pos-column {
+            background-color: #27ae60 !important;
+            color: white !important;
+        }
+        
+        .segundo-puesto {
+            background-color: #58d68d !important;
+            color: white !important;
+            font-weight: bold;
+        }
+        
+        .segundo-puesto .pos-column {
+            background-color: #4caf50 !important;
+            color: white !important;
+        }
+        
+        .tercer-puesto {
+            background-color: #f1c40f !important;
+            color: #2c3e50 !important;
+            font-weight: bold;
+        }
+        
+        .tercer-puesto .pos-column {
+            background-color: #f39c12 !important;
+            color: #2c3e50 !important;
+        }
+        
+        .clasificacion-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 8px;
+            border-left: 4px solid #3498db;
+        }
+        
+        .clasificacion-info h3 {
+            color: #2c3e50;
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+        
+        .clasificacion-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            padding: 8px;
+            border-radius: 4px;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .clasificacion-badge {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 15px;
+            font-size: 14px;
+        }
+        
+        .badge-primero { background-color: #2ecc71; }
+        .badge-segundo { background-color: #58d68d; }
+        .badge-tercero { background-color: #f1c40f; color: #2c3e50; }
+        
+        .clasificacion-text {
+            flex: 1;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+        
         /* Media queries para móvil */
         @media (max-width: 768px) {
             body {
@@ -194,6 +276,31 @@
             
             table {
                 min-width: 600px;
+            }
+            
+            .clasificacion-info {
+                padding: 8px;
+            }
+            
+            .clasificacion-info h3 {
+                font-size: 0.9rem;
+                margin-bottom: 8px;
+            }
+            
+            .clasificacion-item {
+                margin-bottom: 6px;
+                padding: 4px;
+            }
+            
+            .clasificacion-badge {
+                width: 22px;
+                height: 22px;
+                font-size: 10px;
+                margin-right: 8px;
+            }
+            
+            .clasificacion-text {
+                font-size: 10px;
             }
         }
         
@@ -252,7 +359,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Tabla de Posiciones - Liga A y Liga B</h1>
+        <h1>Tabla de Posiciones - Liga A</h1>
         
         <!-- Botón para ir a fixture -->
         <a href="fixture.html" class="fixture-button">Ver Fixture</a>
@@ -298,35 +405,22 @@
             </div>
         </div>
         
-        <!-- Publicidad Intermedia -->
-        <div class="ad-container">
-            <div class="ad-label">Publicidad</div>
-            <script type='text/javascript' src='//pl27458422.revenuecpmgate.com/9f/ad/aa/9fadaacd147b7764a274c4d38f00b281.js'></script>
-        </div>
-        
-        <!-- Liga B -->
+        <!-- Información de Clasificación -->
         <div class="liga-section">
-            <h2 class="liga-title">Liga B</h2>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Pos</th>
-                            <th>Equipo</th>
-                            <th>Club</th>
-                            <th>PJ</th>
-                            <th>G</th>
-                            <th>E</th>
-                            <th>P</th>
-                            <th>GF</th>
-                            <th>GC</th>
-                            <th>DG</th>
-                            <th>Pts</th>
-                        </tr>
-                    </thead>
-                    <tbody id="bodyLigaB">
-                    </tbody>
-                </table>
+            <div class="clasificacion-info">
+                <h3>🏆 Sistema de Clasificación</h3>
+                <div class="clasificacion-item">
+                    <div class="clasificacion-badge badge-primero">1°</div>
+                    <div class="clasificacion-text">Clasificación directa a la FINAL</div>
+                </div>
+                <div class="clasificacion-item">
+                    <div class="clasificacion-badge badge-segundo">2°</div>
+                    <div class="clasificacion-text">Semifinal vs 3er puesto</div>
+                </div>
+                <div class="clasificacion-item">
+                    <div class="clasificacion-badge badge-tercero">3°</div>
+                    <div class="clasificacion-text">Semifinal vs 2do puesto</div>
+                </div>
             </div>
         </div>
         
@@ -340,17 +434,17 @@
 
     <script>
         // Datos de los equipos - AQUÍ PUEDES MODIFICAR LOS PUNTOS Y ESTADÍSTICAS
-      let ligaA = [
-    { name: "Carlos De La Barrera", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-    { name: "Benny Caballero", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-    { name: "jeffers0n", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-    { name: "Caliz_mistico5", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-    { name: "ale99", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-    { name: "Evers1to", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-    { name: "Alexander", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-    { name: "ElianVz17", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-    { name: "brnc_14", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 }
-];
+        let ligaA = [
+            { name: "Carlos De La Barrera", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
+            { name: "Benny Caballero", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
+            { name: "jeffers0n", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
+            { name: "Caliz_mistico5", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
+            { name: "ale99", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
+            { name: "Evers1to", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
+            { name: "Alexander", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
+            { name: "ElianVz17", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
+            { name: "brnc_14", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 }
+        ];
 
         function ordenarLiga(liga) {
             return liga.sort((a, b) => {
@@ -370,6 +464,16 @@
                 const row = tbody.insertRow();
                 const dg = equipo.gf - equipo.gc;
                 
+                // Aplicar clases según la posición
+                let posicionClass = '';
+                if (index === 0) posicionClass = 'primer-puesto';
+                else if (index === 1) posicionClass = 'segundo-puesto';
+                else if (index === 2) posicionClass = 'tercer-puesto';
+                
+                if (posicionClass) {
+                    row.className = posicionClass;
+                }
+                
                 row.innerHTML = `
                     <td class="pos-column">${index + 1}</td>
                     <td class="team-column">${equipo.name}</td>
@@ -386,9 +490,8 @@
             });
         }
 
-        // Inicializar las tablas
+        // Inicializar la tabla
         actualizarTabla(ligaA, 'bodyLigaA');
-        actualizarTabla(ligaB, 'bodyLigaB');
         
         // Función para refrescar anuncios después de cargar la página
         setTimeout(function() {
