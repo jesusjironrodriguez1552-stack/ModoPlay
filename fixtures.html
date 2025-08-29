@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixtures del Torneo - Grupos A y B</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ffa726);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
+        }
+
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .ad-container {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+            padding: 10px;
+        }
+
+        .groups-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            padding: 30px;
+        }
+
+        .group {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 2px solid transparent;
+            background-clip: padding-box;
+        }
+
+        .group-a {
+            border-image: linear-gradient(135deg, #667eea, #764ba2) 1;
+        }
+
+        .group-b {
+            border-image: linear-gradient(135deg, #f093fb, #f5576c) 1;
+        }
+
+        .group-title {
+            font-size: 2em;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .group-a .group-title {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .group-b .group-title {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+
+        .fecha {
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 5px solid #ffa726;
+        }
+
+        .fecha-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+            display: flex;
+            align-items: center;
+        }
+
+        .fecha-title::before {
+            content: '⚽';
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+
+        .match {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            border: 1px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .match:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            border-color: #ffa726;
+        }
+
+        .player {
+            font-weight: 600;
+            color: #333;
+            flex: 1;
+        }
+
+        .team {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 3px;
+        }
+
+        .vs {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #ffa726;
+            margin: 0 15px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .rest {
+            text-align: center;
+            font-style: italic;
+            color: #666;
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 6px;
+            border: 2px dashed #adb5bd;
+        }
+
+        .rest::before {
+            content: '😴 ';
+        }
+
+        @media (max-width: 768px) {
+            .groups-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 15px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .match {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .vs {
+                margin: 10px 0;
+            }
+
+            .player {
+                margin-bottom: 5px;
+            }
+        }
+
+        .footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏆 Fixtures del Torneo</h1>
+            <p>Consulta tu calendario de partidos - Grupos A y B</p>
+        </div>
+
+        <div class="ad-container">
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : 'a6c29732eed562ce6c743af0a3b60273',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/a6c29732eed562ce6c743af0a3b60273/invoke.js"></script>
+        </div>
+
+        <div class="groups-container">
+            <!-- Grupo A -->
+            <div class="group group-a">
+                <div class="group-title">📅 Grupo A</div>
+                
+                <div class="fecha">
+                    <div class="fecha-title">Fecha 1</div>
+                    <div class="match">
+                        <div class="player">
+                            Royyer10<br>
+                            <span class="team">(INTER)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            Benny Caballero<br>
+                            <span class="team">(FC BARCELONA)</span>
+                        </div>
+                    </div>
+                    <div class="match">
+                        <div class="player">
+                            LW🐉<br>
+                            <span class="team">(AC Milan)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            the Andres<br>
+                            <span class="team">(Real Madrid)</span>
+                        </div>
+                    </div>
+                    <div class="match">
+                        <div class="player">
+                            alexander<br>
+                            <span class="team">(Santos)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            399633<br>
+                            <span class="team">(Newcastle)</span>
+                        </div>
+                    </div>
+                    <div class="match">
+                        <div class="player">
+                            ElianVz17<br>
+                            <span class="team">(Venezuela)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            JLesme<br>
+                            <span class="team">(Disponible)</span>
+                        </div>
+                    </div>
+                    <div class="match">
+                        <div class="player">
+                            Ever Gutierrez<br>
+                            <span class="team">(SC Corinthians)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            Santislowly<br>
+                            <span class="team">(Club América)</span>
+                        </div>
+                    </div>
+                    <div class="rest">Descansa: Máx (Botafogo)</div>
+                </div>
+
+                <div class="fecha">
+                    <div class="fecha-title">Fecha 2</div>
+                    <div class="match">
+                        <div class="player">
+                            Royyer10<br>
+                            <span class="team">(INTER)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            LW🐉<br>
+                            <span class="team">(AC Milan)</span>
+                        </div>
+                    </div>
+                    <div class="match">
+                        <div class="player">
+                            Benny Caballero<br>
+                            <span class="team">(FC BARCELONA)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            alexander<br>
+                            <span class="team">(Santos)</span>
+                        </div>
+                    </div>
+                    <div class="match">
+                        <div class="player">
+                            the Andres<br>
+                            <span class="team">(Real Madrid)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            ElianVz17<br>
+                            <span class="team">(Venezuela)</span>
+                        </div>
+                    </div>
+                    <div class="match">
+                        <div class="player">
+                            399633<br>
+                            <span class="team">(Newcastle)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            Ever Gutierrez<br>
+                            <span class="team">(SC Corinthians)</span>
+                        </div>
+                    </div>
+                    <div class="match">
+                        <div class="player">
+                            JLesme<br>
+                            <span class="team">(Disponible)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            Máx<br>
+                            <span class="team">(Botafogo)</span>
+                        </div>
+                    </div>
+                    <div class="rest">Descansa: Santislowly (Club América)</div>
+                </div>
+
+                <div class="fecha">
+                    <div class="fecha-title">Fecha 3</div>
+                    <div class="match">
+                        <div class="player">
+                            Royyer10<br>
+                            <span class="team">(INTER)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            the Andres<br>
+                            <span class="team">(Real Madrid)</span>
+                        </div>
+                    </div>
+                    <div class="match">
+                        <div class="player">
+                            Benny Caballero<br>
+                            <span class="team">(FC BARCELONA)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            399633<br>
+                            <span class="team">(Newcastle)</span>
+                        </div>
+                    </div>
+                    <div class="match">
+                        <div class="player">
+                            LW🐉<br>
+                            <span class="team">(AC Milan)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            ElianVz17<br>
+                            <span class="team">(Venezuela)</span>
+                        </div>
+                    </div>
+                    <div class="match">
+                        <div class="player">
+                            alexander<br>
+                            <span class="team">(Santos)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            Ever Gutierrez<br>
+                            <span class="team">(SC Corinthians)</span>
+                        </div>
+                    </div>
+                    <div class="match">
+                        <div class="player">
+                            Santislowly<br>
+                            <span class="team">(Club América)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            Máx<br>
+                            <span class="team">(Botafogo)</span>
+                        </div>
+                    </div>
+                    <div class="rest">Descansa: JLesme (Disponible)</div>
+                </div>
+            </div>
+
+            <!-- Grupo B -->
+            <div class="group group-b">
+                <div class="group-title">📅 Grupo B</div>
+                
+                <div class="fecha">
+                    <div class="fecha-title">Fecha 1</div>
+                    <div class="match">
+                        <div class="player">
+                            brnc_14<br>
+                            <span class="team">(Arsenal)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            Alexander<br>
+                            <span class="team">(Ajax)</span>
+                        </div>
+                    </div>
+                    <div class="match">
+                        <div class="player">
+                            Angel3.1416<br>
+                            <span class="team">(Club America)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            Bennett_DD<br>
+                            <span class="team">(FC Barcelona)</span>
+                        </div>
+                    </div>
+                    <div class="match">
+                        <div class="player">
+                            Alberto Sosa<br>
+                            <span class="team">(Manchester United)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            Carlos De La Barrera<br>
+                            <span class="team">(Junior FC)</span>
+                        </div>
+                    </div>
+                    <div class="match">
+                        <div class="player">
+                            David Meriño<br>
+                            <span class="team">(Atlético Nacional)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            BRANDON<br>
+                            <span class="team">(JAPÓN)</span>
+                        </div>
+                    </div>
+                    <div class="match">
+                        <div class="player">
+                            Caliz_mistico5<br>
+                            <span class="team">(Gomito58)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            jeffers0n<br>
+                            <span class="team">(BENFICA)</span>
+                        </div>
+                    </div>
+                    <div class="rest">Descansa: Ferplay (ECUADOR)</div>
+                </div>
+
+                <div class="fecha">
+                    <div class="fecha-title">Fecha 2</div>
+                    <div class="match">
+                        <div class="player">
+                            brnc_14<br>
+                            <span class="team">(Arsenal)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            Angel3.1416<br>
+                            <span class="team">(Club America)</span>
+                        </div>
+                    </div>
+                    <div class="match">
+                        <div class="player">
+                            Alexander<br>
+                            <span class="team">(Ajax)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            Alberto Sosa<br>
+                            <span class="team">(Manchester United)</span>
+                        </div>
+                    </div>
+                    <div class="match">
+                        <div class="player">
+                            Bennett_DD<br>
+                            <span class="team">(FC Barcelona)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            David Meriño<br>
+                            <span class="team">(Atlético Nacional)</span>
+                        </div>
+                    </div>
+                    <div class="match">
+                        <div class="player">
+                            Carlos De La Barrera<br>
+                            <span class="team">(Junior FC)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            Caliz_mistico5<br>
+                            <span class="team">(Gomito58)</span>
+                        </div>
+                    </div>
+                    <div class="match">
+                        <div class="player">
+                            BRANDON<br>
+                            <span class="team">(JAPÓN)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            Ferplay<br>
+                            <span class="team">(ECUADOR)</span>
+                        </div>
+                    </div>
+                    <div class="rest">Descansa: jeffers0n (BENFICA)</div>
+                </div>
+
+                <div class="fecha">
+                    <div class="fecha-title">Fecha 3</div>
+                    <div class="match">
+                        <div class="player">
+                            brnc_14<br>
+                            <span class="team">(Arsenal)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            Bennett_DD<br>
+                            <span class="team">(FC Barcelona)</span>
+                        </div>
+                    </div>
+                    <div class="match">
+                        <div class="player">
+                            Angel3.1416<br>
+                            <span class="team">(Club America)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            Alexander<br>
+                            <span class="team">(Ajax)</span>
+                        </div>
+                    </div>
+                    <div class="match">
+                        <div class="player">
+                            Alberto Sosa<br>
+                            <span class="team">(Manchester United)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            BRANDON<br>
+                            <span class="team">(JAPÓN)</span>
+                        </div>
+                    </div>
+                    <div class="match">
+                        <div class="player">
+                            Carlos De La Barrera<br>
+                            <span class="team">(Junior FC)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            jeffers0n<br>
+                            <span class="team">(BENFICA)</span>
+                        </div>
+                    </div>
+                    <div class="match">
+                        <div class="player">
+                            David Meriño<br>
+                            <span class="team">(Atlético Nacional)</span>
+                        </div>
+                        <div class="vs">VS</div>
+                        <div class="player">
+                            Caliz_mistico5<br>
+                            <span class="team">(Gomito58)</span>
+                        </div>
+                    </div>
+                    <div class="rest">Descansa: Ferplay (ECUADOR)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="ad-container">
+            <script type='text/javascript' src='//pl27458422.revenuecpmgate.com/9f/ad/aa/9fadaacd147b7764a274c4d38f00b281.js'></script>
+        </div>
+
+        <div class="ad-container">
+            <script async="async" data-cfasync="false" src="//pl27458414.revenuecpmgate.com/2cab1d61c2dc9d7d47e9cefc513235df/invoke.js"></script>
+            <div id="container-2cab1d61c2dc9d7d47e9cefc513235df"></div>
+        </div>
+
+        <div class="footer">
+            <p>🏆 ¡Buena suerte a todos los participantes!</p>
+        </div>
+    </div>
+</body>
+</html>
