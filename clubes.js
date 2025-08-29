@@ -19,8 +19,10 @@ const jugadores = [
   { name: "carlosandreess", club: "Junior FC", id: "ASAA-000-436-279" },
   { name: "Esteban David Meriño", club: "Atlético Nacional", id: "ASNQ-494-301-322" },
   { name: "BRANZZINO-777", club: "Japón", id: "ASDN-004-617-039" },
-  { name: "Carlos Andrés Hurtado Cuero", club: "Gomito58", id: "ASAA-789-208-113" }
+  { name: "Carlos Andrés Hurtado Cuero", club: "Gomito58", id: "ASAA-789-208-113" },
+  { name: "JEFFRY10", club: "Benfica", id: "ASBB-584-742-141" }
 ];
+
 
 // ... tu código existente ...
 
