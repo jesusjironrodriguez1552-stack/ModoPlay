@@ -340,33 +340,17 @@
 
     <script>
         // Datos de los equipos - AQUÍ PUEDES MODIFICAR LOS PUNTOS Y ESTADÍSTICAS
-        let ligaA = [
-            { name: "Royyer10", club: "INTER", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-            { name: "Benny Caballero", club: "FC BARCELONA", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-            { name: "LW🐉", club: "AC Milan", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-            { name: "the Andres", club: "Real Madrid", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-            { name: "alexander", club: "Santos", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-            { name: "399633", club: "Newcastle", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-            { name: "ElianVz17", club: "Venezuela", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-            { name: "JLesme", club: "Disponible", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-            { name: "Ever Gutierrez", club: "SC Corinthians", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-            { name: "Santislowly", club: "Club América", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-            { name: "Máx", club: "Botafogo", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 }
-        ];
-
-        let ligaB = [
-            { name: "brnc_14", club: "Arsenal", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-            { name: "Alexander", club: "Bangbrousnetwork / Ajax", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-            { name: "Angel3.1416", club: "Club America", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-            { name: "Bennett_DD", club: "DorianBU / FC Barcelona", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-            { name: "Alberto Sosa", club: "Manchester United", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-            { name: "Carlos De La Barrera", club: "carlosandreess / Junior FC", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-            { name: "David Meriño", club: "Esteban David Meriño / Atlético Nacional", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-            { name: "BRANDON", club: "BRANZZINO-777 / JAPÓN", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-            { name: "Caliz_mistico5", club: "Carlos Andrés Hurtado Cuero / Gomito58", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-            { name: "jeffers0n", club: "JEFFRY10 / BENFICA", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
-            { name: "Ferplay", club: "FERXX3 / ECUADOR", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 }
-        ];
+      let ligaA = [
+    { name: "Carlos De La Barrera", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
+    { name: "Benny Caballero", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
+    { name: "jeffers0n", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
+    { name: "Caliz_mistico5", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
+    { name: "ale99", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
+    { name: "Evers1to", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
+    { name: "Alexander", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
+    { name: "ElianVz17", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
+    { name: "brnc_14", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 }
+];
 
         function ordenarLiga(liga) {
             return liga.sort((a, b) => {
