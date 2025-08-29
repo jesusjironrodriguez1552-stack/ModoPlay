@@ -3,628 +3,347 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fixtures del Torneo - Grupos A y B</title>
+    <title>Fixture Completo - Torneo eFootball</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        .gradient-bg {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: #333;
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #ff6b6b, #ffa726);
-            color: white;
-            text-align: center;
-            padding: 40px 20px;
-            position: relative;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="rgba(255,255,255,0.1)"/><circle cx="80" cy="40" r="1.5" fill="rgba(255,255,255,0.1)"/><circle cx="40" cy="80" r="1" fill="rgba(255,255,255,0.1)"/></svg>');
-        }
-
-        .header h1 {
-            font-size: 3em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            position: relative;
-            z-index: 1;
-        }
-
-        .header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-            position: relative;
-            z-index: 1;
-        }
-
-        .ad-container {
-            display: flex;
-            justify-content: center;
-            margin: 20px 0;
-            padding: 10px;
-        }
-
-        .groups-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            padding: 30px;
-        }
-
-        .group {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            border: 2px solid transparent;
-            background-clip: padding-box;
-        }
-
-        .group-a {
-            border-image: linear-gradient(135deg, #667eea, #764ba2) 1;
-        }
-
-        .group-b {
-            border-image: linear-gradient(135deg, #f093fb, #f5576c) 1;
-        }
-
-        .group-title {
-            font-size: 2em;
-            font-weight: bold;
-            text-align: center;
-            margin-bottom: 25px;
-            padding: 15px;
-            border-radius: 10px;
-            color: white;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-        }
-
-        .group-a .group-title {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-        }
-
-        .group-b .group-title {
-            background: linear-gradient(135deg, #f093fb, #f5576c);
-        }
-
-        .fecha {
-            margin-bottom: 30px;
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 20px;
-            border-left: 5px solid #ffa726;
-        }
-
-        .fecha-title {
-            font-size: 1.5em;
-            font-weight: bold;
-            margin-bottom: 15px;
-            color: #333;
-            display: flex;
-            align-items: center;
-        }
-
-        .fecha-title::before {
-            content: '⚽';
-            margin-right: 10px;
-            font-size: 1.2em;
-        }
-
-        .match {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 12px;
-            padding: 15px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            border: 1px solid #e9ecef;
+        .match-card {
             transition: all 0.3s ease;
+            border-left: 4px solid #3b82f6;
         }
-
-        .match:hover {
+        .match-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            border-color: #ffa726;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
         }
-
-        .player {
-            font-weight: 600;
-            color: #333;
-            flex: 1;
+        .played {
+            background: linear-gradient(45deg, #d1fae5, #a7f3d0);
+            border-left-color: #10b981;
         }
-
-        .team {
-            font-size: 0.9em;
-            color: #666;
-            margin-top: 3px;
+        .pending {
+            background: linear-gradient(45deg, #fef3c7, #fde68a);
+            border-left-color: #f59e0b;
         }
-
-        .vs {
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #ffa726;
-            margin: 0 15px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        }
-
-        .rest {
-            text-align: center;
-            font-style: italic;
-            color: #666;
-            background: #e9ecef;
-            padding: 10px;
-            border-radius: 6px;
-            border: 2px dashed #adb5bd;
-        }
-
-        .rest::before {
-            content: '😴 ';
-        }
-
-        @media (max-width: 768px) {
-            .groups-container {
-                grid-template-columns: 1fr;
-                gap: 20px;
-                padding: 15px;
-            }
-
-            .header h1 {
-                font-size: 2em;
-            }
-
-            .match {
-                flex-direction: column;
-                text-align: center;
-            }
-
-            .vs {
-                margin: 10px 0;
-            }
-
-            .player {
-                margin-bottom: 5px;
-            }
-        }
-
-        .footer {
-            background: #333;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            margin-top: 30px;
+        .section-title {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <h1>🏆 Fixtures del Torneo</h1>
-            <p>Consulta tu calendario de partidos - Grupos A y B</p>
-        </div>
-
-        <div class="ad-container">
-            <script type="text/javascript">
-                atOptions = {
-                    'key' : 'a6c29732eed562ce6c743af0a3b60273',
-                    'format' : 'iframe',
-                    'height' : 90,
-                    'width' : 728,
-                    'params' : {}
-                };
-            </script>
-            <script type="text/javascript" src="//www.highperformanceformat.com/a6c29732eed562ce6c743af0a3b60273/invoke.js"></script>
-        </div>
-
-        <div class="groups-container">
-            <!-- Grupo A -->
-            <div class="group group-a">
-                <div class="group-title">📅 Grupo A</div>
-                
-                <div class="fecha">
-                    <div class="fecha-title">Fecha 1</div>
-                    <div class="match">
-                        <div class="player">
-                            Royyer10<br>
-                            <span class="team">(INTER)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            Benny Caballero<br>
-                            <span class="team">(FC BARCELONA)</span>
-                        </div>
-                    </div>
-                    <div class="match">
-                        <div class="player">
-                            LW🐉<br>
-                            <span class="team">(AC Milan)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            the Andres<br>
-                            <span class="team">(Real Madrid)</span>
-                        </div>
-                    </div>
-                    <div class="match">
-                        <div class="player">
-                            alexander<br>
-                            <span class="team">(Santos)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            399633<br>
-                            <span class="team">(Newcastle)</span>
-                        </div>
-                    </div>
-                    <div class="match">
-                        <div class="player">
-                            ElianVz17<br>
-                            <span class="team">(Venezuela)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            JLesme<br>
-                            <span class="team">(Disponible)</span>
-                        </div>
-                    </div>
-                    <div class="match">
-                        <div class="player">
-                            Ever Gutierrez<br>
-                            <span class="team">(SC Corinthians)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            Santislowly<br>
-                            <span class="team">(Club América)</span>
-                        </div>
-                    </div>
-                    <div class="rest">Descansa: Máx (Botafogo)</div>
-                </div>
-
-                <div class="fecha">
-                    <div class="fecha-title">Fecha 2</div>
-                    <div class="match">
-                        <div class="player">
-                            Royyer10<br>
-                            <span class="team">(INTER)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            LW🐉<br>
-                            <span class="team">(AC Milan)</span>
-                        </div>
-                    </div>
-                    <div class="match">
-                        <div class="player">
-                            Benny Caballero<br>
-                            <span class="team">(FC BARCELONA)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            alexander<br>
-                            <span class="team">(Santos)</span>
-                        </div>
-                    </div>
-                    <div class="match">
-                        <div class="player">
-                            the Andres<br>
-                            <span class="team">(Real Madrid)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            ElianVz17<br>
-                            <span class="team">(Venezuela)</span>
-                        </div>
-                    </div>
-                    <div class="match">
-                        <div class="player">
-                            399633<br>
-                            <span class="team">(Newcastle)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            Ever Gutierrez<br>
-                            <span class="team">(SC Corinthians)</span>
-                        </div>
-                    </div>
-                    <div class="match">
-                        <div class="player">
-                            JLesme<br>
-                            <span class="team">(Disponible)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            Máx<br>
-                            <span class="team">(Botafogo)</span>
-                        </div>
-                    </div>
-                    <div class="rest">Descansa: Santislowly (Club América)</div>
-                </div>
-
-                <div class="fecha">
-                    <div class="fecha-title">Fecha 3</div>
-                    <div class="match">
-                        <div class="player">
-                            Royyer10<br>
-                            <span class="team">(INTER)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            the Andres<br>
-                            <span class="team">(Real Madrid)</span>
-                        </div>
-                    </div>
-                    <div class="match">
-                        <div class="player">
-                            Benny Caballero<br>
-                            <span class="team">(FC BARCELONA)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            399633<br>
-                            <span class="team">(Newcastle)</span>
-                        </div>
-                    </div>
-                    <div class="match">
-                        <div class="player">
-                            LW🐉<br>
-                            <span class="team">(AC Milan)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            ElianVz17<br>
-                            <span class="team">(Venezuela)</span>
-                        </div>
-                    </div>
-                    <div class="match">
-                        <div class="player">
-                            alexander<br>
-                            <span class="team">(Santos)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            Ever Gutierrez<br>
-                            <span class="team">(SC Corinthians)</span>
-                        </div>
-                    </div>
-                    <div class="match">
-                        <div class="player">
-                            Santislowly<br>
-                            <span class="team">(Club América)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            Máx<br>
-                            <span class="team">(Botafogo)</span>
-                        </div>
-                    </div>
-                    <div class="rest">Descansa: JLesme (Disponible)</div>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Header -->
+    <div class="gradient-bg text-white py-8 mb-8">
+        <div class="container mx-auto px-4">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold mb-2">
+                    <i class="fas fa-calendar-alt mr-3"></i>
+                    Fixture Completo
+                </h1>
+                <p class="text-xl opacity-90">Torneo eFootball - Todos vs Todos</p>
+                <div class="mt-4 flex justify-center items-center space-x-6 text-sm">
+                    <span><i class="fas fa-users mr-1"></i>9 Jugadores</span>
+                    <span><i class="fas fa-gamepad mr-1"></i>36 Partidos Total</span>
+                    <span id="progress-header"><i class="fas fa-chart-pie mr-1"></i>Progreso: 0%</span>
                 </div>
             </div>
-
-            <!-- Grupo B -->
-            <div class="group group-b">
-                <div class="group-title">📅 Grupo B</div>
-                
-                <div class="fecha">
-                    <div class="fecha-title">Fecha 1</div>
-                    <div class="match">
-                        <div class="player">
-                            brnc_14<br>
-                            <span class="team">(Arsenal)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            Alexander<br>
-                            <span class="team">(Ajax)</span>
-                        </div>
-                    </div>
-                    <div class="match">
-                        <div class="player">
-                            Angel3.1416<br>
-                            <span class="team">(Club America)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            Bennett_DD<br>
-                            <span class="team">(FC Barcelona)</span>
-                        </div>
-                    </div>
-                    <div class="match">
-                        <div class="player">
-                            Alberto Sosa<br>
-                            <span class="team">(Manchester United)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            Carlos De La Barrera<br>
-                            <span class="team">(Junior FC)</span>
-                        </div>
-                    </div>
-                    <div class="match">
-                        <div class="player">
-                            David Meriño<br>
-                            <span class="team">(Atlético Nacional)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            BRANDON<br>
-                            <span class="team">(JAPÓN)</span>
-                        </div>
-                    </div>
-                    <div class="match">
-                        <div class="player">
-                            Caliz_mistico5<br>
-                            <span class="team">(Gomito58)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            jeffers0n<br>
-                            <span class="team">(BENFICA)</span>
-                        </div>
-                    </div>
-                    <div class="rest">Descansa: Ferplay (ECUADOR)</div>
-                </div>
-
-                <div class="fecha">
-                    <div class="fecha-title">Fecha 2</div>
-                    <div class="match">
-                        <div class="player">
-                            brnc_14<br>
-                            <span class="team">(Arsenal)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            Angel3.1416<br>
-                            <span class="team">(Club America)</span>
-                        </div>
-                    </div>
-                    <div class="match">
-                        <div class="player">
-                            Alexander<br>
-                            <span class="team">(Ajax)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            Alberto Sosa<br>
-                            <span class="team">(Manchester United)</span>
-                        </div>
-                    </div>
-                    <div class="match">
-                        <div class="player">
-                            Bennett_DD<br>
-                            <span class="team">(FC Barcelona)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            David Meriño<br>
-                            <span class="team">(Atlético Nacional)</span>
-                        </div>
-                    </div>
-                    <div class="match">
-                        <div class="player">
-                            Carlos De La Barrera<br>
-                            <span class="team">(Junior FC)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            Caliz_mistico5<br>
-                            <span class="team">(Gomito58)</span>
-                        </div>
-                    </div>
-                    <div class="match">
-                        <div class="player">
-                            BRANDON<br>
-                            <span class="team">(JAPÓN)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            Ferplay<br>
-                            <span class="team">(ECUADOR)</span>
-                        </div>
-                    </div>
-                    <div class="rest">Descansa: jeffers0n (BENFICA)</div>
-                </div>
-
-                <div class="fecha">
-                    <div class="fecha-title">Fecha 3</div>
-                    <div class="match">
-                        <div class="player">
-                            brnc_14<br>
-                            <span class="team">(Arsenal)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            Bennett_DD<br>
-                            <span class="team">(FC Barcelona)</span>
-                        </div>
-                    </div>
-                    <div class="match">
-                        <div class="player">
-                            Angel3.1416<br>
-                            <span class="team">(Club America)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            Alexander<br>
-                            <span class="team">(Ajax)</span>
-                        </div>
-                    </div>
-                    <div class="match">
-                        <div class="player">
-                            Alberto Sosa<br>
-                            <span class="team">(Manchester United)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            BRANDON<br>
-                            <span class="team">(JAPÓN)</span>
-                        </div>
-                    </div>
-                    <div class="match">
-                        <div class="player">
-                            Carlos De La Barrera<br>
-                            <span class="team">(Junior FC)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            jeffers0n<br>
-                            <span class="team">(BENFICA)</span>
-                        </div>
-                    </div>
-                    <div class="match">
-                        <div class="player">
-                            David Meriño<br>
-                            <span class="team">(Atlético Nacional)</span>
-                        </div>
-                        <div class="vs">VS</div>
-                        <div class="player">
-                            Caliz_mistico5<br>
-                            <span class="team">(Gomito58)</span>
-                        </div>
-                    </div>
-                    <div class="rest">Descansa: Ferplay (ECUADOR)</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="ad-container">
-            <script type='text/javascript' src='//pl27458422.revenuecpmgate.com/9f/ad/aa/9fadaacd147b7764a274c4d38f00b281.js'></script>
-        </div>
-
-        <div class="ad-container">
-            <script async="async" data-cfasync="false" src="//pl27458414.revenuecpmgate.com/2cab1d61c2dc9d7d47e9cefc513235df/invoke.js"></script>
-            <div id="container-2cab1d61c2dc9d7d47e9cefc513235df"></div>
-        </div>
-
-        <div class="footer">
-            <p>🏆 ¡Buena suerte a todos los participantes!</p>
         </div>
     </div>
+
+    <div class="container mx-auto px-4 max-w-6xl">
+        <!-- Estadísticas Rápidas -->
+        <div class="grid md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white rounded-xl shadow-lg p-4 text-center">
+                <div class="text-2xl font-bold text-green-600" id="played-count">0</div>
+                <div class="text-sm text-gray-600">Jugados</div>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-4 text-center">
+                <div class="text-2xl font-bold text-yellow-600" id="pending-count">0</div>
+                <div class="text-sm text-gray-600">Pendientes</div>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-4 text-center">
+                <div class="text-2xl font-bold text-blue-600" id="total-goals">0</div>
+                <div class="text-sm text-gray-600">Goles</div>
+            </div>
+            <div class="bg-white rounded-xl shadow-lg p-4 text-center">
+                <div class="text-2xl font-bold text-purple-600" id="avg-goals">0.0</div>
+                <div class="text-sm text-gray-600">Promedio</div>
+            </div>
+        </div>
+
+        <!-- Partidos Jugados -->
+        <div class="mb-12">
+            <div class="flex items-center mb-6">
+                <div class="bg-green-500 p-3 rounded-lg mr-4">
+                    <i class="fas fa-check-circle text-white text-2xl"></i>
+                </div>
+                <h2 class="text-3xl font-bold section-title">Partidos Jugados</h2>
+                <div class="ml-4 bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">
+                    <span id="played-badge">0 partidos</span>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 gap-4" id="played-matches">
+                <!-- Se llena dinámicamente -->
+            </div>
+            
+            <div id="no-played" class="text-center py-12 text-gray-500 hidden">
+                <i class="fas fa-clock text-4xl mb-4 opacity-50"></i>
+                <p class="text-lg">No hay partidos jugados aún</p>
+            </div>
+        </div>
+
+        <!-- Partidos Pendientes -->
+        <div>
+            <div class="flex items-center mb-6">
+                <div class="bg-yellow-500 p-3 rounded-lg mr-4">
+                    <i class="fas fa-hourglass-half text-white text-2xl"></i>
+                </div>
+                <h2 class="text-3xl font-bold section-title">Partidos Pendientes</h2>
+                <div class="ml-4 bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-semibold">
+                    <span id="pending-badge">0 partidos</span>
+                </div>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4" id="pending-matches">
+                <!-- Se llena dinámicamente -->
+            </div>
+        </div>
+
+        <!-- Leyenda -->
+        <div class="mt-12 bg-white rounded-xl shadow-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-info-circle mr-2 text-blue-500"></i>
+                Información
+            </h3>
+            <div class="grid md:grid-cols-2 gap-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-6 h-6 bg-green-200 rounded border-l-4 border-green-500"></div>
+                    <span class="text-gray-700">Partidos completados con resultado final</span>
+                </div>
+                <div class="flex items-center space-x-3">
+                    <div class="w-6 h-6 bg-yellow-200 rounded border-l-4 border-yellow-500"></div>
+                    <span class="text-gray-700">Partidos por disputar</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-16 bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4 text-center">
+            <p>&copy; 2024 Torneo eFootball - Fixture Completo</p>
+            <div class="mt-2 text-gray-400 text-sm">
+                <span>Sistema: Todos vs Todos</span>
+                <span class="mx-2">|</span>
+                <span>9 Participantes</span>
+                <span class="mx-2">|</span>
+                <span>36 Partidos Total</span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Participantes del torneo
+        const players = [
+            "Carlos De La Barrera",
+            "Benny Caballero", 
+            "jeffers0n",
+            "Caliz_mistico5",
+            "ale99",
+            "Evers1to",
+            "Alexander",
+            "ElianVz17",
+            "brnc_14"
+        ];
+
+        // Partidos con resultados
+        const playedMatches = [
+            { team1: "Carlos De La Barrera", team2: "Benny Caballero", score1: 1, score2: 1 },
+            { team1: "jeffers0n", team2: "Caliz_mistico5", score1: 1, score2: 1 },
+            { team1: "ale99", team2: "Evers1to", score1: 2, score2: 2 },
+            { team1: "Caliz_mistico5", team2: "Alexander", score1: 2, score2: 0 },
+            { team1: "Evers1to", team2: "ElianVz17", score1: 5, score2: 0 }
+        ];
+
+        // Generar todos los partidos posibles
+        function generateAllMatches() {
+            const allMatches = [];
+            const playedMatchesSet = new Set();
+            
+            // Marcar partidos ya jugados
+            playedMatches.forEach(match => {
+                playedMatchesSet.add(`${match.team1}-${match.team2}`);
+                playedMatchesSet.add(`${match.team2}-${match.team1}`);
+            });
+
+            // Generar todos los enfrentamientos posibles
+            for (let i = 0; i < players.length; i++) {
+                for (let j = i + 1; j < players.length; j++) {
+                    const matchKey = `${players[i]}-${players[j]}`;
+                    
+                    if (playedMatchesSet.has(matchKey)) {
+                        // Encontrar el partido jugado
+                        const playedMatch = playedMatches.find(m => 
+                            (m.team1 === players[i] && m.team2 === players[j]) ||
+                            (m.team1 === players[j] && m.team2 === players[i])
+                        );
+                        allMatches.push({...playedMatch, played: true});
+                    } else {
+                        // Partido pendiente
+                        allMatches.push({
+                            team1: players[i],
+                            team2: players[j],
+                            score1: 0,
+                            score2: 0,
+                            played: false
+                        });
+                    }
+                }
+            }
+            
+            return allMatches;
+        }
+
+        // Renderizar partido jugado
+        function renderPlayedMatch(match, index) {
+            const winner = match.score1 > match.score2 ? 'team1' : 
+                          match.score1 < match.score2 ? 'team2' : 'tie';
+            
+            return `
+                <div class="match-card played bg-white rounded-lg p-6 shadow-sm">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="text-sm text-gray-500 font-medium">Partido #${index + 1}</div>
+                        <div class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-semibold">
+                            FINALIZADO
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center flex-1">
+                                <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold mr-3">
+                                    ${match.team1.charAt(0)}
+                                </div>
+                                <span class="font-medium text-gray-800 ${winner === 'team1' ? 'text-green-600' : ''}">${match.team1}</span>
+                            </div>
+                            <div class="text-2xl font-bold text-gray-800 mx-4">${match.score1}</div>
+                        </div>
+                        
+                        <div class="border-t border-gray-200"></div>
+                        
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center flex-1">
+                                <div class="w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold mr-3">
+                                    ${match.team2.charAt(0)}
+                                </div>
+                                <span class="font-medium text-gray-800 ${winner === 'team2' ? 'text-green-600' : ''}">${match.team2}</span>
+                            </div>
+                            <div class="text-2xl font-bold text-gray-800 mx-4">${match.score2}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 text-center">
+                        <span class="text-sm ${winner === 'tie' ? 'text-yellow-600 font-semibold' : 'text-gray-500'}">
+                            ${winner === 'tie' ? 'EMPATE' : 
+                              winner === 'team1' ? `Victoria: ${match.team1}` : 
+                              `Victoria: ${match.team2}`}
+                        </span>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Renderizar partido pendiente
+        function renderPendingMatch(match, index) {
+            return `
+                <div class="match-card pending bg-white rounded-lg p-5 shadow-sm">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="text-sm text-gray-500 font-medium">Pendiente #${index + 1}</div>
+                        <div class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs font-semibold">
+                            POR JUGAR
+                        </div>
+                    </div>
+                    
+                    <div class="space-y-3">
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm mr-3">
+                                ${match.team1.charAt(0)}
+                            </div>
+                            <span class="font-medium text-gray-700">${match.team1}</span>
+                        </div>
+                        
+                        <div class="flex justify-center">
+                            <div class="bg-yellow-100 px-4 py-2 rounded-lg">
+                                <span class="text-yellow-800 font-bold">VS</span>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <div class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold text-sm mr-3">
+                                ${match.team2.charAt(0)}
+                            </div>
+                            <span class="font-medium text-gray-700">${match.team2}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Calcular estadísticas
+        function calculateStats(matches) {
+            const played = matches.filter(m => m.played);
+            const pending = matches.filter(m => !m.played);
+            const totalGoals = played.reduce((sum, m) => sum + m.score1 + m.score2, 0);
+            const avgGoals = played.length > 0 ? (totalGoals / played.length).toFixed(1) : 0.0;
+            const progress = Math.round((played.length / matches.length) * 100);
+
+            return {
+                played: played.length,
+                pending: pending.length,
+                totalGoals,
+                avgGoals,
+                progress
+            };
+        }
+
+        // Inicializar la página
+        function init() {
+            const matches = generateAllMatches();
+            const stats = calculateStats(matches);
+            
+            // Actualizar estadísticas
+            document.getElementById('played-count').textContent = stats.played;
+            document.getElementById('pending-count').textContent = stats.pending;
+            document.getElementById('total-goals').textContent = stats.totalGoals;
+            document.getElementById('avg-goals').textContent = stats.avgGoals;
+            document.getElementById('progress-header').innerHTML = `<i class="fas fa-chart-pie mr-1"></i>Progreso: ${stats.progress}%`;
+            document.getElementById('played-badge').textContent = `${stats.played} partidos`;
+            document.getElementById('pending-badge').textContent = `${stats.pending} partidos`;
+
+            // Renderizar partidos jugados
+            const playedContainer = document.getElementById('played-matches');
+            const playedMatchesFiltered = matches.filter(m => m.played);
+            
+            if (playedMatchesFiltered.length > 0) {
+                playedContainer.innerHTML = playedMatchesFiltered.map((match, index) => renderPlayedMatch(match, index)).join('');
+                document.getElementById('no-played').classList.add('hidden');
+            } else {
+                playedContainer.innerHTML = '';
+                document.getElementById('no-played').classList.remove('hidden');
+            }
+
+            // Renderizar partidos pendientes
+            const pendingContainer = document.getElementById('pending-matches');
+            const pendingMatches = matches.filter(m => !m.played);
+            pendingContainer.innerHTML = pendingMatches.map((match, index) => renderPendingMatch(match, index)).join('');
+        }
+
+        // Ejecutar al cargar la página
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
 </body>
 </html>
+
