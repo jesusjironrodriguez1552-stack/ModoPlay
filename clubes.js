@@ -8,7 +8,7 @@ const clubes = [
     { name: "alexander", club: "Santos" },
     { name: "399633", club: "Newcastle" },
     { name: "ElianVz17", club: "Venezuela" },
-    { name: "JLesme", club: "Equipo disponible" },
+    { name: "Brn_14", club: "Arsenal" },
     { name: "Ever Gutierrez", club: "SC Corinthians" },
     { name: "Santislowly", club: "Club América" },
     { name: "Máx", club: "Botafogo" }
