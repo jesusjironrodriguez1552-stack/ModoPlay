@@ -3,341 +3,577 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liga Efootball 2025 </title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <h1>Liga Efootball 2025 </h1>
-    
-    <!-- Anuncio superior -->
-    <div style="text-align: center; margin: 10px 0;">
-        <script type="text/javascript"> 
-            atOptions = { 
-                'key' : 'a6c29732eed562ce6c743af0a3b60273', 
-                'format' : 'iframe', 
-                'height' : 90, 
-                'width' : 728, 
-                'params' : {} 
-            }; 
-        </script> 
-        <script type="text/javascript" src="//www.highperformanceformat.com/a6c29732eed562ce6c743af0a3b60273/invoke.js"></script>
-    </div>
-    
-    <div id="standings-section">
-        <h2>🏆 Tabla de Posiciones</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Pos</th>
-                    <th>Equipo</th>
-                    <th>PJ</th>
-                    <th>PG</th>
-                    <th>PE</th>
-                    <th>PP</th>
-                    <th>GF</th>
-                    <th>GC</th>
-                    <th>DG</th>
-                    <th>Pts</th>
-                </tr>
-            </thead>
-            <tbody id="standings-body"></tbody>
-        </table>
-    </div>
-
-    <!-- Anuncio medio -->
-    <div style="text-align: center; margin: 20px 0;">
-        <script type='text/javascript' src='//pl27458422.effectivecpmrate.com/9f/ad/aa/9fadaacd147b7764a274c4d38f00b281.js'></script>
-    </div>
-
-    <div id="fixtures-section">
-        <h2>📅 Fixture Liga Efootball 2025</h2>
-        <div id="fixture-navigation">
-            <button id="prev-fecha" onclick="previousFecha()">⬅️ Fecha Anterior</button>
-            <span id="current-fecha-display">Fecha 1</span>
-            <button id="next-fecha" onclick="nextFecha()">Fecha Siguiente ➡️</button>
-        </div>
-        <div id="fixtures-list"></div>
-        <div id="fixtures-summary">
-            <p>Total de fechas: <span id="total-fechas">0</span> | Fecha actual: <span id="current-fecha-number">1</span></p>
-        </div>
-    </div>
-
-    <!-- Anuncio inferior -->
-    <div style="text-align: center; margin: 20px 0;">
-        <script async="async" data-cfasync="false" src="//pl27458414.effectivecpmrate.com/2cab1d61c2dc9d7d47e9cefc513235df/invoke.js"></script> 
-        <div id="container-2cab1d61c2dc9d7d47e9cefc513235df"></div>
-    </div>
-
-    <script type="module">
-        console.log('Liga Efootball 2025 starting...');
+    <title>eFootball Tournament Test</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.1/umd/lucide.js"></script>
+    <style>
+        /* Estilos básicos para que sea legible */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        /* Estilos mínimos de Tailwind que usa el componente */
+        .bg-white { background-color: white; }
+        .bg-gray-50 { background-color: #f9fafb; }
+        .bg-gray-100 { background-color: #f3f4f6; }
+        .bg-blue-50 { background-color: #eff6ff; }
+        .bg-green-50 { background-color: #f0fdf4; }
+        .bg-red-50 { background-color: #fef2f2; }
+        .bg-yellow-50 { background-color: #fefce8; }
+        .bg-orange-100 { background-color: #fed7aa; }
+        .bg-yellow-100 { background-color: #fef3c7; }
+        .bg-green-100 { background-color: #dcfce7; }
+        .bg-blue-100 { background-color: #dbeafe; }
         
-        // Variables globales
-        let clubes = [];
-        let customFixtures = [];
-        let fixtureHelper = null;
-        let currentFechaIndex = 0;
+        .text-center { text-align: center; }
+        .text-left { text-left: left; }
+        .text-right { text-align: right; }
         
-        // Función para cargar los datos
-        async function loadData() {
-            try {
-                console.log('Loading league data...');
-                
-                // Importar clubes
-                const clubesModule = await import('./clubes.js');
-                clubes = clubesModule.clubes || clubesModule.default || clubesModule;
-                
-                // Importar fixtures y helper
-                const fixturesModule = await import('./fixtures.js');
-                customFixtures = fixturesModule.customFixtures || fixturesModule.default;
-                fixtureHelper = fixturesModule.fixtureHelper;
-                
-                if (clubes && Array.isArray(clubes) && clubes.length > 0) {
-                    console.log(`✅ Loaded ${clubes.length} teams`);
-                    console.log('Teams:', clubes.map(c => c.name || c.nombre || c));
-                } else {
-                    console.error('❌ Failed to load teams data');
-                    return;
-                }
-                
-                if (customFixtures && Array.isArray(customFixtures) && customFixtures.length > 0) {
-                    console.log(`✅ Loaded ${customFixtures.length} fixtures`);
-                    console.log('First fixture example:', customFixtures[0]);
-                    document.getElementById('total-fechas').textContent = customFixtures.length;
-                } else {
-                    console.error('❌ Failed to load fixtures data');
-                    return;
-                }
-                
-                // Mostrar los datos
-                displayStandings();
-                displayCurrentFixture();
-                updateNavigationButtons();
-                
-            } catch (error) {
-                console.error('Error loading data:', error);
-                document.body.innerHTML += `<div style="color: red; text-align: center; margin: 20px;">
-                    <h2>Error cargando datos</h2>
-                    <p>${error.message}</p>
-                    <p>Asegúrate de tener los archivos clubes.js y fixtures.js en la misma carpeta.</p>
-                    <details style="text-align: left; margin: 20px;">
-                        <summary>Detalles del error</summary>
-                        <pre>${error.stack}</pre>
-                    </details>
-                </div>`;
-            }
+        .font-bold { font-weight: bold; }
+        .font-medium { font-weight: 500; }
+        .font-semibold { font-weight: 600; }
+        
+        .text-xs { font-size: 0.75rem; }
+        .text-sm { font-size: 0.875rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-4xl { font-size: 2.25rem; }
+        
+        .p-1 { padding: 0.25rem; }
+        .p-2 { padding: 0.5rem; }
+        .p-3 { padding: 0.75rem; }
+        .p-4 { padding: 1rem; }
+        .p-6 { padding: 1.5rem; }
+        
+        .m-2 { margin: 0.5rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-3 { margin-bottom: 0.75rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mb-6 { margin-bottom: 1.5rem; }
+        .mb-8 { margin-bottom: 2rem; }
+        .mr-2 { margin-right: 0.5rem; }
+        .mr-3 { margin-right: 0.75rem; }
+        .ml-1 { margin-left: 0.25rem; }
+        .mt-2 { margin-top: 0.5rem; }
+        .mt-6 { margin-top: 1.5rem; }
+        .mt-8 { margin-top: 2rem; }
+        .my-1 { margin-top: 0.25rem; margin-bottom: 0.25rem; }
+        .my-2 { margin-top: 0.5rem; margin-bottom: 0.5rem; }
+        
+        .px-1 { padding-left: 0.25rem; padding-right: 0.25rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        
+        .rounded { border-radius: 0.25rem; }
+        .rounded-lg { border-radius: 0.5rem; }
+        .rounded-md { border-radius: 0.375rem; }
+        
+        .shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+        
+        .border { border: 1px solid #d1d5db; }
+        .border-2 { border-width: 2px; }
+        .border-l-4 { border-left-width: 4px; }
+        .border-blue-500 { border-color: #3b82f6; }
+        .border-green-200 { border-color: #bbf7d0; }
+        .border-yellow-300 { border-color: #fde047; }
+        
+        .flex { display: flex; }
+        .flex-1 { flex: 1; }
+        .items-center { align-items: center; }
+        .justify-center { justify-content: center; }
+        .justify-between { justify-content: space-between; }
+        .space-x-4 > * + * { margin-left: 1rem; }
+        .space-y-1 > * + * { margin-top: 0.25rem; }
+        .space-y-6 > * + * { margin-top: 1.5rem; }
+        
+        .grid { display: grid; }
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .gap-3 { gap: 0.75rem; }
+        .gap-6 { gap: 1.5rem; }
+        
+        .text-blue-500 { color: #3b82f6; }
+        .text-blue-600 { color: #2563eb; }
+        .text-blue-700 { color: #1d4ed8; }
+        .text-blue-800 { color: #1e40af; }
+        .text-green-600 { color: #16a34a; }
+        .text-red-600 { color: #dc2626; }
+        .text-yellow-600 { color: #ca8a04; }
+        .text-yellow-700 { color: #a16207; }
+        .text-gray-400 { color: #9ca3af; }
+        .text-gray-500 { color: #6b7280; }
+        .text-gray-600 { color: #4b5563; }
+        .text-gray-700 { color: #374151; }
+        .text-gray-800 { color: #1f2937; }
+        
+        .bg-blue-500 { background-color: #3b82f6; }
+        .bg-red-500 { background-color: #ef4444; }
+        .text-white { color: white; }
+        
+        .hover\\:bg-gray-100:hover { background-color: #f3f4f6; }
+        .hover\\:bg-gray-50:hover { background-color: #f9fafb; }
+        
+        .transition-all { transition: all 0.15s; }
+        
+        .overflow-x-auto { overflow-x: auto; }
+        .border-collapse { border-collapse: collapse; }
+        
+        .min-h-screen { min-height: 100vh; }
+        .max-w-7xl { max-width: 80rem; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+        
+        .w-full { width: 100%; }
+        
+        .bg-gradient-to-br { background-image: linear-gradient(to bottom right, var(--tw-gradient-stops)); }
+        .from-blue-50 { --tw-gradient-from: #eff6ff; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(239, 246, 255, 0)); }
+        .to-green-50 { --tw-gradient-to: #f0fdf4; }
+        .bg-gradient-to-r { background-image: linear-gradient(to right, var(--tw-gradient-stops)); }
+        .from-yellow-50 { --tw-gradient-from: #fefce8; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(254, 252, 232, 0)); }
+        .to-green-50 { --tw-gradient-to: #f0fdf4; }
+        
+        button {
+            cursor: pointer;
+            border: none;
+            outline: none;
         }
         
-        function displayStandings() {
-            if (!clubes || clubes.length === 0) return;
-            
-            const tbody = document.getElementById('standings-body');
-            tbody.innerHTML = '';
-            
-            // Crear estadísticas básicas para cada equipo
-            const teamStats = clubes.map((club, index) => ({
-                position: index + 1,
-                name: club.name || club.nombre || club,
-                played: 0,
-                won: 0,
-                drawn: 0,
-                lost: 0,
-                goalsFor: 0,
-                goalsAgainst: 0,
-                goalDifference: 0,
-                points: 0
-            }));
-            
-            // Si hay fixtures jugados, calcular estadísticas reales
-            if (customFixtures && customFixtures.length > 0) {
-                customFixtures.forEach(fecha => {
-                    if (fecha.partidos && Array.isArray(fecha.partidos)) {
-                        fecha.partidos.forEach(partido => {
-                            // Verificar si el partido está jugado
-                            const jugado = partido.resultado && partido.resultado.jugado === true;
-                            
-                            if (jugado) {
-                                const localTeam = teamStats.find(team => team.name === partido.local);
-                                const visitanteTeam = teamStats.find(team => team.name === partido.visitante);
-                                
-                                if (localTeam && visitanteTeam) {
-                                    // Verificar que los goles sean números válidos
-                                    const golesLocal = parseInt(partido.resultado.golesLocal) || 0;
-                                    const golesVisitante = parseInt(partido.resultado.golesVisitante) || 0;
-                                    
-                                    // Actualizar estadísticas del local
-                                    localTeam.played++;
-                                    localTeam.goalsFor += golesLocal;
-                                    localTeam.goalsAgainst += golesVisitante;
-                                    
-                                    // Actualizar estadísticas del visitante
-                                    visitanteTeam.played++;
-                                    visitanteTeam.goalsFor += golesVisitante;
-                                    visitanteTeam.goalsAgainst += golesLocal;
-                                    
-                                    // Determinar resultado
-                                    if (golesLocal > golesVisitante) {
-                                        localTeam.won++;
-                                        localTeam.points += 3;
-                                        visitanteTeam.lost++;
-                                    } else if (golesLocal < golesVisitante) {
-                                        visitanteTeam.won++;
-                                        visitanteTeam.points += 3;
-                                        localTeam.lost++;
-                                    } else {
-                                        localTeam.drawn++;
-                                        visitanteTeam.drawn++;
-                                        localTeam.points++;
-                                        visitanteTeam.points++;
-                                    }
-                                }
-                            }
+        table th, table td {
+            border: 1px solid #d1d5db;
+            padding: 0.5rem;
+        }
+        
+        @media (min-width: 768px) {
+            .md\\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        }
+        
+        @media (min-width: 1024px) {
+            .lg\\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+            .lg\\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+        }
+        
+        @media (min-width: 1280px) {
+            .xl\\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // Datos de prueba para los clubes
+        const clubes = [
+            {
+                name: "Juan Pérez",
+                club: "FC Barcelona",
+                id: "001"
+            },
+            {
+                name: "María García",
+                club: "Real Madrid",
+                id: "002"
+            },
+            {
+                name: "Carlos López",
+                club: "Manchester City",
+                id: "003"
+            },
+            {
+                name: "Ana Martínez",
+                club: "Liverpool",
+                id: "004"
+            },
+            {
+                name: "Luis Rodríguez",
+                club: "PSG",
+                id: "005"
+            },
+            {
+                name: "Sofia Hernández",
+                club: "Bayern Munich",
+                id: "006"
+            },
+            {
+                name: "Diego Morales",
+                club: "Chelsea",
+                id: "007"
+            },
+            {
+                name: "Isabel Torres",
+                club: "Arsenal",
+                id: "008"
+            },
+            {
+                name: "Roberto Silva",
+                club: "Inter Milan",
+                id: "009"
+            },
+            {
+                name: "Carmen Ruiz",
+                club: "Juventus",
+                id: "010"
+            },
+            {
+                name: "Fernando Castro",
+                club: "Atletico Madrid",
+                id: "011"
+            },
+            {
+                name: "Patricia Vega",
+                club: "AC Milan",
+                id: "012"
+            }
+        ];
+
+        // Componente del torneo (el mismo código que tienes pero adaptado para trabajar con el HTML)
+        const { useState, useEffect } = React;
+        const { Trophy, Users, Calendar, Target } = lucide;
+
+        const EFootballTournament = () => {
+            const [activeTab, setActiveTab] = useState('grupos');
+            const [grupos, setGrupos] = useState([]);
+            const [partidosGrupos, setPartidosGrupos] = useState([]);
+            const [eliminatorias, setEliminatorias] = useState({
+                octavos: [],
+                cuartos: [],
+                semis: [],
+                final: []
+            });
+
+            // Calcular estadísticas del torneo
+            const stats = {
+                totalJugadores: clubes.length,
+                numGrupos: Math.ceil(clubes.length / 3),
+                partidosPorGrupo: 3,
+                totalPartidosGrupos: Math.ceil(clubes.length / 3) * 3,
+                clasificados: Math.ceil(clubes.length / 3) * 2
+            };
+
+            // Función para mezclar array (Fisher-Yates shuffle)
+            const shuffleArray = (array) => {
+                const newArray = [...array];
+                for (let i = newArray.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+                }
+                return newArray;
+            };
+
+            // Crear grupos dinámicamente
+            const crearGrupos = () => {
+                const jugadoresMezclados = shuffleArray([...clubes]);
+                const numGrupos = Math.ceil(clubes.length / 3);
+                const nuevosGrupos = [];
+
+                for (let i = 0; i < numGrupos; i++) {
+                    const equiposGrupo = jugadoresMezclados.slice(i * 3, (i + 1) * 3);
+                    
+                    if (equiposGrupo.length >= 2) {
+                        nuevosGrupos.push({
+                            nombre: `Grupo ${String.fromCharCode(65 + i)}`,
+                            equipos: equiposGrupo,
+                            tabla: equiposGrupo.map(equipo => ({
+                                ...equipo,
+                                partidos: 0,
+                                ganados: 0,
+                                empatados: 0,
+                                perdidos: 0,
+                                golesFavor: 0,
+                                golesContra: 0,
+                                diferencia: 0,
+                                puntos: 0
+                            }))
+                        });
+                    }
+                }
+
+                setGrupos(nuevosGrupos);
+                generarPartidosGrupos(nuevosGrupos);
+            };
+
+            // Generar partidos de grupos
+            const generarPartidosGrupos = (gruposData) => {
+                const todosLosPartidos = [];
+
+                gruposData.forEach((grupo, grupoIndex) => {
+                    const equipos = grupo.equipos;
+                    const partidosGrupo = [];
+
+                    for (let i = 0; i < equipos.length; i++) {
+                        for (let j = i + 1; j < equipos.length; j++) {
+                            partidosGrupo.push({
+                                id: `${grupoIndex}-${i}-${j}`,
+                                grupo: grupo.nombre,
+                                grupoIndex,
+                                local: equipos[i],
+                                visitante: equipos[j],
+                                jornada: partidosGrupo.length + 1,
+                                estado: 'pendiente',
+                                resultado: { local: null, visitante: null }
+                            });
+                        }
+                    }
+
+                    todosLosPartidos.push(...partidosGrupo);
+                });
+
+                setPartidosGrupos(todosLosPartidos);
+            };
+
+            // Obtener clasificados de grupos
+            const obtenerClasificados = () => {
+                const clasificados = [];
+                
+                grupos.forEach((grupo) => {
+                    const tablaOrdenada = [...grupo.tabla].sort((a, b) => {
+                        if (b.puntos !== a.puntos) return b.puntos - a.puntos;
+                        if (b.diferencia !== a.diferencia) return b.diferencia - a.diferencia;
+                        return b.golesFavor - a.golesFavor;
+                    });
+                    
+                    if (tablaOrdenada[0]) {
+                        clasificados.push({ 
+                            ...tablaOrdenada[0], 
+                            posicion: `1° ${grupo.nombre}`,
+                            grupoOrigen: grupo.nombre 
+                        });
+                    }
+                    if (tablaOrdenada[1]) {
+                        clasificados.push({ 
+                            ...tablaOrdenada[1], 
+                            posicion: `2° ${grupo.nombre}`,
+                            grupoOrigen: grupo.nombre 
                         });
                     }
                 });
+
+                return clasificados;
+            };
+
+            // Generar eliminatorias
+            const generarEliminatorias = () => {
+                const clasificados = obtenerClasificados();
+                const numClasificados = clasificados.length;
                 
-                // Calcular diferencia de goles y ordenar por puntos
-                teamStats.forEach(team => {
-                    team.goalDifference = team.goalsFor - team.goalsAgainst;
-                });
+                const potenciasDeDos = [2, 4, 8, 16, 32];
+                const numEliminatorias = potenciasDeDos.find(p => p >= numClasificados) || 16;
                 
-                teamStats.sort((a, b) => {
-                    if (b.points !== a.points) return b.points - a.points;
-                    if (b.goalDifference !== a.goalDifference) return b.goalDifference - a.goalDifference;
-                    return b.goalsFor - a.goalsFor;
-                });
-                
-                // Actualizar posiciones
-                teamStats.forEach((team, index) => {
-                    team.position = index + 1;
-                });
-            }
-            
-            // Mostrar en tabla
-            teamStats.forEach(team => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td><strong>${team.position}</strong></td>
-                    <td><strong>${team.name}</strong></td>
-                    <td>${team.played}</td>
-                    <td>${team.won}</td>
-                    <td>${team.drawn}</td>
-                    <td>${team.lost}</td>
-                    <td>${team.goalsFor}</td>
-                    <td>${team.goalsAgainst}</td>
-                    <td ${team.goalDifference > 0 ? 'style="color: green;"' : team.goalDifference < 0 ? 'style="color: red;"' : ''}>${team.goalDifference > 0 ? '+' : ''}${team.goalDifference}</td>
-                    <td><strong>${team.points}</strong></td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-        
-        function displayCurrentFixture() {
-            if (!customFixtures || customFixtures.length === 0) {
-                document.getElementById('fixtures-list').innerHTML = '<p>No hay fixtures disponibles</p>';
-                return;
-            }
-            
-            const currentFixture = customFixtures[currentFechaIndex];
-            const fixturesList = document.getElementById('fixtures-list');
-            
-            document.getElementById('current-fecha-display').textContent = `Fecha ${currentFixture.fecha}`;
-            document.getElementById('current-fecha-number').textContent = currentFechaIndex + 1;
-            
-            fixturesList.innerHTML = '';
-            
-            const fechaDiv = document.createElement('div');
-            fechaDiv.className = 'fecha-container';
-            
-            let partidosJugados = 0;
-            let partidosPendientes = 0;
-            
-            if (currentFixture.partidos && Array.isArray(currentFixture.partidos)) {
-                currentFixture.partidos.forEach(partido => {
-                    const matchDiv = document.createElement('div');
+                const clasificadosParaEliminatorias = shuffleArray(clasificados.slice(0, numEliminatorias));
+
+                const nuevasEliminatorias = {
+                    octavos: [],
+                    cuartos: [],
+                    semis: [],
+                    final: []
+                };
+
+                let primeraRonda = 'octavos';
+                let numPartidosPrimeraRonda = numEliminatorias / 2;
+
+                if (numEliminatorias <= 4) {
+                    primeraRonda = 'semis';
+                    numPartidosPrimeraRonda = 2;
+                } else if (numEliminatorias <= 8) {
+                    primeraRonda = 'cuartos';
+                    numPartidosPrimeraRonda = 4;
+                }
+
+                for (let i = 0; i < numPartidosPrimeraRonda; i++) {
+                    const local = clasificadosParaEliminatorias[i * 2];
+                    const visitante = clasificadosParaEliminatorias[i * 2 + 1];
                     
-                    // Verificar el estado del partido
-                    const jugado = partido.resultado && partido.resultado.jugado === true;
-                    const tieneGoles = partido.resultado && 
-                                     partido.resultado.golesLocal !== null && 
-                                     partido.resultado.golesVisitante !== null;
-                    
-                    if (jugado && tieneGoles) {
-                        partidosJugados++;
-                        matchDiv.className = 'match-item played';
-                        
-                        const golesLocal = parseInt(partido.resultado.golesLocal) || 0;
-                        const golesVisitante = parseInt(partido.resultado.golesVisitante) || 0;
-                        
-                        matchDiv.innerHTML = `
-                            <div class="match-teams">
-                                <span class="team local">${partido.local}</span>
-                                <span class="result">${golesLocal} - ${golesVisitante}</span>
-                                <span class="team visitante">${partido.visitante}</span>
-                            </div>
-                            <div class="match-status played">✅ Finalizado</div>
-                            ${partido.estadisticas && partido.estadisticas.goleadores && partido.estadisticas.goleadores.length > 0 ? 
-                                `<div class="match-details">
-                                    <small>⚽ Goleadores: ${partido.estadisticas.goleadores.map(g => `${g.jugador} (${g.minuto}')`).join(', ')}</small>
-                                </div>` : ''
-                            }
-                        `;
-                    } else {
-                        partidosPendientes++;
-                        matchDiv.className = 'match-item pending';
-                        matchDiv.innerHTML = `
-                            <div class="match-teams">
-                                <span class="team local">${partido.local}</span>
-                                <span class="vs">VS</span>
-                                <span class="team visitante">${partido.visitante}</span>
-                            </div>
-                            <div class="match-status pending">⏳ Pendiente</div>
-                        `;
+                    if (local && visitante) {
+                        nuevasEliminatorias[primeraRonda].push({
+                            id: `${primeraRonda}-${i}`,
+                            local,
+                            visitante,
+                            estado: 'pendiente',
+                            resultado: { local: null, visitante: null }
+                        });
                     }
-                    
-                    fechaDiv.appendChild(matchDiv);
+                }
+
+                const fases = ['cuartos', 'semis', 'final'];
+                const numPartidos = [4, 2, 1];
+
+                fases.forEach((fase, faseIndex) => {
+                    if (fase !== primeraRonda) {
+                        for (let i = 0; i < numPartidos[faseIndex]; i++) {
+                            nuevasEliminatorias[fase].push({
+                                id: `${fase}-${i}`,
+                                local: null,
+                                visitante: null,
+                                estado: 'pendiente',
+                                resultado: { local: null, visitante: null },
+                                dependeDe: faseIndex === 0 ? 
+                                    (primeraRonda === 'octavos' ? [`octavos-${i*2}`, `octavos-${i*2+1}`] : [`${primeraRonda}-${i*2}`, `${primeraRonda}-${i*2+1}`]) :
+                                    [`${fases[faseIndex-1]}-${i*2}`, `${fases[faseIndex-1]}-${i*2+1}`]
+                            });
+                        }
+                    }
                 });
-            }
-            
-            // Agregar resumen de la fecha
-            const summaryDiv = document.createElement('div');
-            summaryDiv.className = 'fecha-summary';
-            summaryDiv.innerHTML = `
-                <p><strong>Resumen Fecha ${currentFixture.fecha}:</strong></p>
-                <p>Partidos jugados: ${partidosJugados} | Partidos pendientes: ${partidosPendientes}</p>
-            `;
-            
-            fixturesList.appendChild(summaryDiv);
-            fixturesList.appendChild(fechaDiv);
-        }
-        
-        function updateNavigationButtons() {
-            const prevBtn = document.getElementById('prev-fecha');
-            const nextBtn = document.getElementById('next-fecha');
-            
-            prevBtn.disabled = currentFechaIndex === 0;
-            nextBtn.disabled = currentFechaIndex === customFixtures.length - 1;
-        }
-        
-        // Funciones de navegación
-        window.previousFecha = function() {
-            if (currentFechaIndex > 0) {
-                currentFechaIndex--;
-                displayCurrentFixture();
-                updateNavigationButtons();
-            }
-        };
-        
-        window.nextFecha = function() {
-            if (currentFechaIndex < customFixtures.length - 1) {
-                currentFechaIndex++;
-                displayCurrentFixture();
-                updateNavigationButtons();
-            }
-        };
-        
-        // Cargar datos al iniciar
-        document.addEventListener('DOMContentLoaded', loadData);
-        window.addEventListener('load', loadData);
-    </script>
-</body>
-</html>
+
+                setEliminatorias(nuevasEliminatorias);
+            };
+
+            useEffect(() => {
+                crearGrupos();
+            }, []);
+
+            const PartidosGrupo = ({ grupo }) => {
+                const partidosDelGrupo = partidosGrupos.filter(p => p.grupo === grupo.nombre);
+                
+                return React.createElement('div', {
+                    className: "bg-white rounded-lg shadow-md p-4 mb-4 border-l-4 border-blue-500"
+                }, [
+                    React.createElement('h3', {
+                        key: 'title',
+                        className: "text-lg font-bold text-blue-800 mb-3 flex items-center"
+                    }, [
+                        React.createElement(Users, { key: 'icon', className: "mr-2", size: 20 }),
+                        `${grupo.nombre} (${grupo.equipos.length} equipos)`
+                    ]),
+                    
+                    React.createElement('div', { key: 'tabla', className: "mb-4" }, [
+                        React.createElement('h4', { 
+                            key: 'tabla-title', 
+                            className: "font-semibold mb-2 text-gray-700" 
+                        }, "Clasificación"),
+                        React.createElement('div', { key: 'tabla-container', className: "overflow-x-auto" }, [
+                            React.createElement('table', { key: 'table', className: "w-full text-sm border-collapse" }, [
+                                React.createElement('thead', { key: 'thead' }, 
+                                    React.createElement('tr', { className: "bg-gray-100" }, [
+                                        React.createElement('th', { key: 'pos', className: "text-left p-2 border" }, "Pos"),
+                                        React.createElement('th', { key: 'equipo', className: "text-left p-2 border" }, "Equipo"),
+                                        React.createElement('th', { key: 'pj', className: "text-center p-2 border" }, "PJ"),
+                                        React.createElement('th', { key: 'g', className: "text-center p-2 border" }, "G"),
+                                        React.createElement('th', { key: 'e', className: "text-center p-2 border" }, "E"),
+                                        React.createElement('th', { key: 'p', className: "text-center p-2 border" }, "P"),
+                                        React.createElement('th', { key: 'gf', className: "text-center p-2 border" }, "GF"),
+                                        React.createElement('th', { key: 'gc', className: "text-center p-2 border" }, "GC"),
+                                        React.createElement('th', { key: 'dg', className: "text-center p-2 border" }, "DG"),
+                                        React.createElement('th', { key: 'pts', className: "text-center p-2 border" }, "Pts")
+                                    ])
+                                ),
+                                React.createElement('tbody', { key: 'tbody' }, 
+                                    grupo.tabla
+                                        .sort((a, b) => {
+                                            if (b.puntos !== a.puntos) return b.puntos - a.puntos;
+                                            if (b.diferencia !== a.diferencia) return b.diferencia - a.diferencia;
+                                            return b.golesFavor - a.golesFavor;
+                                        })
+                                        .map((equipo, index) => 
+                                            React.createElement('tr', {
+                                                key: equipo.name,
+                                                className: `${index < 2 ? 'bg-green-50 border-green-200' : 'hover:bg-gray-50'}`
+                                            }, [
+                                                React.createElement('td', { key: 'pos', className: "p-2 border text-center font-bold" }, [
+                                                    index + 1,
+                                                    index < 2 && React.createElement('span', { className: "text-green-600 ml-1" }, "✓")
+                                                ]),
+                                                React.createElement('td', { key: 'equipo', className: "p-2 border" }, [
+                                                    React.createElement('div', { key: 'club', className: "font-medium" }, equipo.club),
+                                                    React.createElement('div', { key: 'name', className: "text-xs text-gray-500" }, equipo.name),
+                                                    equipo.id && React.createElement('div', { key: 'id', className: "text-xs text-gray-400" }, `ID: ${equipo.id}`)
+                                                ]),
+                                                React.createElement('td', { key: 'pj', className: "text-center p-2 border" }, equipo.partidos),
+                                                React.createElement('td', { key: 'g', className: "text-center p-2 border text-green-600" }, equipo.ganados),
+                                                React.createElement('td', { key: 'e', className: "text-center p-2 border text-yellow-600" }, equipo.empatados),
+                                                React.createElement('td', { key: 'p', className: "text-center p-2 border text-red-600" }, equipo.perdidos),
+                                                React.createElement('td', { key: 'gf', className: "text-center p-2 border" }, equipo.golesFavor),
+                                                React.createElement('td', { key: 'gc', className: "text-center p-2 border" }, equipo.golesContra),
+                                                React.createElement('td', { key: 'dg', className: "text-center p-2 border font-medium" }, `${equipo.diferencia > 0 ? '+' : ''}${equipo.diferencia}`),
+                                                React.createElement('td', { key: 'pts', className: "text-center p-2 border font-bold text-blue-600" }, equipo.puntos)
+                                            ])
+                                        )
+                                )
+                            ])
+                        ]),
+                        React.createElement('div', { 
+                            key: 'classification-note', 
+                            className: "mt-2 text-xs text-green-600" 
+                        }, "✓ Clasifican a eliminatorias (1° y 2° puesto)")
+                    ]),
+                    
+                    React.createElement('div', { key: 'partidos' }, [
+                        React.createElement('h4', { 
+                            key: 'partidos-title', 
+                            className: "font-semibold mb-2 text-gray-700" 
+                        }, "Fixture"),
+                        ...partidosDelGrupo.map((partido, index) => 
+                            React.createElement('div', {
+                                key: partido.id,
+                                className: "flex items-center justify-between bg-gray-50 p-3 mb-2 rounded border"
+                            }, [
+                                React.createElement('div', { key: 'local', className: "flex-1" }, [
+                                    React.createElement('span', { className: "font-medium" }, partido.local.club),
+                                    React.createElement('div', { className: "text-xs text-gray-500" }, partido.local.name)
+                                ]),
+                                React.createElement('div', { key: 'vs', className: "px-4 text-center" }, [
+                                    React.createElement('div', { className: "text-sm text-gray-600" }, `J${partido.jornada}`),
+                                    React.createElement('div', { className: "font-bold" }, "VS")
+                                ]),
+                                React.createElement('div', { key: 'visitante', className: "flex-1 text-right" }, [
+                                    React.createElement('span', { className: "font-medium" }, partido.visitante.club),
+                                    React.createElement('div', { className: "text-xs text-gray-500" }, partido.visitante.name)
+                                ])
+                            ])
+                        )
+                    ])
+                ]);
+            };
+
+            const EliminatoriasView = () => {
+                const clasificados = obtenerClasificados();
+                
+                return React.createElement('div', { className: "space-y-6" }, [
+                    React.createElement('div', { key: 'clasificados', className: "bg-white rounded-lg shadow-md p-4" }, [
+                        React.createElement('h3', { 
+                            key: 'title',
+                            className: "text-lg font-bold text-green-600 mb-3 flex items-center" 
+                        }, [
+                            React.createElement(Trophy, { key: 'icon', className: "mr-2", size: 20 }),
+                            `Equipos Clasificados (${clasificados.length})`
+                        ]),
+                        React.createElement('div', { 
+                            key: 'grid',
+                            className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3" 
+                        }, 
+                            clasificados.map((equipo, index) =>
+                                React.createElement('div', {
+                                    key: equipo.name,
+                                    className: "bg-green-50 p-3 rounded border border-green-200"
+                                }, [
+                                    React.createElement('div', { key: 'club', className: "font-medium" }, equipo.club),
+                                    React.createElement('div', { key: 'name', className: "text-sm text-gray-600" }, equipo.name),
+                                    React.createElement('div', { key: 'position', className: "text-xs text-green-600" }, equipo.posicion),
+                                    React.createElement('div', { key: 'stats', className: "text-xs text-gray-500" }, `${equipo.puntos} pts • DG: ${equipo.diferencia}`)
+                                ])
+                            )
+                        )
+                    ]),
+                    
+                    React.createElement('div', { key: 'bracket', className: "bg-white rounded-lg shadow-md p-6" }, [
+                        React.createElement('h3', { 
+                            key: 'title',
+                            className: "text-lg font-bold text-red-600 mb-4 flex items-center" 
+                        }, [
+                            React.createElement(Target, { key: 'icon', className: "mr-2", size: 20 }),
+                            "Bracket Eliminatorio"
+                        ]),
+                        React.createElement('div', { 
+                            key: 'phases',
+                            className: "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" 
+                        }, [
+                            eliminatorias.octavos.length > 0 && React.createElement('div', { key: 'octavos' }, [
+                                React.createElement('h4', { 
+                                    className: "font-bold mb-3 text-center bg-red-100 p-2 rounded" 
+                                }, `Octavos de Final (${eliminatorias.octavos.length} partidos)`),
+                                ...eliminatorias.octavos.map((partido, index) =>
