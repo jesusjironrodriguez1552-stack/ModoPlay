@@ -7,7 +7,8 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 0;
+            padding: 10px;
             background-color: #f5f5f5;
         }
         
@@ -19,14 +20,32 @@
         h1 {
             text-align: center;
             color: #333;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+        
+        /* Estilos para publicidad */
+        .ad-container {
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .ad-label {
+            font-size: 10px;
+            color: #888;
+            margin-bottom: 5px;
+            text-transform: uppercase;
         }
         
         .liga-section {
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             background: white;
             border-radius: 8px;
-            padding: 20px;
+            padding: 15px;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         
@@ -35,25 +54,36 @@
             border-bottom: 3px solid #3498db;
             padding-bottom: 10px;
             margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        /* Tabla responsive */
+        .table-container {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
         
         table {
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20px;
+            min-width: 700px;
         }
         
         th, td {
-            padding: 8px;
+            padding: 8px 4px;
             text-align: center;
             border-bottom: 1px solid #ddd;
-            font-size: 14px;
+            font-size: 12px;
         }
         
         th {
             background-color: #3498db;
             color: white;
             font-weight: bold;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
         
         tr:hover {
@@ -63,31 +93,121 @@
         .pos-column {
             font-weight: bold;
             background-color: #ecf0f1;
-            width: 40px;
+            width: 35px;
         }
         
         .team-column {
             text-align: left;
             font-weight: bold;
             color: #2c3e50;
-            min-width: 150px;
+            min-width: 120px;
+            padding-left: 8px;
         }
         
         .club-column {
             text-align: left;
             color: #e74c3c;
-            font-size: 12px;
-            min-width: 120px;
+            font-size: 10px;
+            min-width: 100px;
+            padding-left: 8px;
         }
         
         .pts-column {
             font-weight: bold;
             color: #27ae60;
             background-color: #d5f4e6;
+            width: 45px;
         }
         
         .stats-column {
-            width: 50px;
+            width: 35px;
+        }
+        
+        /* Media queries para móvil */
+        @media (max-width: 768px) {
+            body {
+                padding: 5px;
+            }
+            
+            h1 {
+                font-size: 1.4rem;
+                margin-bottom: 15px;
+            }
+            
+            .liga-title {
+                font-size: 1.2rem;
+            }
+            
+            .liga-section {
+                padding: 10px;
+                margin-bottom: 20px;
+            }
+            
+            th, td {
+                padding: 6px 2px;
+                font-size: 10px;
+            }
+            
+            .team-column {
+                min-width: 100px;
+                font-size: 10px;
+            }
+            
+            .club-column {
+                min-width: 80px;
+                font-size: 9px;
+            }
+            
+            table {
+                min-width: 600px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.2rem;
+            }
+            
+            .liga-title {
+                font-size: 1rem;
+            }
+            
+            th, td {
+                padding: 4px 1px;
+                font-size: 9px;
+            }
+            
+            .team-column {
+                min-width: 80px;
+            }
+            
+            .club-column {
+                min-width: 70px;
+                font-size: 8px;
+            }
+            
+            table {
+                min-width: 550px;
+            }
+        }
+        
+        /* Estilo para hacer el scroll más visible en móvil */
+        .table-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        
+        .table-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        
+        .table-container::-webkit-scrollbar-thumb {
+            background: #3498db;
+            border-radius: 4px;
+        }
+        
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: #2980b9;
         }
     </style>
 </head>
@@ -95,52 +215,84 @@
     <div class="container">
         <h1>Tabla de Posiciones - Liga A y Liga B</h1>
         
+        <!-- Publicidad Superior -->
+        <div class="ad-container">
+            <div class="ad-label">Publicidad</div>
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : 'a6c29732eed562ce6c743af0a3b60273',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/a6c29732eed562ce6c743af0a3b60273/invoke.js"></script>
+        </div>
+        
         <!-- Liga A -->
         <div class="liga-section">
             <h2 class="liga-title">Liga A</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Pos</th>
-                        <th>Equipo</th>
-                        <th>Club</th>
-                        <th>PJ</th>
-                        <th>G</th>
-                        <th>E</th>
-                        <th>P</th>
-                        <th>GF</th>
-                        <th>GC</th>
-                        <th>DG</th>
-                        <th>Pts</th>
-                    </tr>
-                </thead>
-                <tbody id="bodyLigaA">
-                </tbody>
-            </table>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Pos</th>
+                            <th>Equipo</th>
+                            <th>Club</th>
+                            <th>PJ</th>
+                            <th>G</th>
+                            <th>E</th>
+                            <th>P</th>
+                            <th>GF</th>
+                            <th>GC</th>
+                            <th>DG</th>
+                            <th>Pts</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyLigaA">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Publicidad Intermedia -->
+        <div class="ad-container">
+            <div class="ad-label">Publicidad</div>
+            <script type='text/javascript' src='//pl27458422.revenuecpmgate.com/9f/ad/aa/9fadaacd147b7764a274c4d38f00b281.js'></script>
         </div>
         
         <!-- Liga B -->
         <div class="liga-section">
             <h2 class="liga-title">Liga B</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Pos</th>
-                        <th>Equipo</th>
-                        <th>Club</th>
-                        <th>PJ</th>
-                        <th>G</th>
-                        <th>E</th>
-                        <th>P</th>
-                        <th>GF</th>
-                        <th>GC</th>
-                        <th>DG</th>
-                        <th>Pts</th>
-                    </tr>
-                </thead>
-                <tbody id="bodyLigaB">
-                </tbody>
-            </table>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Pos</th>
+                            <th>Equipo</th>
+                            <th>Club</th>
+                            <th>PJ</th>
+                            <th>G</th>
+                            <th>E</th>
+                            <th>P</th>
+                            <th>GF</th>
+                            <th>GC</th>
+                            <th>DG</th>
+                            <th>Pts</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyLigaB">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Publicidad Inferior -->
+        <div class="ad-container">
+            <div class="ad-label">Publicidad</div>
+            <script async="async" data-cfasync="false" src="//pl27458414.revenuecpmgate.com/2cab1d61c2dc9d7d47e9cefc513235df/invoke.js"></script>
+            <div id="container-2cab1d61c2dc9d7d47e9cefc513235df"></div>
         </div>
     </div>
 
@@ -161,7 +313,7 @@
         ];
 
         let ligaB = [
-            { name: "brnc_14", club: "Arsenal", pj: 0, g: 0, e: 0, p: 0, gf: 8, gc: 0, pts: 0 },
+            { name: "brnc_14", club: "Arsenal", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
             { name: "Alexander", club: "Bangbrousnetwork / Ajax", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
             { name: "Angel3.1416", club: "Club America", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
             { name: "Bennett_DD", club: "DorianBU / FC Barcelona", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 },
@@ -211,6 +363,11 @@
         // Inicializar las tablas
         actualizarTabla(ligaA, 'bodyLigaA');
         actualizarTabla(ligaB, 'bodyLigaB');
+        
+        // Función para refrescar anuncios después de cargar la página
+        setTimeout(function() {
+            console.log('Página completamente cargada con anuncios');
+        }, 2000);
     </script>
 </body>
 </html>
