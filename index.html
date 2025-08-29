@@ -24,6 +24,35 @@
             font-size: 1.8rem;
         }
         
+        /* Estilos para el botón fixture */
+        .fixture-button {
+            display: block;
+            margin: 20px auto;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+            max-width: 200px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .fixture-button:hover {
+            background: linear-gradient(135deg, #2980b9, #1f5582);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        }
+        
+        .fixture-button:active {
+            transform: translateY(0);
+        }
+        
         /* Estilos para publicidad */
         .ad-container {
             text-align: center;
@@ -143,6 +172,11 @@
                 margin-bottom: 20px;
             }
             
+            .fixture-button {
+                font-size: 14px;
+                padding: 10px 20px;
+            }
+            
             th, td {
                 padding: 6px 2px;
                 font-size: 10px;
@@ -170,6 +204,11 @@
             
             .liga-title {
                 font-size: 1rem;
+            }
+            
+            .fixture-button {
+                font-size: 12px;
+                padding: 8px 16px;
             }
             
             th, td {
@@ -214,6 +253,9 @@
 <body>
     <div class="container">
         <h1>Tabla de Posiciones - Liga A y Liga B</h1>
+        
+        <!-- Botón para ir a fixture -->
+        <a href="fixture.html" class="fixture-button">Ver Fixture</a>
         
         <!-- Publicidad Superior -->
         <div class="ad-container">
