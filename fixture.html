@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fixture Completo - Torneo eFootball</title>
+    <title>Fixture Torneo eFootball</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -32,6 +32,13 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
+        .date-section {
+            margin-bottom: 3rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
@@ -40,13 +47,13 @@
         <div class="container mx-auto px-4">
             <div class="text-center">
                 <h1 class="text-4xl font-bold mb-2">
-                    <i class="fas fa-calendar-alt mr-3"></i>
-                    Fixture Completo
+                    <i class="fas fa-futbol mr-3"></i>
+                    Fixture Torneo eFootball
                 </h1>
-                <p class="text-xl opacity-90">Torneo eFootball - Todos vs Todos</p>
-                <div class="mt-4 flex justify-center items-center space-x-6 text-sm">
+                <p class="text-xl opacity-90">Sistema Manual de Resultados</p>
+                <div class="mt-4 flex justify-center items-center space-x-6 text-sm flex-wrap">
                     <span><i class="fas fa-users mr-1"></i>9 Jugadores</span>
-                    <span><i class="fas fa-gamepad mr-1"></i>36 Partidos Total</span>
+                    <span><i class="fas fa-gamepad mr-1"></i><span id="total-matches">0</span> Partidos</span>
                     <span id="progress-header"><i class="fas fa-chart-pie mr-1"></i>Progreso: 0%</span>
                 </div>
             </div>
@@ -54,7 +61,7 @@
     </div>
 
     <div class="container mx-auto px-4 max-w-6xl">
-        <!-- Estadísticas Rápidas -->
+        <!-- Estadísticas -->
         <div class="grid md:grid-cols-4 gap-4 mb-8">
             <div class="bg-white rounded-xl shadow-lg p-4 text-center">
                 <div class="text-2xl font-bold text-green-600" id="played-count">0</div>
@@ -74,59 +81,25 @@
             </div>
         </div>
 
-        <!-- Partidos Jugados -->
-        <div class="mb-12">
-            <div class="flex items-center mb-6">
-                <div class="bg-green-500 p-3 rounded-lg mr-4">
-                    <i class="fas fa-check-circle text-white text-2xl"></i>
-                </div>
-                <h2 class="text-3xl font-bold section-title">Partidos Jugados</h2>
-                <div class="ml-4 bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">
-                    <span id="played-badge">0 partidos</span>
-                </div>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-4" id="played-matches">
-                <!-- Se llena dinámicamente -->
-            </div>
-            
-            <div id="no-played" class="text-center py-12 text-gray-500 hidden">
-                <i class="fas fa-clock text-4xl mb-4 opacity-50"></i>
-                <p class="text-lg">No hay partidos jugados aún</p>
-            </div>
+        <!-- Fechas y Partidos -->
+        <div id="matches-container">
+            <!-- Se llena automáticamente -->
         </div>
 
-        <!-- Partidos Pendientes -->
-        <div>
-            <div class="flex items-center mb-6">
-                <div class="bg-yellow-500 p-3 rounded-lg mr-4">
-                    <i class="fas fa-hourglass-half text-white text-2xl"></i>
+        <!-- Instrucciones -->
+        <div class="mt-12 bg-blue-50 border-l-4 border-blue-400 p-6 rounded-lg">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-info-circle text-blue-400 text-xl"></i>
                 </div>
-                <h2 class="text-3xl font-bold section-title">Partidos Pendientes</h2>
-                <div class="ml-4 bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-semibold">
-                    <span id="pending-badge">0 partidos</span>
-                </div>
-            </div>
-            
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4" id="pending-matches">
-                <!-- Se llena dinámicamente -->
-            </div>
-        </div>
-
-        <!-- Leyenda -->
-        <div class="mt-12 bg-white rounded-xl shadow-lg p-6">
-            <h3 class="text-xl font-bold text-gray-800 mb-4">
-                <i class="fas fa-info-circle mr-2 text-blue-500"></i>
-                Información
-            </h3>
-            <div class="grid md:grid-cols-2 gap-4">
-                <div class="flex items-center space-x-3">
-                    <div class="w-6 h-6 bg-green-200 rounded border-l-4 border-green-500"></div>
-                    <span class="text-gray-700">Partidos completados con resultado final</span>
-                </div>
-                <div class="flex items-center space-x-3">
-                    <div class="w-6 h-6 bg-yellow-200 rounded border-l-4 border-yellow-500"></div>
-                    <span class="text-gray-700">Partidos por disputar</span>
+                <div class="ml-3">
+                    <h3 class="text-lg font-medium text-blue-800 mb-2">¿Cómo agregar/editar partidos?</h3>
+                    <div class="text-blue-700 text-sm space-y-1">
+                        <p><strong>1.</strong> Ve al código JavaScript (línea ~80 aprox)</p>
+                        <p><strong>2.</strong> Busca la sección "PARTIDOS DEL TORNEO"</p>
+                        <p><strong>3.</strong> Agrega partidos en el formato mostrado</p>
+                        <p><strong>4.</strong> Guarda y recarga la página</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -134,90 +107,76 @@
 
     <footer class="mt-16 bg-gray-800 text-white py-8">
         <div class="container mx-auto px-4 text-center">
-            <p>&copy; 2024 Torneo eFootball - Fixture Completo</p>
-            <div class="mt-2 text-gray-400 text-sm">
-                <span>Sistema: Todos vs Todos</span>
-                <span class="mx-2">|</span>
-                <span>9 Participantes</span>
-                <span class="mx-2">|</span>
-                <span>36 Partidos Total</span>
-            </div>
+            <p>&copy; 2024 Fixture Torneo eFootball</p>
         </div>
     </footer>
 
     <script>
-        // Participantes del torneo
-        const players = [
-            "Carlos De La Barrera",
-            "Benny Caballero", 
-            "jeffers0n",
-            "Caliz_mistico5",
-            "ale99",
-            "Evers1to",
-            "Alexander",
-            "ElianVz17",
-            "brnc_14"
-        ];
-
-        // Partidos con resultados
-        const playedMatches = [
-            { team1: "Carlos De La Barrera", team2: "Benny Caballero", score1: 1, score2: 1 },
-            { team1: "jeffers0n", team2: "Caliz_mistico5", score1: 1, score2: 1 },
-            { team1: "ale99", team2: "Evers1to", score1: 2, score2: 2 },
-            { team1: "Caliz_mistico5", team2: "Alexander", score1: 2, score2: 0 },
-            { team1: "Evers1to", team2: "ElianVz17", score1: 5, score2: 0 }
-        ];
-
-        // Generar todos los partidos posibles
-        function generateAllMatches() {
-            const allMatches = [];
-            const playedMatchesSet = new Set();
+        // ============================================================
+        // 🎯 PARTIDOS DEL TORNEO - EDITA AQUÍ PARA AGREGAR/MODIFICAR
+        // ============================================================
+        
+        const PARTIDOS = [
+            // FECHA 1
+            { fecha: 1, equipo1: "Carlos De La Barrera", equipo2: "Benny Caballero", goles1: 1, goles2: 1 },
+            { fecha: 1, equipo1: "jeffers0n", equipo2: "Caliz_mistico5", goles1: 1, goles2: 1 },
+            { fecha: 1, equipo1: "ale99", equipo2: "Evers1to", goles1: 2, goles2: 2 },
+            { fecha: 1, equipo1: "Alexander", equipo2: "ElianVz17", goles1: null, goles2: null }, // null = no jugado
             
-            // Marcar partidos ya jugados
-            playedMatches.forEach(match => {
-                playedMatchesSet.add(`${match.team1}-${match.team2}`);
-                playedMatchesSet.add(`${match.team2}-${match.team1}`);
+            // FECHA 2
+            { fecha: 2, equipo1: "Caliz_mistico5", equipo2: "Alexander", goles1: 2, goles2: 0 },
+            { fecha: 2, equipo1: "Evers1to", equipo2: "ElianVz17", goles1: 5, goles2: 0 },
+            { fecha: 2, equipo1: "brnc_14", equipo2: "Carlos De La Barrera", goles1: null, goles2: null },
+            { fecha: 2, equipo1: "Benny Caballero", equipo2: "ale99", goles1: null, goles2: null },
+            
+            // FECHA 3 - AGREGA AQUÍ MÁS PARTIDOS
+            { fecha: 3, equipo1: "jeffers0n", equipo2: "Alexander", goles1: null, goles2: null },
+            { fecha: 3, equipo1: "Carlos De La Barrera", equipo2: "ale99", goles1: null, goles2: null },
+            { fecha: 3, equipo1: "brnc_14", equipo2: "Caliz_mistico5", goles1: null, goles2: null },
+            
+            // AÑADE MÁS FECHAS AQUÍ:
+            // { fecha: 4, equipo1: "Jugador1", equipo2: "Jugador2", goles1: null, goles2: null },
+            // { fecha: 4, equipo1: "Jugador3", equipo2: "Jugador4", goles1: 2, goles2: 1 },
+        ];
+
+        // ============================================================
+        // 🔧 NO TOCAR - CÓDIGO AUTOMÁTICO
+        // ============================================================
+
+        // Organizar partidos por fecha
+        function organizarPorFechas() {
+            const fechasMap = {};
+            
+            PARTIDOS.forEach((partido, index) => {
+                if (!fechasMap[partido.fecha]) {
+                    fechasMap[partido.fecha] = [];
+                }
+                fechasMap[partido.fecha].push({
+                    ...partido,
+                    id: index + 1,
+                    jugado: partido.goles1 !== null && partido.goles2 !== null
+                });
             });
 
-            // Generar todos los enfrentamientos posibles
-            for (let i = 0; i < players.length; i++) {
-                for (let j = i + 1; j < players.length; j++) {
-                    const matchKey = `${players[i]}-${players[j]}`;
-                    
-                    if (playedMatchesSet.has(matchKey)) {
-                        // Encontrar el partido jugado
-                        const playedMatch = playedMatches.find(m => 
-                            (m.team1 === players[i] && m.team2 === players[j]) ||
-                            (m.team1 === players[j] && m.team2 === players[i])
-                        );
-                        allMatches.push({...playedMatch, played: true});
-                    } else {
-                        // Partido pendiente
-                        allMatches.push({
-                            team1: players[i],
-                            team2: players[j],
-                            score1: 0,
-                            score2: 0,
-                            played: false
-                        });
-                    }
-                }
-            }
-            
-            return allMatches;
+            return Object.keys(fechasMap)
+                .sort((a, b) => parseInt(a) - parseInt(b))
+                .map(fecha => ({
+                    numero: parseInt(fecha),
+                    partidos: fechasMap[fecha]
+                }));
         }
 
         // Renderizar partido jugado
-        function renderPlayedMatch(match, index) {
-            const winner = match.score1 > match.score2 ? 'team1' : 
-                          match.score1 < match.score2 ? 'team2' : 'tie';
+        function renderPartidoJugado(partido) {
+            const ganador = partido.goles1 > partido.goles2 ? 'equipo1' : 
+                           partido.goles1 < partido.goles2 ? 'equipo2' : 'empate';
             
             return `
-                <div class="match-card played bg-white rounded-lg p-6 shadow-sm">
+                <div class="match-card played bg-white rounded-lg p-6 shadow-sm mb-4">
                     <div class="flex items-center justify-between mb-3">
-                        <div class="text-sm text-gray-500 font-medium">Partido #${index + 1}</div>
+                        <div class="text-sm text-gray-500 font-medium">Partido #${partido.id}</div>
                         <div class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-semibold">
-                            FINALIZADO
+                            ✅ FINALIZADO
                         </div>
                     </div>
                     
@@ -225,11 +184,11 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center flex-1">
                                 <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold mr-3">
-                                    ${match.team1.charAt(0)}
+                                    ${partido.equipo1.charAt(0)}
                                 </div>
-                                <span class="font-medium text-gray-800 ${winner === 'team1' ? 'text-green-600' : ''}">${match.team1}</span>
+                                <span class="font-medium ${ganador === 'equipo1' ? 'text-green-600 font-bold' : 'text-gray-800'}">${partido.equipo1}</span>
                             </div>
-                            <div class="text-2xl font-bold text-gray-800 mx-4">${match.score1}</div>
+                            <div class="text-2xl font-bold text-gray-800 mx-4">${partido.goles1}</div>
                         </div>
                         
                         <div class="border-t border-gray-200"></div>
@@ -237,19 +196,19 @@
                         <div class="flex items-center justify-between">
                             <div class="flex items-center flex-1">
                                 <div class="w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold mr-3">
-                                    ${match.team2.charAt(0)}
+                                    ${partido.equipo2.charAt(0)}
                                 </div>
-                                <span class="font-medium text-gray-800 ${winner === 'team2' ? 'text-green-600' : ''}">${match.team2}</span>
+                                <span class="font-medium ${ganador === 'equipo2' ? 'text-green-600 font-bold' : 'text-gray-800'}">${partido.equipo2}</span>
                             </div>
-                            <div class="text-2xl font-bold text-gray-800 mx-4">${match.score2}</div>
+                            <div class="text-2xl font-bold text-gray-800 mx-4">${partido.goles2}</div>
                         </div>
                     </div>
                     
                     <div class="mt-4 text-center">
-                        <span class="text-sm ${winner === 'tie' ? 'text-yellow-600 font-semibold' : 'text-gray-500'}">
-                            ${winner === 'tie' ? 'EMPATE' : 
-                              winner === 'team1' ? `Victoria: ${match.team1}` : 
-                              `Victoria: ${match.team2}`}
+                        <span class="text-sm font-medium ${ganador === 'empate' ? 'text-yellow-600' : 'text-green-600'}">
+                            ${ganador === 'empate' ? '⚖️ EMPATE' : 
+                              ganador === 'equipo1' ? `🏆 GANADOR: ${partido.equipo1}` : 
+                              `🏆 GANADOR: ${partido.equipo2}`}
                         </span>
                     </div>
                 </div>
@@ -257,22 +216,22 @@
         }
 
         // Renderizar partido pendiente
-        function renderPendingMatch(match, index) {
+        function renderPartidoPendiente(partido) {
             return `
-                <div class="match-card pending bg-white rounded-lg p-5 shadow-sm">
+                <div class="match-card pending bg-white rounded-lg p-5 shadow-sm mb-4">
                     <div class="flex items-center justify-between mb-3">
-                        <div class="text-sm text-gray-500 font-medium">Pendiente #${index + 1}</div>
+                        <div class="text-sm text-gray-500 font-medium">Partido #${partido.id}</div>
                         <div class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs font-semibold">
-                            POR JUGAR
+                            ⏳ PENDIENTE
                         </div>
                     </div>
                     
                     <div class="space-y-3">
                         <div class="flex items-center">
                             <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm mr-3">
-                                ${match.team1.charAt(0)}
+                                ${partido.equipo1.charAt(0)}
                             </div>
-                            <span class="font-medium text-gray-700">${match.team1}</span>
+                            <span class="font-medium text-gray-700">${partido.equipo1}</span>
                         </div>
                         
                         <div class="flex justify-center">
@@ -283,67 +242,94 @@
                         
                         <div class="flex items-center">
                             <div class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold text-sm mr-3">
-                                ${match.team2.charAt(0)}
+                                ${partido.equipo2.charAt(0)}
                             </div>
-                            <span class="font-medium text-gray-700">${match.team2}</span>
+                            <span class="font-medium text-gray-700">${partido.equipo2}</span>
                         </div>
+                    </div>
+                    
+                    <div class="mt-4 text-center text-xs text-gray-500">
+                        Para agregar resultado, edita el código JavaScript
                     </div>
                 </div>
             `;
         }
 
-        // Calcular estadísticas
-        function calculateStats(matches) {
-            const played = matches.filter(m => m.played);
-            const pending = matches.filter(m => !m.played);
-            const totalGoals = played.reduce((sum, m) => sum + m.score1 + m.score2, 0);
-            const avgGoals = played.length > 0 ? (totalGoals / played.length).toFixed(1) : 0.0;
-            const progress = Math.round((played.length / matches.length) * 100);
-
-            return {
-                played: played.length,
-                pending: pending.length,
-                totalGoals,
-                avgGoals,
-                progress
-            };
+        // Renderizar todas las fechas
+        function renderFechas() {
+            const fechas = organizarPorFechas();
+            const container = document.getElementById('matches-container');
+            
+            container.innerHTML = fechas.map(fecha => {
+                const jugados = fecha.partidos.filter(p => p.jugado);
+                const pendientes = fecha.partidos.filter(p => !p.jugado);
+                
+                return `
+                    <div class="date-section">
+                        <div class="text-center mb-8">
+                            <h2 class="text-3xl font-bold section-title mb-2">📅 FECHA ${fecha.numero}</h2>
+                            <div class="flex justify-center space-x-4 text-sm">
+                                <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full">
+                                    ✅ ${jugados.length} Jugados
+                                </span>
+                                <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full">
+                                    ⏳ ${pendientes.length} Pendientes
+                                </span>
+                            </div>
+                        </div>
+                        
+                        ${jugados.length > 0 ? `
+                            <div class="mb-8">
+                                <h3 class="text-xl font-bold text-green-600 mb-4">
+                                    <i class="fas fa-check-circle mr-2"></i>Partidos Completados
+                                </h3>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    ${jugados.map(partido => renderPartidoJugado(partido)).join('')}
+                                </div>
+                            </div>
+                        ` : ''}
+                        
+                        ${pendientes.length > 0 ? `
+                            <div>
+                                <h3 class="text-xl font-bold text-yellow-600 mb-4">
+                                    <i class="fas fa-hourglass-half mr-2"></i>Partidos Pendientes
+                                </h3>
+                                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                    ${pendientes.map(partido => renderPartidoPendiente(partido)).join('')}
+                                </div>
+                            </div>
+                        ` : `
+                            <div class="text-center py-8 text-green-600">
+                                <i class="fas fa-trophy text-3xl mb-2"></i>
+                                <p class="text-lg font-semibold">¡Fecha completada!</p>
+                            </div>
+                        `}
+                    </div>
+                `;
+            }).join('');
         }
 
-        // Inicializar la página
-        function init() {
-            const matches = generateAllMatches();
-            const stats = calculateStats(matches);
-            
-            // Actualizar estadísticas
-            document.getElementById('played-count').textContent = stats.played;
-            document.getElementById('pending-count').textContent = stats.pending;
-            document.getElementById('total-goals').textContent = stats.totalGoals;
-            document.getElementById('avg-goals').textContent = stats.avgGoals;
-            document.getElementById('progress-header').innerHTML = `<i class="fas fa-chart-pie mr-1"></i>Progreso: ${stats.progress}%`;
-            document.getElementById('played-badge').textContent = `${stats.played} partidos`;
-            document.getElementById('pending-badge').textContent = `${stats.pending} partidos`;
+        // Actualizar estadísticas
+        function actualizarEstadisticas() {
+            const jugados = PARTIDOS.filter(p => p.goles1 !== null && p.goles2 !== null);
+            const pendientes = PARTIDOS.filter(p => p.goles1 === null || p.goles2 === null);
+            const totalGoles = jugados.reduce((sum, p) => sum + p.goles1 + p.goles2, 0);
+            const promedio = jugados.length > 0 ? (totalGoles / jugados.length).toFixed(1) : 0.0;
+            const progreso = Math.round((jugados.length / PARTIDOS.length) * 100);
 
-            // Renderizar partidos jugados
-            const playedContainer = document.getElementById('played-matches');
-            const playedMatchesFiltered = matches.filter(m => m.played);
-            
-            if (playedMatchesFiltered.length > 0) {
-                playedContainer.innerHTML = playedMatchesFiltered.map((match, index) => renderPlayedMatch(match, index)).join('');
-                document.getElementById('no-played').classList.add('hidden');
-            } else {
-                playedContainer.innerHTML = '';
-                document.getElementById('no-played').classList.remove('hidden');
-            }
-
-            // Renderizar partidos pendientes
-            const pendingContainer = document.getElementById('pending-matches');
-            const pendingMatches = matches.filter(m => !m.played);
-            pendingContainer.innerHTML = pendingMatches.map((match, index) => renderPendingMatch(match, index)).join('');
+            document.getElementById('played-count').textContent = jugados.length;
+            document.getElementById('pending-count').textContent = pendientes.length;
+            document.getElementById('total-goals').textContent = totalGoles;
+            document.getElementById('avg-goals').textContent = promedio;
+            document.getElementById('total-matches').textContent = PARTIDOS.length;
+            document.getElementById('progress-header').innerHTML = `<i class="fas fa-chart-pie mr-1"></i>Progreso: ${progreso}%`;
         }
 
-        // Ejecutar al cargar la página
-        document.addEventListener('DOMContentLoaded', init);
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', () => {
+            renderFechas();
+            actualizarEstadisticas();
+        });
     </script>
 </body>
 </html>
-
