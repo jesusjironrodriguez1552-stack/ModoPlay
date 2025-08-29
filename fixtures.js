@@ -49,7 +49,7 @@ const customFixtures = [
                 }
             },
             { 
-                local: "JLesme", 
+                local: "Brn_14", 
                 visitante: "alexander",
                 resultado: {
                     golesLocal: null,
@@ -144,7 +144,7 @@ const customFixtures = [
                 }
             },
             { 
-                local: "JLesme", 
+                local: "Brn_14", 
                 visitante: "ElianVz17",
                 resultado: {
                     golesLocal: null,
@@ -500,7 +500,7 @@ const customFixtures = [
             },
             { 
                 local: "399633", 
-                visitante: "JLesme",
+                visitante: "Brn_14",
                 resultado: {
                     golesLocal: null,
                     golesVisitante: null,
@@ -564,7 +564,7 @@ const customFixtures = [
         fecha: 8,
         partidos: [
             { 
-                local: "JLesme", 
+                local: "Brn_14", 
                 visitante: "Royyer10",
                 resultado: {
                     golesLocal: null,
@@ -659,7 +659,7 @@ const customFixtures = [
                 }
             },
             { 
-                local: "JLesme", 
+                local: "Brn_14", 
                 visitante: "Santislowly",
                 resultado: {
                     golesLocal: null,
@@ -834,7 +834,7 @@ const customFixtures = [
                 }
             },
             { 
-                local: "JLesme", 
+                local: "Brn_14", 
                 visitante: "LW🐉",
                 resultado: {
                     golesLocal: null,
@@ -931,7 +931,7 @@ const customFixtures = [
             },
             { 
                 local: "alexander", 
-                visitante: "JLesme",
+                visitante: "Brn_14q",
                 resultado: {
                     golesLocal: null,
                     golesVisitante: null,
@@ -1026,7 +1026,7 @@ const customFixtures = [
             },
             { 
                 local: "ElianVz17", 
-                visitante: "JLesme",
+                visitante: "Brn_14",
                 resultado: {
                     golesLocal: null,
                     golesVisitante: null,
@@ -1105,7 +1105,7 @@ const customFixtures = [
                 }
             },
             { 
-                local: "JLesme", 
+                local: "Brn_14", 
                 visitante: "Ever Gutierrez",
                 resultado: {
                     golesLocal: null,
@@ -1170,7 +1170,7 @@ const customFixtures = [
                 }
             },
             { 
-                local: "JLesme", 
+                local: "Brn_14", 
                 visitante: "Máx",
                 resultado: {
                     golesLocal: null,
@@ -1250,7 +1250,7 @@ const customFixtures = [
                 }
             },
             { 
-                local: "JLesme", 
+                local: "Brn_14", 
                 visitante: "Benny Caballero",
                 resultado: {
                     golesLocal: null,
@@ -1315,7 +1315,7 @@ const customFixtures = [
                 }
             },
             { 
-                local: "JLesme", 
+                local: "Brn_14", 
                 visitante: "the Andres",
                 resultado: {
                     golesLocal: null,
@@ -1380,7 +1380,7 @@ const customFixtures = [
                 }
             },
             { 
-                local: "JLesme", 
+                local: "Brn_14", 
                 visitante: "399633",
                 resultado: {
                     golesLocal: null,
@@ -1446,7 +1446,7 @@ const customFixtures = [
         partidos: [
             { 
                 local: "Royyer10", 
-                visitante: "JLesme",
+                visitante: "Brn_14",
                 resultado: {
                     golesLocal: null,
                     golesVisitante: null,
@@ -1541,7 +1541,7 @@ const customFixtures = [
             },
             { 
                 local: "Santislowly", 
-                visitante: "JLesme",
+                visitante: "Brn_14",
                 resultado: {
                     golesLocal: null,
                     golesVisitante: null,
@@ -1716,7 +1716,7 @@ const customFixtures = [
             },
             { 
                 local: "LW🐉", 
-                visitante: "JLesme",
+                visitante: "Brn_14",
                 resultado: {
                     golesLocal: null,
                     golesVisitante: null,
