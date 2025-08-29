@@ -3,333 +3,383 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fixture Torneo eFootball</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Fixture del Torneo</title>
     <style>
-        .gradient-bg {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
         }
-        .match-card {
-            transition: all 0.3s ease;
-            border-left: 4px solid #3b82f6;
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         }
-        .match-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 40px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
-        .played {
-            background: linear-gradient(45deg, #d1fae5, #a7f3d0);
-            border-left-color: #10b981;
+
+        .fecha {
+            margin-bottom: 40px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 5px solid #667eea;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
         }
-        .pending {
-            background: linear-gradient(45deg, #fef3c7, #fde68a);
-            border-left-color: #f59e0b;
+
+        .fecha h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
-        .section-title {
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+
+        .fecha h2::before {
+            content: "📅";
+            font-size: 1.2rem;
         }
-        .date-section {
-            margin-bottom: 3rem;
-            padding: 2rem;
+
+        .partido {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             background: white;
-            border-radius: 1rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .partido:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .partido-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-grow: 1;
+            min-width: 200px;
+        }
+
+        .estado {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .estado.jugado {
+            background: #28a745;
+            color: white;
+        }
+
+        .estado.pendiente {
+            background: #ffc107;
+            color: #333;
+        }
+
+        .jugadores {
+            font-weight: 500;
+            color: #333;
+            font-size: 1rem;
+        }
+
+        .resultado {
+            font-weight: bold;
+            color: #667eea;
+            font-size: 1.1rem;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .resultado.pendiente {
+            color: #ffc107;
+            font-style: italic;
+        }
+
+        .descansa {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-style: italic;
+            color: #1976d2;
+        }
+
+        .descansa::before {
+            content: "😴 ";
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .partido {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .partido-info {
+                justify-content: center;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
-    <!-- Header -->
-    <div class="gradient-bg text-white py-8 mb-8">
-        <div class="container mx-auto px-4">
-            <div class="text-center">
-                <h1 class="text-4xl font-bold mb-2">
-                    <i class="fas fa-futbol mr-3"></i>
-                    Fixture Torneo eFootball
-                </h1>
-                <p class="text-xl opacity-90">Sistema Manual de Resultados</p>
-                <div class="mt-4 flex justify-center items-center space-x-6 text-sm flex-wrap">
-                    <span><i class="fas fa-users mr-1"></i>9 Jugadores</span>
-                    <span><i class="fas fa-gamepad mr-1"></i><span id="total-matches">0</span> Partidos</span>
-                    <span id="progress-header"><i class="fas fa-chart-pie mr-1"></i>Progreso: 0%</span>
-                </div>
+<body>
+    <div class="container">
+        <h1>⚽ Fixture del Torneo</h1>
+        <div id="fixture-container">
+            <!-- El contenido se generará con JavaScript -->
+        </div>
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="total-partidos">0</div>
+                <div class="stat-label">Total Partidos</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="partidos-jugados">0</div>
+                <div class="stat-label">Partidos Jugados</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="partidos-pendientes">0</div>
+                <div class="stat-label">Partidos Pendientes</div>
             </div>
         </div>
     </div>
-
-    <div class="container mx-auto px-4 max-w-6xl">
-        <!-- Estadísticas -->
-        <div class="grid md:grid-cols-4 gap-4 mb-8">
-            <div class="bg-white rounded-xl shadow-lg p-4 text-center">
-                <div class="text-2xl font-bold text-green-600" id="played-count">0</div>
-                <div class="text-sm text-gray-600">Jugados</div>
-            </div>
-            <div class="bg-white rounded-xl shadow-lg p-4 text-center">
-                <div class="text-2xl font-bold text-yellow-600" id="pending-count">0</div>
-                <div class="text-sm text-gray-600">Pendientes</div>
-            </div>
-            <div class="bg-white rounded-xl shadow-lg p-4 text-center">
-                <div class="text-2xl font-bold text-blue-600" id="total-goals">0</div>
-                <div class="text-sm text-gray-600">Goles</div>
-            </div>
-            <div class="bg-white rounded-xl shadow-lg p-4 text-center">
-                <div class="text-2xl font-bold text-purple-600" id="avg-goals">0.0</div>
-                <div class="text-sm text-gray-600">Promedio</div>
-            </div>
-        </div>
-
-        <!-- Fechas y Partidos -->
-        <div id="matches-container">
-            <!-- Se llena automáticamente -->
-        </div>
-
-        <!-- Instrucciones -->
-        <div class="mt-12 bg-blue-50 border-l-4 border-blue-400 p-6 rounded-lg">
-            <div class="flex">
-                <div class="flex-shrink-0">
-                    <i class="fas fa-info-circle text-blue-400 text-xl"></i>
-                </div>
-                <div class="ml-3">
-                    <h3 class="text-lg font-medium text-blue-800 mb-2">¿Cómo agregar/editar partidos?</h3>
-                    <div class="text-blue-700 text-sm space-y-1">
-                        <p><strong>1.</strong> Ve al código JavaScript (línea ~80 aprox)</p>
-                        <p><strong>2.</strong> Busca la sección "PARTIDOS DEL TORNEO"</p>
-                        <p><strong>3.</strong> Agrega partidos en el formato mostrado</p>
-                        <p><strong>4.</strong> Guarda y recarga la página</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <footer class="mt-16 bg-gray-800 text-white py-8">
-        <div class="container mx-auto px-4 text-center">
-            <p>&copy; 2024 Fixture Torneo eFootball</p>
-        </div>
-    </footer>
 
     <script>
-        // ============================================================
-        // 🎯 PARTIDOS DEL TORNEO - EDITA AQUÍ PARA AGREGAR/MODIFICAR
-        // ============================================================
-        
-        const PARTIDOS = [
-            // FECHA 1
-            { fecha: 1, equipo1: "Carlos De La Barrera", equipo2: "Benny Caballero", goles1: 1, goles2: 1 },
-            { fecha: 1, equipo1: "jeffers0n", equipo2: "Caliz_mistico5", goles1: 1, goles2: 1 },
-            { fecha: 1, equipo1: "ale99", equipo2: "Evers1to", goles1: 2, goles2: 2 },
-            { fecha: 1, equipo1: "Alexander", equipo2: "ElianVz17", goles1: null, goles2: null }, // null = no jugado
-            
-            // FECHA 2
-            { fecha: 2, equipo1: "Caliz_mistico5", equipo2: "Alexander", goles1: 2, goles2: 0 },
-            { fecha: 2, equipo1: "Evers1to", equipo2: "ElianVz17", goles1: 5, goles2: 0 },
-            { fecha: 2, equipo1: "brnc_14", equipo2: "Carlos De La Barrera", goles1: null, goles2: null },
-            { fecha: 2, equipo1: "Benny Caballero", equipo2: "ale99", goles1: null, goles2: null },
-            
-            // FECHA 3 - AGREGA AQUÍ MÁS PARTIDOS
-            { fecha: 3, equipo1: "jeffers0n", equipo2: "Alexander", goles1: null, goles2: null },
-            { fecha: 3, equipo1: "Carlos De La Barrera", equipo2: "ale99", goles1: null, goles2: null },
-            { fecha: 3, equipo1: "brnc_14", equipo2: "Caliz_mistico5", goles1: null, goles2: null },
-            
-            // AÑADE MÁS FECHAS AQUÍ:
-            // { fecha: 4, equipo1: "Jugador1", equipo2: "Jugador2", goles1: null, goles2: null },
-            // { fecha: 4, equipo1: "Jugador3", equipo2: "Jugador4", goles1: 2, goles2: 1 },
+        // AQUÍ PUEDES AGREGAR MÁS PARTIDOS - SIMPLEMENTE EDITA ESTE ARRAY
+        const fixture = [
+            {
+                fecha: 1,
+                partidos: [
+                    { jugador1: "Carlos De La Barrera", jugador2: "Benny Caballero", resultado1: 1, resultado2: 1, estado: "jugado" },
+                    { jugador1: "jeffers0n", jugador2: "Caliz_mistico5", resultado1: 1, resultado2: 1, estado: "jugado" },
+                    { jugador1: "ale99", jugador2: "Evers1to", resultado1: 2, resultado2: 2, estado: "jugado" },
+                    { jugador1: "Alexander", jugador2: "ElianVz17", estado: "pendiente" }
+                ],
+                descansa: "brnc_14"
+            },
+            {
+                fecha: 2,
+                partidos: [
+                    { jugador1: "Caliz_mistico5", jugador2: "Alexander", resultado1: 2, resultado2: 0, estado: "jugado" },
+                    { jugador1: "Evers1to", jugador2: "ElianVz17", resultado1: 5, resultado2: 0, estado: "jugado" },
+                    { jugador1: "brnc_14", jugador2: "Carlos De La Barrera", estado: "pendiente" },
+                    { jugador1: "Benny Caballero", jugador2: "ale99", estado: "pendiente" }
+                ],
+                descansa: "jeffers0n"
+            },
+            {
+                fecha: 3,
+                partidos: [
+                    { jugador1: "Evers1to", jugador2: "brnc_14", estado: "pendiente" },
+                    { jugador1: "Alexander", jugador2: "Benny Caballero", estado: "pendiente" },
+                    { jugador1: "ElianVz17", jugador2: "Carlos De La Barrera", estado: "pendiente" },
+                    { jugador1: "Caliz_mistico5", jugador2: "ale99", estado: "pendiente" }
+                ],
+                descansa: "jeffers0n"
+            },
+            {
+                fecha: 4,
+                partidos: [
+                    { jugador1: "brnc_14", jugador2: "ale99", estado: "pendiente" },
+                    { jugador1: "Evers1to", jugador2: "Caliz_mistico5", estado: "pendiente" },
+                    { jugador1: "jeffers0n", jugador2: "Benny Caballero", estado: "pendiente" },
+                    { jugador1: "Alexander", jugador2: "Carlos De La Barrera", estado: "pendiente" }
+                ],
+                descansa: "ElianVz17"
+            },
+            {
+                fecha: 5,
+                partidos: [
+                    { jugador1: "ale99", jugador2: "ElianVz17", estado: "pendiente" },
+                    { jugador1: "Caliz_mistico5", jugador2: "Benny Caballero", estado: "pendiente" },
+                    { jugador1: "Alexander", jugador2: "brnc_14", estado: "pendiente" },
+                    { jugador1: "Carlos De La Barrera", jugador2: "jeffers0n", estado: "pendiente" }
+                ],
+                descansa: "Evers1to"
+            },
+           {
+                fecha: 6,
+                partidos: [
+                    { jugador1: "ale99", jugador2: "ElianVz17", estado: "pendiente" },
+                    { jugador1: "Caliz_mistico5", jugador2: "Benny Caballero", estado: "pendiente" },
+                    { jugador1: "Alexander", jugador2: "brnc_14", estado: "pendiente" },
+                    { jugador1: "Carlos De La Barrera", jugador2: "jeffers0n", estado: "pendiente" }
+                ],
+                descansa: "Evers1to"
+            } 
         ];
 
-        // ============================================================
-        // 🔧 NO TOCAR - CÓDIGO AUTOMÁTICO
-        // ============================================================
+        function renderFixture() {
+            const container = document.getElementById('fixture-container');
+            container.innerHTML = '';
 
-        // Organizar partidos por fecha
-        function organizarPorFechas() {
-            const fechasMap = {};
-            
-            PARTIDOS.forEach((partido, index) => {
-                if (!fechasMap[partido.fecha]) {
-                    fechasMap[partido.fecha] = [];
-                }
-                fechasMap[partido.fecha].push({
-                    ...partido,
-                    id: index + 1,
-                    jugado: partido.goles1 !== null && partido.goles2 !== null
+            let totalPartidos = 0;
+            let partidosJugados = 0;
+            let partidosPendientes = 0;
+
+            fixture.forEach(fechaData => {
+                const fechaDiv = document.createElement('div');
+                fechaDiv.className = 'fecha';
+
+                const fechaTitle = document.createElement('h2');
+                fechaTitle.textContent = `FECHA ${fechaData.fecha}`;
+                fechaDiv.appendChild(fechaTitle);
+
+                fechaData.partidos.forEach(partido => {
+                    const partidoDiv = document.createElement('div');
+                    partidoDiv.className = 'partido';
+
+                    const partidoInfo = document.createElement('div');
+                    partidoInfo.className = 'partido-info';
+
+                    const estado = document.createElement('div');
+                    estado.className = `estado ${partido.estado}`;
+                    estado.textContent = partido.estado === 'jugado' ? '✓' : '⏳';
+
+                    const jugadores = document.createElement('div');
+                    jugadores.className = 'jugadores';
+                    jugadores.textContent = `${partido.jugador1} vs ${partido.jugador2}`;
+
+                    partidoInfo.appendChild(estado);
+                    partidoInfo.appendChild(jugadores);
+
+                    const resultado = document.createElement('div');
+                    resultado.className = `resultado ${partido.estado}`;
+                    
+                    if (partido.estado === 'jugado') {
+                        resultado.textContent = `${partido.resultado1}–${partido.resultado2}`;
+                        partidosJugados++;
+                    } else {
+                        resultado.textContent = 'Pendiente';
+                        partidosPendientes++;
+                    }
+
+                    partidoDiv.appendChild(partidoInfo);
+                    partidoDiv.appendChild(resultado);
+                    fechaDiv.appendChild(partidoDiv);
+                    totalPartidos++;
                 });
+
+                if (fechaData.descansa) {
+                    const descansaDiv = document.createElement('div');
+                    descansaDiv.className = 'descansa';
+                    descansaDiv.textContent = `Descansa: ${fechaData.descansa}`;
+                    fechaDiv.appendChild(descansaDiv);
+                }
+
+                container.appendChild(fechaDiv);
             });
 
-            return Object.keys(fechasMap)
-                .sort((a, b) => parseInt(a) - parseInt(b))
-                .map(fecha => ({
-                    numero: parseInt(fecha),
-                    partidos: fechasMap[fecha]
-                }));
+            // Actualizar estadísticas
+            document.getElementById('total-partidos').textContent = totalPartidos;
+            document.getElementById('partidos-jugados').textContent = partidosJugados;
+            document.getElementById('partidos-pendientes').textContent = partidosPendientes;
         }
 
-        // Renderizar partido jugado
-        function renderPartidoJugado(partido) {
-            const ganador = partido.goles1 > partido.goles2 ? 'equipo1' : 
-                           partido.goles1 < partido.goles2 ? 'equipo2' : 'empate';
-            
-            return `
-                <div class="match-card played bg-white rounded-lg p-6 shadow-sm mb-4">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="text-sm text-gray-500 font-medium">Partido #${partido.id}</div>
-                        <div class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-semibold">
-                            ✅ FINALIZADO
-                        </div>
-                    </div>
-                    
-                    <div class="space-y-3">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center flex-1">
-                                <div class="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold mr-3">
-                                    ${partido.equipo1.charAt(0)}
-                                </div>
-                                <span class="font-medium ${ganador === 'equipo1' ? 'text-green-600 font-bold' : 'text-gray-800'}">${partido.equipo1}</span>
-                            </div>
-                            <div class="text-2xl font-bold text-gray-800 mx-4">${partido.goles1}</div>
-                        </div>
-                        
-                        <div class="border-t border-gray-200"></div>
-                        
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center flex-1">
-                                <div class="w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold mr-3">
-                                    ${partido.equipo2.charAt(0)}
-                                </div>
-                                <span class="font-medium ${ganador === 'equipo2' ? 'text-green-600 font-bold' : 'text-gray-800'}">${partido.equipo2}</span>
-                            </div>
-                            <div class="text-2xl font-bold text-gray-800 mx-4">${partido.goles2}</div>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-4 text-center">
-                        <span class="text-sm font-medium ${ganador === 'empate' ? 'text-yellow-600' : 'text-green-600'}">
-                            ${ganador === 'empate' ? '⚖️ EMPATE' : 
-                              ganador === 'equipo1' ? `🏆 GANADOR: ${partido.equipo1}` : 
-                              `🏆 GANADOR: ${partido.equipo2}`}
-                        </span>
-                    </div>
-                </div>
-            `;
+        // Función para agregar un nuevo partido (ejemplo de uso)
+        function agregarPartido(fecha, jugador1, jugador2, resultado1 = null, resultado2 = null, estado = 'pendiente') {
+            const fechaIndex = fixture.findIndex(f => f.fecha === fecha);
+            if (fechaIndex !== -1) {
+                const nuevoPartido = { jugador1, jugador2, estado };
+                if (estado === 'jugado') {
+                    nuevoPartido.resultado1 = resultado1;
+                    nuevoPartido.resultado2 = resultado2;
+                }
+                fixture[fechaIndex].partidos.push(nuevoPartido);
+                renderFixture();
+            }
         }
 
-        // Renderizar partido pendiente
-        function renderPartidoPendiente(partido) {
-            return `
-                <div class="match-card pending bg-white rounded-lg p-5 shadow-sm mb-4">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="text-sm text-gray-500 font-medium">Partido #${partido.id}</div>
-                        <div class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs font-semibold">
-                            ⏳ PENDIENTE
-                        </div>
-                    </div>
-                    
-                    <div class="space-y-3">
-                        <div class="flex items-center">
-                            <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold text-sm mr-3">
-                                ${partido.equipo1.charAt(0)}
-                            </div>
-                            <span class="font-medium text-gray-700">${partido.equipo1}</span>
-                        </div>
-                        
-                        <div class="flex justify-center">
-                            <div class="bg-yellow-100 px-4 py-2 rounded-lg">
-                                <span class="text-yellow-800 font-bold">VS</span>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-center">
-                            <div class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center text-white font-bold text-sm mr-3">
-                                ${partido.equipo2.charAt(0)}
-                            </div>
-                            <span class="font-medium text-gray-700">${partido.equipo2}</span>
-                        </div>
-                    </div>
-                    
-                    <div class="mt-4 text-center text-xs text-gray-500">
-                        Para agregar resultado, edita el código JavaScript
-                    </div>
-                </div>
-            `;
+        // Función para actualizar resultado de un partido
+        function actualizarResultado(fecha, jugador1, jugador2, resultado1, resultado2) {
+            const fechaData = fixture.find(f => f.fecha === fecha);
+            if (fechaData) {
+                const partido = fechaData.partidos.find(p => 
+                    (p.jugador1 === jugador1 && p.jugador2 === jugador2) ||
+                    (p.jugador1 === jugador2 && p.jugador2 === jugador1)
+                );
+                if (partido) {
+                    partido.resultado1 = resultado1;
+                    partido.resultado2 = resultado2;
+                    partido.estado = 'jugado';
+                    renderFixture();
+                }
+            }
         }
 
-        // Renderizar todas las fechas
-        function renderFechas() {
-            const fechas = organizarPorFechas();
-            const container = document.getElementById('matches-container');
-            
-            container.innerHTML = fechas.map(fecha => {
-                const jugados = fecha.partidos.filter(p => p.jugado);
-                const pendientes = fecha.partidos.filter(p => !p.jugado);
-                
-                return `
-                    <div class="date-section">
-                        <div class="text-center mb-8">
-                            <h2 class="text-3xl font-bold section-title mb-2">📅 FECHA ${fecha.numero}</h2>
-                            <div class="flex justify-center space-x-4 text-sm">
-                                <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full">
-                                    ✅ ${jugados.length} Jugados
-                                </span>
-                                <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full">
-                                    ⏳ ${pendientes.length} Pendientes
-                                </span>
-                            </div>
-                        </div>
-                        
-                        ${jugados.length > 0 ? `
-                            <div class="mb-8">
-                                <h3 class="text-xl font-bold text-green-600 mb-4">
-                                    <i class="fas fa-check-circle mr-2"></i>Partidos Completados
-                                </h3>
-                                <div class="grid md:grid-cols-2 gap-4">
-                                    ${jugados.map(partido => renderPartidoJugado(partido)).join('')}
-                                </div>
-                            </div>
-                        ` : ''}
-                        
-                        ${pendientes.length > 0 ? `
-                            <div>
-                                <h3 class="text-xl font-bold text-yellow-600 mb-4">
-                                    <i class="fas fa-hourglass-half mr-2"></i>Partidos Pendientes
-                                </h3>
-                                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                    ${pendientes.map(partido => renderPartidoPendiente(partido)).join('')}
-                                </div>
-                            </div>
-                        ` : `
-                            <div class="text-center py-8 text-green-600">
-                                <i class="fas fa-trophy text-3xl mb-2"></i>
-                                <p class="text-lg font-semibold">¡Fecha completada!</p>
-                            </div>
-                        `}
-                    </div>
-                `;
-            }).join('');
-        }
+        // Ejemplos de uso (descomenta para probar):
+        agregarPartido(1, "Nuevo Jugador", "Otro Jugador");
+         actualizarResultado(1, "Alexander", "ElianVz17", 2, 1);
 
-        // Actualizar estadísticas
-        function actualizarEstadisticas() {
-            const jugados = PARTIDOS.filter(p => p.goles1 !== null && p.goles2 !== null);
-            const pendientes = PARTIDOS.filter(p => p.goles1 === null || p.goles2 === null);
-            const totalGoles = jugados.reduce((sum, p) => sum + p.goles1 + p.goles2, 0);
-            const promedio = jugados.length > 0 ? (totalGoles / jugados.length).toFixed(1) : 0.0;
-            const progreso = Math.round((jugados.length / PARTIDOS.length) * 100);
-
-            document.getElementById('played-count').textContent = jugados.length;
-            document.getElementById('pending-count').textContent = pendientes.length;
-            document.getElementById('total-goals').textContent = totalGoles;
-            document.getElementById('avg-goals').textContent = promedio;
-            document.getElementById('total-matches').textContent = PARTIDOS.length;
-            document.getElementById('progress-header').innerHTML = `<i class="fas fa-chart-pie mr-1"></i>Progreso: ${progreso}%`;
-        }
-
-        // Inicializar
-        document.addEventListener('DOMContentLoaded', () => {
-            renderFechas();
-            actualizarEstadisticas();
-        });
+        // Renderizar el fixture inicial
+        renderFixture();
     </script>
 </body>
 </html>
