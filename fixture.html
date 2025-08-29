@@ -15,85 +15,112 @@
             font-family: 'Arial', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 10px;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 100%;
             margin: 0 auto;
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
         }
 
         h1 {
-            text-align: center;
             color: #333;
-            margin-bottom: 40px;
-            font-size: 2.5rem;
+            font-size: 1.8rem;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            margin-bottom: 15px;
+        }
+
+        .back-button {
+            display: inline-block;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .ad-container {
+            text-align: center;
+            margin: 15px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+            border: 1px solid #e0e0e0;
         }
 
         .fecha {
-            margin-bottom: 40px;
+            margin-bottom: 25px;
             background: #f8f9fa;
-            border-radius: 15px;
-            padding: 25px;
-            border-left: 5px solid #667eea;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            border-radius: 12px;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
         }
 
         .fecha h2 {
             color: #667eea;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 8px;
         }
 
         .fecha h2::before {
             content: "📅";
-            font-size: 1.2rem;
+            font-size: 1rem;
         }
 
         .partido {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
             background: white;
-            padding: 15px 20px;
-            margin: 10px 0;
-            border-radius: 10px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
-            flex-wrap: wrap;
-            gap: 10px;
         }
 
         .partido:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         }
 
-        .partido-info {
+        .partido-header {
             display: flex;
             align-items: center;
-            gap: 15px;
-            flex-grow: 1;
-            min-width: 200px;
+            justify-content: space-between;
+            margin-bottom: 8px;
         }
 
         .estado {
-            width: 25px;
-            height: 25px;
+            width: 20px;
+            height: 20px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 12px;
+            flex-shrink: 0;
         }
 
         .estado.jugado {
@@ -106,33 +133,41 @@
             color: #333;
         }
 
-        .jugadores {
-            font-weight: 500;
-            color: #333;
-            font-size: 1rem;
-        }
-
         .resultado {
             font-weight: bold;
             color: #667eea;
-            font-size: 1.1rem;
-            min-width: 60px;
-            text-align: center;
+            font-size: 1rem;
         }
 
         .resultado.pendiente {
             color: #ffc107;
             font-style: italic;
+            font-size: 0.9rem;
+        }
+
+        .jugadores {
+            font-weight: 500;
+            color: #333;
+            font-size: 0.9rem;
+            text-align: center;
+            word-break: break-word;
+        }
+
+        .vs {
+            color: #667eea;
+            font-weight: bold;
+            margin: 0 5px;
         }
 
         .descansa {
             background: #e3f2fd;
-            border-left: 4px solid #2196f3;
-            padding: 10px 15px;
-            margin: 10px 0;
+            border-left: 3px solid #2196f3;
+            padding: 8px 12px;
+            margin: 8px 0;
             border-radius: 5px;
             font-style: italic;
             color: #1976d2;
+            font-size: 0.85rem;
         }
 
         .descansa::before {
@@ -141,60 +176,142 @@
 
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-            padding: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+            padding: 15px;
             background: #f8f9fa;
-            border-radius: 15px;
+            border-radius: 12px;
         }
 
         .stat-card {
             background: white;
-            padding: 20px;
-            border-radius: 10px;
+            padding: 15px 10px;
+            border-radius: 8px;
             text-align: center;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .stat-number {
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: bold;
             color: #667eea;
         }
 
         .stat-label {
             color: #666;
-            font-size: 0.9rem;
+            font-size: 0.75rem;
             margin-top: 5px;
+            line-height: 1.2;
         }
 
+        /* Estilos específicos para móvil */
         @media (max-width: 768px) {
-            .partido {
-                flex-direction: column;
-                text-align: center;
+            body {
+                padding: 5px;
             }
 
-            .partido-info {
-                justify-content: center;
+            .container {
+                padding: 10px;
+                border-radius: 10px;
             }
 
             h1 {
-                font-size: 2rem;
+                font-size: 1.5rem;
             }
 
-            .stats {
-                grid-template-columns: 1fr;
+            .back-button {
+                padding: 10px 16px;
+                font-size: 0.85rem;
+            }
+
+            .fecha {
+                padding: 12px;
+                margin-bottom: 20px;
+            }
+
+            .fecha h2 {
+                font-size: 1.1rem;
+            }
+
+            .partido {
+                padding: 10px;
+            }
+
+            .jugadores {
+                font-size: 0.85rem;
+            }
+
+            .resultado {
+                font-size: 0.9rem;
+            }
+
+            .stat-number {
+                font-size: 1.3rem;
+            }
+
+            .stat-label {
+                font-size: 0.7rem;
+            }
+
+            /* Ajustes para pantallas muy pequeñas */
+            @media (max-width: 480px) {
+                .stats {
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: 8px;
+                    padding: 10px;
+                }
+
+                .stat-card {
+                    padding: 10px 5px;
+                }
+
+                .jugadores {
+                    font-size: 0.8rem;
+                }
+
+                .partido-header {
+                    flex-wrap: wrap;
+                    gap: 5px;
+                }
+            }
+        }
+
+        /* Estilos para anuncios responsivos */
+        .ad-container iframe {
+            max-width: 100%;
+            height: auto;
+        }
+
+        @media (max-width: 768px) {
+            .ad-container {
+                margin: 10px 0;
+                padding: 8px;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>⚽ Fixture del Torneo</h1>
-        <div id="fixture-container">
-            <!-- El contenido se generará con JavaScript -->
+        <div class="header">
+            <h1>⚽ Fixture del Torneo</h1>
+            <a href="index.html" class="back-button">← Volver a Posiciones</a>
         </div>
+
+        <!-- Anuncio Superior -->
+        <div class="ad-container">
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : 'a6c29732eed562ce6c743af0a3b60273',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/a6c29732eed562ce6c743af0a3b60273/invoke.js"></script>
+        </div>
+
         <div class="stats">
             <div class="stat-card">
                 <div class="stat-number" id="total-partidos">0</div>
@@ -202,12 +319,27 @@
             </div>
             <div class="stat-card">
                 <div class="stat-number" id="partidos-jugados">0</div>
-                <div class="stat-label">Partidos Jugados</div>
+                <div class="stat-label">Jugados</div>
             </div>
             <div class="stat-card">
                 <div class="stat-number" id="partidos-pendientes">0</div>
-                <div class="stat-label">Partidos Pendientes</div>
+                <div class="stat-label">Pendientes</div>
             </div>
+        </div>
+
+        <!-- Anuncio Medio -->
+        <div class="ad-container">
+            <script type='text/javascript' src='//pl27458422.revenuecpmgate.com/9f/ad/aa/9fadaacd147b7764a274c4d38f00b281.js'></script>
+        </div>
+
+        <div id="fixture-container">
+            <!-- El contenido se generará con JavaScript -->
+        </div>
+
+        <!-- Anuncio Inferior -->
+        <div class="ad-container">
+            <script async="async" data-cfasync="false" src="//pl27458414.revenuecpmgate.com/2cab1d61c2dc9d7d47e9cefc513235df/invoke.js"></script>
+            <div id="container-2cab1d61c2dc9d7d47e9cefc513235df"></div>
         </div>
     </div>
 
@@ -286,19 +418,12 @@
                     const partidoDiv = document.createElement('div');
                     partidoDiv.className = 'partido';
 
-                    const partidoInfo = document.createElement('div');
-                    partidoInfo.className = 'partido-info';
+                    const partidoHeader = document.createElement('div');
+                    partidoHeader.className = 'partido-header';
 
                     const estado = document.createElement('div');
                     estado.className = `estado ${partido.estado}`;
                     estado.textContent = partido.estado === 'jugado' ? '✓' : '⏳';
-
-                    const jugadores = document.createElement('div');
-                    jugadores.className = 'jugadores';
-                    jugadores.textContent = `${partido.jugador1} vs ${partido.jugador2}`;
-
-                    partidoInfo.appendChild(estado);
-                    partidoInfo.appendChild(jugadores);
 
                     const resultado = document.createElement('div');
                     resultado.className = `resultado ${partido.estado}`;
@@ -311,8 +436,15 @@
                         partidosPendientes++;
                     }
 
-                    partidoDiv.appendChild(partidoInfo);
-                    partidoDiv.appendChild(resultado);
+                    partidoHeader.appendChild(estado);
+                    partidoHeader.appendChild(resultado);
+
+                    const jugadores = document.createElement('div');
+                    jugadores.className = 'jugadores';
+                    jugadores.innerHTML = `${partido.jugador1} <span class="vs">vs</span> ${partido.jugador2}`;
+
+                    partidoDiv.appendChild(partidoHeader);
+                    partidoDiv.appendChild(jugadores);
                     fechaDiv.appendChild(partidoDiv);
                     totalPartidos++;
                 });
@@ -365,8 +497,8 @@
         }
 
         // Ejemplos de uso (descomenta para probar):
-        agregarPartido(1, "Nuevo Jugador", "Otro Jugador");
-         actualizarResultado(1, "Alexander", "ElianVz17", 2, 1);
+        // agregarPartido(1, "Nuevo Jugador", "Otro Jugador");
+        // actualizarResultado(1, "Alexander", "ElianVz17", 2, 1);
 
         // Renderizar el fixture inicial
         renderFixture();
