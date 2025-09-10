@@ -3,500 +3,611 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liga A - Tabla de Posiciones</title>
+    <title>Catálogo de Películas</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        * {
             margin: 0;
-            padding: 10px;
-            background-color: #f5f5f5;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #1a1a1a;
+            color: #e0e0e0;
+            font-family: Arial, sans-serif;
+            padding: 20px;
         }
         
         .container {
-            max-width: 1400px;
+            max-width: 1200px;
             margin: 0 auto;
         }
         
         h1 {
             text-align: center;
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
+            margin-bottom: 40px;
+            color: #fff;
+            font-size: 32px;
         }
         
-        /* Estilos para el botón fixture */
-        .fixture-button {
-            display: block;
-            margin: 20px auto;
-            padding: 12px 24px;
-            background: linear-gradient(135deg, #3498db, #2980b9);
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-            text-align: center;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
-            max-width: 200px;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
+        .movies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
         }
         
-        .fixture-button:hover {
-            background: linear-gradient(135deg, #2980b9, #1f5582);
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(52, 152, 219, 0.4);
+        .movie-item {
+            background-color: #2d2d2d;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #444;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
-        .fixture-button:active {
-            transform: translateY(0);
+        .movie-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
         }
         
-        /* Estilos para publicidad */
-        .ad-container {
-            text-align: center;
-            margin: 20px 0;
-            padding: 10px;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        
-        .ad-label {
-            font-size: 10px;
-            color: #888;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-        }
-        
-        .liga-section {
-            margin-bottom: 30px;
-            background: white;
-            border-radius: 8px;
-            padding: 15px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        
-        .liga-title {
-            color: #2c3e50;
-            border-bottom: 3px solid #3498db;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-        }
-        
-        /* Tabla responsive */
-        .table-container {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-        }
-        
-        table {
+        .movie-image-container {
             width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            min-width: 700px;
-        }
-        
-        th, td {
-            padding: 8px 4px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-            font-size: 12px;
-        }
-        
-        th {
-            background-color: #3498db;
-            color: white;
-            font-weight: bold;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-        
-        tr:hover {
-            background-color: #f8f9fa;
-        }
-        
-        .pos-column {
-            font-weight: bold;
-            background-color: #ecf0f1;
-            width: 35px;
-        }
-        
-        .team-column {
-            text-align: left;
-            font-weight: bold;
-            color: #2c3e50;
-            min-width: 120px;
-            padding-left: 8px;
-        }
-        
-        .club-column {
-            text-align: left;
-            color: #e74c3c;
-            font-size: 10px;
-            min-width: 100px;
-            padding-left: 8px;
-        }
-        
-        .pts-column {
-            font-weight: bold;
-            color: #27ae60;
-            background-color: #d5f4e6;
-            width: 45px;
-        }
-        
-        .stats-column {
-            width: 35px;
-        }
-        
-        /* Estilos para posiciones destacadas */
-        .primer-puesto {
-            background-color: #2ecc71 !important;
-            color: white !important;
-            font-weight: bold;
-        }
-        
-        .primer-puesto .pos-column {
-            background-color: #27ae60 !important;
-            color: white !important;
-        }
-        
-        .segundo-puesto {
-            background-color: #58d68d !important;
-            color: white !important;
-            font-weight: bold;
-        }
-        
-        .segundo-puesto .pos-column {
-            background-color: #4caf50 !important;
-            color: white !important;
-        }
-        
-        .tercer-puesto {
-            background-color: #f1c40f !important;
-            color: #2c3e50 !important;
-            font-weight: bold;
-        }
-        
-        .tercer-puesto .pos-column {
-            background-color: #f39c12 !important;
-            color: #2c3e50 !important;
-        }
-        
-        .clasificacion-info {
-            margin-top: 20px;
-            padding: 15px;
-            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            height: 300px;
             border-radius: 8px;
-            border-left: 4px solid #3498db;
-        }
-        
-        .clasificacion-info h3 {
-            color: #2c3e50;
-            margin-top: 0;
             margin-bottom: 15px;
-            font-size: 1.2rem;
-        }
-        
-        .clasificacion-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            padding: 8px;
-            border-radius: 4px;
-            background: white;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        
-        .clasificacion-badge {
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+            background-color: #444;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: bold;
-            margin-right: 15px;
+        }
+        
+        .movie-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            cursor: pointer;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        .movie-image:hover {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+        
+        .image-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #444, #666);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: #ccc;
+            font-size: 24px;
+        }
+        
+        .image-placeholder.hidden {
+            display: none;
+        }
+        
+        .movie-title {
+            color: #fff;
+            font-size: 20px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .movie-synopsis {
+            background-color: #333;
+            padding: 15px;
+            border-radius: 8px;
+            line-height: 1.5;
+            text-align: justify;
             font-size: 14px;
+            margin-bottom: 20px;
+            max-height: 150px;
+            overflow-y: auto;
         }
         
-        .badge-primero { background-color: #2ecc71; }
-        .badge-segundo { background-color: #58d68d; }
-        .badge-tercero { background-color: #f1c40f; color: #2c3e50; }
-        
-        .clasificacion-text {
-            flex: 1;
-            color: #2c3e50;
-            font-weight: 500;
+        .movie-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         
-        /* Media queries para móvil */
+        .movie-year {
+            background-color: #444;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #ccc;
+        }
+        
+        .movie-genre {
+            background-color: #555;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #fff;
+        }
+        
+        .watch-button {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .watch-button:hover {
+            background: linear-gradient(135deg, #ee5a24, #ff6b6b);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(238, 90, 36, 0.4);
+        }
+        
+        .play-icon {
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        
+        .loading-spinner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            border: 4px solid #666;
+            border-top: 4px solid #ff6b6b;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* Estilos para publicidad */
+        .ad-container {
+            margin: 30px 0;
+            text-align: center;
+            padding: 20px;
+            background-color: #2d2d2d;
+            border-radius: 10px;
+            border: 1px solid #444;
+        }
+
+        .ad-label {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .ad-top {
+            margin: 20px 0 40px 0;
+        }
+
+        .ad-middle {
+            margin: 40px 0;
+        }
+
+        .ad-bottom {
+            margin: 40px 0 20px 0;
+        }
+
+        /* Banner superior */
+        .top-banner {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 15px;
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        /* Native ad container */
+        .native-ad {
+            background-color: #2d2d2d;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #444;
+            margin: 30px 0;
+        }
+        
         @media (max-width: 768px) {
             body {
-                padding: 5px;
+                padding: 10px;
+            }
+            
+            .movies-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .movie-image-container {
+                height: 250px;
+            }
+            
+            .movie-item {
+                padding: 15px;
             }
             
             h1 {
-                font-size: 1.4rem;
-                margin-bottom: 15px;
+                font-size: 24px;
+                margin-bottom: 30px;
             }
             
-            .liga-title {
-                font-size: 1.2rem;
+            .movie-info {
+                justify-content: center;
             }
-            
-            .liga-section {
-                padding: 10px;
-                margin-bottom: 20px;
-            }
-            
-            .fixture-button {
-                font-size: 14px;
-                padding: 10px 20px;
-            }
-            
-            th, td {
-                padding: 6px 2px;
-                font-size: 10px;
-            }
-            
-            .team-column {
-                min-width: 100px;
-                font-size: 10px;
-            }
-            
-            .club-column {
-                min-width: 80px;
-                font-size: 9px;
-            }
-            
-            table {
-                min-width: 600px;
-            }
-            
-            .clasificacion-info {
-                padding: 8px;
-            }
-            
-            .clasificacion-info h3 {
-                font-size: 0.9rem;
-                margin-bottom: 8px;
-            }
-            
-            .clasificacion-item {
-                margin-bottom: 6px;
-                padding: 4px;
-            }
-            
-            .clasificacion-badge {
-                width: 22px;
-                height: 22px;
-                font-size: 10px;
-                margin-right: 8px;
-            }
-            
-            .clasificacion-text {
-                font-size: 10px;
+
+            .ad-container {
+                padding: 15px;
+                margin: 20px 0;
             }
         }
         
         @media (max-width: 480px) {
-            h1 {
-                font-size: 1.2rem;
+            .movie-image-container {
+                height: 200px;
             }
             
-            .liga-title {
-                font-size: 1rem;
+            .movie-synopsis {
+                padding: 10px;
+                font-size: 13px;
             }
             
-            .fixture-button {
-                font-size: 12px;
-                padding: 8px 16px;
+            .watch-button {
+                padding: 10px 15px;
+                font-size: 14px;
             }
-            
-            th, td {
-                padding: 4px 1px;
-                font-size: 9px;
+
+            .top-banner {
+                font-size: 16px;
+                padding: 12px;
             }
-            
-            .team-column {
-                min-width: 80px;
-            }
-            
-            .club-column {
-                min-width: 70px;
-                font-size: 8px;
-            }
-            
-            table {
-                min-width: 550px;
-            }
-        }
-        
-        /* Estilo para hacer el scroll más visible en móvil */
-        .table-container::-webkit-scrollbar {
-            height: 8px;
-        }
-        
-        .table-container::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 4px;
-        }
-        
-        .table-container::-webkit-scrollbar-thumb {
-            background: #3498db;
-            border-radius: 4px;
-        }
-        
-        .table-container::-webkit-scrollbar-thumb:hover {
-            background: #2980b9;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Tabla de Posiciones - Liga A</h1>
-        
-        <!-- Botón para ir a fixture -->
-        <a href="fixture.html" class="fixture-button">Ver Fixture</a>
-        
-        <!-- Publicidad Superior -->
-        <div class="ad-container">
+        <!-- Banner superior -->
+        <div class="top-banner">
+            Publicidad
+        </div>
+
+        <!-- Primer banner publicitario (468x60) -->
+        <div class="ad-container ad-top">
             <div class="ad-label">Publicidad</div>
             <script type="text/javascript">
                 atOptions = {
-                    'key' : 'a6c29732eed562ce6c743af0a3b60273',
+                    'key' : '9d6766e46c7b34676b45346acec44be2',
                     'format' : 'iframe',
-                    'height' : 90,
-                    'width' : 728,
+                    'height' : 60,
+                    'width' : 468,
                     'params' : {}
                 };
             </script>
-            <script type="text/javascript" src="//www.highperformanceformat.com/a6c29732eed562ce6c743af0a3b60273/invoke.js"></script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/9d6766e46c7b34676b45346acec44be2/invoke.js"></script>
         </div>
+
+        <h1>🎬 Catálogo de Películas</h1>
         
-        <!-- Liga A -->
-        <div class="liga-section">
-            <h2 class="liga-title">Liga A</h2>
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Pos</th>
-                            <th>Equipo</th>
-                            <th>Club</th>
-                            <th>PJ</th>
-                            <th>G</th>
-                            <th>E</th>
-                            <th>P</th>
-                            <th>GF</th>
-                            <th>GC</th>
-                            <th>DG</th>
-                            <th>Pts</th>
-                        </tr>
-                    </thead>
-                    <tbody id="bodyLigaA">
-                    </tbody>
-                </table>
+        <div class="movies-grid">
+            
+            <!-- PELÍCULA 1 -->
+            <div class="movie-item">
+                <div class="movie-image-container">
+                    <div class="loading-spinner"></div>
+                    <div class="image-placeholder">
+                        <div>🎬</div>
+                        <div style="font-size: 14px; margin-top: 10px;">Cargando imagen...</div>
+                    </div>
+                    <img data-src="https://m.media-amazon.com/images/I/41Tk9wptUwL._SY445_SX342_.jpg" 
+                         alt="Poster It Eso" 
+                         class="movie-image"
+                         style="display: none;">
+                </div>
+                <h2 class="movie-title">It Eso</h2>
+                <div class="movie-info">
+                    <span class="movie-year">2017</span>
+                    <span class="movie-genre">Terror</span>
+                </div>
+                <div class="movie-synopsis">
+                    En el verano de 1989, un grupo de niños maltratados se unieron para destruir a un monstruo cambia-formas, que se disfraza de payaso y se aprovecha de los niños de Derry, su pequeño pueblo de Maine.
+                </div>
+                <a href="https://pixeldrain.com/u/Q8KRdN3t" 
+                   class="watch-button" 
+                   target="_blank">
+                    <span class="play-icon">▶️</span>Ver Película
+                </a>
+            </div>
+            
+            <!-- PELÍCULA 2 -->
+            <div class="movie-item">
+                <div class="movie-image-container">
+                    <div class="loading-spinner"></div>
+                    <div class="image-placeholder">
+                        <div>🎬</div>
+                        <div style="font-size: 14px; margin-top: 10px;">Cargando imagen...</div>
+                    </div>
+                    <img data-src="https://pics.filmaffinity.com/Weapons-367021125-large.jpg" 
+                         alt="Poster La hora de la desaparición" 
+                         class="movie-image"
+                         style="display: none;">
+                </div>
+                <h2 class="movie-title">La hora de la desaparición</h2>
+                <div class="movie-info">
+                    <span class="movie-year">2023</span>
+                    <span class="movie-genre">Terror/Misterio</span>
+                </div>
+                <div class="movie-synopsis">
+                    Cuando todos los niños de una secundaria, menos uno, desaparecen misteriosamente la misma noche y exactamente a la misma hora, toda la comunidad de un pequeño pueblo se pregunta quién (o qué) es responsable de su desaparición.
+                    <br><br>
+                    <strong>Actores:</strong> Julia Garner, Josh Brolin, Alden Ehrenreich, Austin Abrams, Benedict Wong, Amy Madigan, Cary Christopher, Toby Huss, Whitmer Thomas, Callie Schuttera, June Diane Raphael, Scarlett Sher, Jason Turner, Anny Jules, Ali Burch
+                </div>
+                <a href="https://pixeldrain.com/u/AiTPN7Sm" 
+                   class="watch-button" 
+                   target="_blank">
+                    <span class="play-icon">▶️</span>Ver Película
+                </a>
             </div>
         </div>
-        
-        <!-- Información de Clasificación -->
-        <div class="liga-section">
-            <div class="clasificacion-info">
-                <h3>🏆 Sistema de Clasificación</h3>
-                <div class="clasificacion-item">
-                    <div class="clasificacion-badge badge-primero">1°</div>
-                    <div class="clasificacion-text">Clasificación directa a la FINAL</div>
-                </div>
-                <div class="clasificacion-item">
-                    <div class="clasificacion-badge badge-segundo">2°</div>
-                    <div class="clasificacion-text">Semifinal vs 3er puesto</div>
-                </div>
-                <div class="clasificacion-item">
-                    <div class="clasificacion-badge badge-tercero">3°</div>
-                    <div class="clasificacion-text">Semifinal vs 2do puesto</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Publicidad Inferior -->
-        <div class="ad-container">
+
+        <!-- Native Ad en el medio -->
+        <div class="native-ad">
             <div class="ad-label">Publicidad</div>
-            <script async="async" data-cfasync="false" src="//pl27458414.revenuecpmgate.com/2cab1d61c2dc9d7d47e9cefc513235df/invoke.js"></script>
-            <div id="container-2cab1d61c2dc9d7d47e9cefc513235df"></div>
+            <script async="async" data-cfasync="false" src="//pl27617152.revenuecpmgate.com/557064b3e7068646f1d1e93ff3e1bd7d/invoke.js"></script>
+            <div id="container-557064b3e7068646f1d1e93ff3e1bd7d"></div>
+        </div>
+
+        <div class="movies-grid">
+            <!-- PELÍCULA 3 -->
+            <div class="movie-item">
+                <div class="movie-image-container">
+                    <div class="loading-spinner"></div>
+                    <div class="image-placeholder">
+                        <div>🚀</div>
+                        <div style="font-size: 14px; margin-top: 10px;">Cargando imagen...</div>
+                    </div>
+                    <img data-src="https://www.cuevana.is/_next/image?url=https%3A%2F%2Fimage.tmdb.org%2Ft%2Fp%2Foriginal%2F5Wb1sOZvFulzzJE5JDWCnFSCvJ5.jpg&w=640&q=75" 
+                         alt="Poster Película 3" 
+                         class="movie-image"
+                         style="display: none;">
+                </div>
+                <h2 class="movie-title">Riesgo bajo cero: Venganza</h2>
+                <div class="movie-info">
+                    <span class="movie-year">2024</span>
+                    <span class="movie-genre">Acción, Suspenso, Drama </span>
+                </div>
+                <div class="movie-synopsis">
+                   Mike viaja a Nepal para esparcir las cenizas de su hermano en el Everest. Cuando Mike y su guía se topan con mercenarios mientras viajan en un autobús se ven obligados a luchar para salvarse a sí mismos, a los pasajeros y al país.  
+                   Actores: Liam Neeson, 范冰冰, Marcus Thomas, Grace O'Sullivan, Saksham Sharma, Bernard Curry, Geoff Morrell, Mahesh Jadu, Amelia Bishop, Shivantha Wijesinha, CJ. Bloomfield, Michala Banas, Salim Fayad, Kaden Hartcher, Seth Kannof
+                </div>
+                <a href="https://pixeldrain.com/u/KaFXupmE" 
+                   class="watch-button" 
+                   target="_blank">
+                    <span class="play-icon">▶️</span>Ver Película
+                </a>
+            </div>
+            
+            <!-- PELÍCULA 4 -->
+            <div class="movie-item">
+                <div class="movie-image-container">
+                    <div class="loading-spinner"></div>
+                    <div class="image-placeholder">
+                        <div>😂</div>
+                        <div style="font-size: 14px; margin-top: 10px;">Cargando imagen...</div>
+                    </div>
+                    <img data-src="https://www.cuevana.is/_next/image?url=https%3A%2F%2Fimage.tmdb.org%2Ft%2Fp%2Foriginal%2FtjCeKESv6z3g7zu9JFCvKpkFEjt.jpg&w=640&q=75" 
+                         alt="Poster Película 4" 
+                         class="movie-image"
+                         style="display: none;">
+                </div>
+                <h2 class="movie-title">El cuento del lobo</h2>
+                <div class="movie-info">
+                    <span class="movie-year">2025</span>
+                    <span class="movie-genre">Suspenso, Misterio</span>
+                </div>
+                <div class="movie-synopsis">
+                   Olga y Javier, una pareja de clase media, presencian como la chica que va a limpiarles la casa recibe mensajes amenazantes en su móvil. Ante esta situación, deciden intervenir, enfrentándose así a un repentino cambio de vida. La aparición del padre de la chica, las dudas y las diferencias cada vez generan más interrogantes en una situación complicada de resolver.
+                   Actores: Daniel Grao, Lucía Jiménez, Paco Tous, María Romanillos
+                </div>
+                <a href="https://pixeldrain.com/u/bdvQhdQP" 
+                   class="watch-button" 
+                   target="_blank">
+                    <span class="play-icon">▶️</span>Ver Película
+                </a>
+            </div>
+
+            <!-- PELÍCULA 5.1 -->
+            <div class="movie-item">
+                <div class="movie-image-container">
+                    <div class="loading-spinner"></div>
+                    <div class="image-placeholder">
+                        <div>🔥</div>
+                        <div style="font-size: 14px; margin-top: 10px;">Cargando imagen...</div>
+                    </div>
+                    <img data-src="https://image.tmdb.org/t/p/w200/rLvtnjRnF8SpKyjdGxG1Ijpfn9S.jpg" 
+                         alt="Poster Película 5" 
+                         class="movie-image"
+                         style="display: none;">
+                </div>
+                <h2 class="movie-title">Película El Conjuro 4: Últimos ritos (calidad baja)</h2>
+                <div class="movie-info">
+                    <span class="movie-year">2025</span>
+                    <span class="movie-genre"> terror, Suspenso</span>
+                </div>
+                <div class="movie-synopsis">
+                    Duración: 2h 16m
+                   En 1986, los investigadores paranormales, Ed y Lorraine Warren, salen de su retiro para investigar, junto con su hija adulta Judy y su compañero Tony, el caso Smurl, una entidad demoníaca más oscura.
+                </div>
+                <a href="https://smoothpre.com/stream/ypOfiQWxGPYiHSy1tHQ4mg/hjkrhuihghfvu/1757586321/31327723/master.m3u8" 
+                   class="watch-button" 
+                   target="_blank">
+                    <span class="play-icon">▶️</span>Ver Película
+                </a>
+            </div>
+            
+            <!-- PELÍCULA 5 -->
+            <div class="movie-item">
+                <div class="movie-image-container">
+                    <div class="loading-spinner"></div>
+                    <div class="image-placeholder">
+                        <div>🔥</div>
+                        <div style="font-size: 14px; margin-top: 10px;">Cargando imagen...</div>
+                    </div>
+                    <img data-src="https://www.cuevana.is/_next/image?url=https%3A%2F%2Fimage.tmdb.org%2Ft%2Fp%2Foriginal%2FkK0ZgJINxy50AkVbCsTRIX0DvbZ.jpg&w=640&q=75" 
+                         alt="Poster Película 5" 
+                         class="movie-image"
+                         style="display: none;">
+                </div>
+                <h2 class="movie-title">Get Fast</h2>
+                <div class="movie-info">
+                    <span class="movie-year">2024</span>
+                    <span class="movie-genre"> Acción, Crimen, Suspenso</span>
+                </div>
+                <div class="movie-synopsis">
+                    Cuando secuestran a su compañero de fechorías después de un robo masivo, un famoso ladrón profesional sigue la pista de los secuestradores hasta el territorio de un despiadado capo de la droga, perseguido por policías corruptos, compinches de bajo nivel y el sicario más letal del sindicato del crimen, un sociópata amante de las armas y fríamente encantador conocido como El Vaquero. Pero con millones de dólares y muchas vidas en juego, ¿cuánto durará la lealtad entre ladrones cuando empiecen a volar las balas?
+                </div>
+                <a href="https://pixeldrain.com/u/mKJmmRBv" 
+                   class="watch-button" 
+                   target="_blank">
+                    <span class="play-icon">▶️</span>Ver Película
+                </a>
+            </div>
+        </div>
+        
+        <!-- Banner inferior -->
+        <div class="ad-container ad-bottom">
+            <div class="ad-label">Publicidad</div>
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : 'f982ee6ba95272eb27b7d10db16f8eea',
+                    'format' : 'iframe',
+                    'height' : 50,
+                    'width' : 320,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/f982ee6ba95272eb27b7d10db16f8eea/invoke.js"></script>
+        </div>
+
+        <!-- Banner final de publicidad -->
+        <div class="top-banner">
+            Publicidad
         </div>
     </div>
 
     <script>
-        // Datos de los equipos - AQUÍ PUEDES MODIFICAR LOS PUNTOS Y ESTADÍSTICAS
-        let ligaA = [
-            { name: "Carlos De La Barrera", club: "", pj: 1, g: 0, e: 1, p: 0, gf: 1, gc: 1, pts: 1 },
-            { name: "Benny Caballero", club: "", pj: 1, g: 0, e: 1, p: 0, gf: 1, gc: 1, pts: 1 },
-            { name: "jeffers0n", club: "", pj: 1, g: 0, e: 1, p: 0, gf: 1, gc: 1, pts: 1 },
-            { name: "Caliz_mistico5", club: "", pj: 2, g: 1, e: 1, p: 0, gf: 3, gc: 1, pts: 4 },
-            { name: "ale99", club: "", pj: 1, g: 0, e: 1, p: 0, gf: 2, gc: 2, pts: 1 },
-            { name: "Evers1to", club: "", pj: 2, g: 1, e: 1, p: 0, gf: 7, gc: 2, pts: 4 },
-            { name: "Alexander", club: "", pj: 1, g: 0, e: 0, p: 1, gf: 0, gc: 2, pts: 0 },
-            { name: "ElianVz17", club: "", pj: 1, g: 0, e: 0, p: 1, gf: 0, gc: 5, pts: 0 },
-            { name: "brnc_14", club: "", pj: 0, g: 0, e: 0, p: 0, gf: 0, gc: 0, pts: 0 }
-        ];
-
-        function ordenarLiga(liga) {
-            return liga.sort((a, b) => {
-                if (b.pts !== a.pts) return b.pts - a.pts;
-                if ((b.gf - b.gc) !== (a.gf - a.gc)) return (b.gf - b.gc) - (a.gf - a.gc);
-                return b.gf - a.gf;
-            });
-        }
-
-        function actualizarTabla(liga, bodyId) {
-            const tbody = document.getElementById(bodyId);
-            tbody.innerHTML = '';
+        function loadImage(img, placeholder, spinner) {
+            const src = img.getAttribute('data-src');
+            if (!src) return;
             
-            const ligaOrdenada = ordenarLiga([...liga]);
+            const testImg = new Image();
             
-            ligaOrdenada.forEach((equipo, index) => {
-                const row = tbody.insertRow();
-                const dg = equipo.gf - equipo.gc;
-                
-                // Aplicar clases según la posición
-                let posicionClass = '';
-                if (index === 0) posicionClass = 'primer-puesto';
-                else if (index === 1) posicionClass = 'segundo-puesto';
-                else if (index === 2) posicionClass = 'tercer-puesto';
-                
-                if (posicionClass) {
-                    row.className = posicionClass;
+            testImg.onload = function() {
+                img.src = src;
+                img.style.display = 'block';
+                if (placeholder) placeholder.classList.add('hidden');
+                if (spinner) spinner.style.display = 'none';
+            };
+            
+            testImg.onerror = function() {
+                if (spinner) spinner.style.display = 'none';
+                if (placeholder) {
+                    placeholder.innerHTML = `
+                        <div style="font-size: 24px;">🖼️</div>
+                        <div style="font-size: 12px; margin-top: 10px; text-align: center;">
+                            Error al cargar imagen<br>
+                            <span style="font-size: 10px; color: #888;">
+                                Formato no compatible o URL inválida
+                            </span>
+                        </div>
+                    `;
                 }
-                
-                row.innerHTML = `
-                    <td class="pos-column">${index + 1}</td>
-                    <td class="team-column">${equipo.name}</td>
-                    <td class="club-column">${equipo.club}</td>
-                    <td class="stats-column">${equipo.pj}</td>
-                    <td class="stats-column">${equipo.g}</td>
-                    <td class="stats-column">${equipo.e}</td>
-                    <td class="stats-column">${equipo.p}</td>
-                    <td class="stats-column">${equipo.gf}</td>
-                    <td class="stats-column">${equipo.gc}</td>
-                    <td class="stats-column">${dg >= 0 ? '+' + dg : dg}</td>
-                    <td class="pts-column">${equipo.pts}</td>
-                `;
-            });
+            };
+            
+            testImg.src = src;
         }
-
-        // Inicializar la tabla
-        actualizarTabla(ligaA, 'bodyLigaA');
         
-        // Función para refrescar anuncios después de cargar la página
-        setTimeout(function() {
-            console.log('Página completamente cargada con anuncios');
-        }, 2000);
+        document.addEventListener('DOMContentLoaded', function() {
+            const movieItems = document.querySelectorAll('.movie-item');
+            
+            movieItems.forEach(item => {
+                const img = item.querySelector('.movie-image');
+                const placeholder = item.querySelector('.image-placeholder');
+                const spinner = item.querySelector('.loading-spinner');
+                
+                if (img && img.getAttribute('data-src')) {
+                    loadImage(img, placeholder, spinner);
+                } else {
+                    if (spinner) spinner.style.display = 'none';
+                }
+            });
+        });
+
+        function addMovie(title, year, genre, synopsis, imageUrl, watchUrl) {
+            const moviesGrid = document.querySelector('.movies-grid');
+            const movieHTML = `
+                <div class="movie-item">
+                    <div class="movie-image-container">
+                        <div class="loading-spinner"></div>
+                        <div class="image-placeholder">
+                            <div>🎬</div>
+                            <div style="font-size: 14px; margin-top: 10px;">Cargando imagen...</div>
+                        </div>
+                        <img data-src="${imageUrl}" 
+                             alt="Poster ${title}" 
+                             class="movie-image"
+                             style="display: none;">
+                    </div>
+                    <h2 class="movie-title">${title}</h2>
+                    <div class="movie-info">
+                        <span class="movie-year">${year}</span>
+                        <span class="movie-genre">${genre}</span>
+                    </div>
+                    <div class="movie-synopsis">
+                        ${synopsis}
+                    </div>
+                    <a href="${watchUrl}" 
+                       class="watch-button" 
+                       target="_blank">
+                        <span class="play-icon">▶️</span>Ver Película
+                    </a>
+                </div>
+            `;
+            
+            moviesGrid.insertAdjacentHTML('beforeend', movieHTML);
+            
+            const newItem = moviesGrid.lastElementChild;
+            const img = newItem.querySelector('.movie-image');
+            const placeholder = newItem.querySelector('.image-placeholder');
+            const spinner = newItem.querySelector('.loading-spinner');
+            
+            if (img && img.getAttribute('data-src')) {
+                loadImage(img, placeholder, spinner);
+            }
+        }
     </script>
 </body>
 </html>
