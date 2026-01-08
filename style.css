@@ -1,0 +1,37 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #70c5ce; /* Color cielo */
+    font-family: Arial, sans-serif;
+}
+
+#game-container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+#ui {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    pointer-events: none;
+}
+
+#ui button {
+    pointer-events: auto;
+    padding: 10px;
+    background: #ff4757;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+canvas {
+    display: block;
+    background: linear-gradient(#70c5ce, #91e6e0);
+}
