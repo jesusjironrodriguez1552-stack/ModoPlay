@@ -1,87 +1,121 @@
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-const levelDisp = document.getElementById('level-display');
-const rewardText = document.getElementById('reward-text');
+const canvas = document.getElementById("snakeCanvas");
+const ctx = canvas.getContext("2d");
+const scoreEl = document.getElementById("score");
 
-canvas.width = 350;
-canvas.height = 500;
+// Tamaño de cada "cuadrito" en el juego
+const box = 20;
 
-let currentLevel = 1;
-let player = { x: 30, y: 30, radius: 10 };
-let goal = { x: 300, y: 450, w: 40, h: 40 };
+// Tamaño del canvas (ajustable)
+canvas.width = 320; // 16 * 20
+canvas.height = 320; // 16 * 20
 
-// Definición de Niveles (Obstáculos)
-const levels = {
-    1: { obstacles: [{x: 0, y: 150, w: 250, h: 40}, {x: 100, y: 300, w: 250, h: 40}], reward: "Sigue así..." },
-    2: { obstacles: [{x: 0, y: 100, w: 300, h: 25}, {x: 50, y: 200, w: 300, h: 25}, {x: 0, y: 300, w: 300, h: 25}, {x: 50, y: 400, w: 300, h: 25}], reward: "PREMIO: 1 Perfil HBO MAX" },
-    3: { obstacles: [{x: 0, y: 50, w: 320, h: 15}, {x: 30, y: 120, w: 320, h: 15}, {x: 0, y: 190, w: 320, h: 15}, {x: 30, y: 260, w: 320, h: 15}, {x: 0, y: 330, w: 320, h: 15}, {x: 30, y: 400, w: 320, h: 15}], reward: "IMPOSIBLE: Netflix 15 Días" }
-};
+// Posición inicial de la serpiente
+let snake = [{ x: 8 * box, y: 8 * box }]; // Empieza más centrado
+
+// Posición inicial de la comida
+let food = {};
+function generateFood() {
+    food = {
+        x: Math.floor(Math.random() * (canvas.width / box)) * box,
+        y: Math.floor(Math.random() * (canvas.height / box)) * box
+    };
+    // Asegurarse de que la comida no aparezca dentro de la serpiente
+    for (let i = 0; i < snake.length; i++) {
+        if (food.x === snake[i].x && food.y === snake[i].y) {
+            generateFood(); // Si choca, genera otra
+            return;
+        }
+    }
+}
+generateFood();
+
+let score = 0;
+let d; // Dirección
+
+// Manejo de teclado para PC
+document.addEventListener("keydown", e => {
+    if (e.keyCode == 37 && d != "RIGHT") d = "LEFT";
+    else if (e.keyCode == 38 && d != "DOWN") d = "UP";
+    else if (e.keyCode == 39 && d != "LEFT") d = "RIGHT";
+    else if (e.keyCode == 40 && d != "UP") d = "DOWN";
+});
+
+// Manejo de botones móviles
+function changeDirection(direction) {
+    if (direction == "LEFT" && d != "RIGHT") d = "LEFT";
+    else if (direction == "UP" && d != "DOWN") d = "UP";
+    else if (direction == "RIGHT" && d != "LEFT") d = "RIGHT";
+    else if (direction == "DOWN" && d != "UP") d = "DOWN";
+}
 
 function draw() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Dibujar Meta
-    ctx.fillStyle = "#f1c40f";
-    ctx.fillRect(goal.x, goal.y, goal.w, goal.h);
+    // Dibujar fondo
     ctx.fillStyle = "black";
-    ctx.fillText("META", goal.x + 5, goal.y + 25);
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Dibujar Obstáculos
-    ctx.fillStyle = "#e74c3c";
-    levels[currentLevel].obstacles.forEach(obs => {
-        ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
-    });
+    // Dibujar serpiente
+    for (let i = 0; i < snake.length; i++) {
+        ctx.fillStyle = (i == 0) ? "#27ae60" : "#2ecc71"; // Verde oscuro y claro
+        ctx.fillRect(snake[i].x, snake[i].y, box, box);
+        ctx.strokeStyle = "#2c3e50"; // Borde para los cuadros
+        ctx.strokeRect(snake[i].x, snake[i].y, box, box);
+    }
 
-    // Dibujar Jugador
-    ctx.beginPath();
-    ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
-    ctx.fillStyle = "#3498db";
-    ctx.fill();
-    ctx.closePath();
-}
+    // Dibujar comida
+    ctx.fillStyle = "#e74c3c"; // Rojo
+    ctx.fillRect(food.x, food.y, box, box);
+    ctx.strokeStyle = "#c0392b";
+    ctx.strokeRect(food.x, food.y, box, box);
 
-function checkCollision(nx, ny) {
-    // Bordes
-    if (nx < 10 || nx > canvas.width - 10 || ny < 10 || ny > canvas.height - 10) return true;
-    
-    // Obstáculos
-    let hit = false;
-    levels[currentLevel].obstacles.forEach(obs => {
-        if (nx + 10 > obs.x && nx - 10 < obs.x + obs.w && ny + 10 > obs.y && ny - 10 < obs.y + obs.h) {
-            hit = true;
-        }
-    });
-    return hit;
-}
+    // Mover la serpiente
+    let snakeX = snake[0].x;
+    let snakeY = snake[0].y;
 
-canvas.addEventListener('touchmove', (e) => {
-    e.preventDefault();
-    let touch = e.touches[0];
-    let rect = canvas.getBoundingClientRect();
-    let nx = touch.clientX - rect.left;
-    let ny = touch.clientY - rect.top;
+    if (d == "LEFT") snakeX -= box;
+    if (d == "UP") snakeY -= box;
+    if (d == "RIGHT") snakeX += box;
+    if (d == "DOWN") snakeY += box;
 
-    if (!checkCollision(nx, ny)) {
-        player.x = nx;
-        player.y = ny;
+    // Si come la comida
+    if (snakeX == food.x && snakeY == food.y) {
+        score++;
+        scoreEl.innerHTML = score;
+        generateFood(); // Genera nueva comida
     } else {
-        // Si choca, regresa al inicio del nivel
-        player.x = 30;
-        player.y = 30;
+        snake.pop(); // Elimina la cola si no comió
     }
 
-    // Ganar Nivel
-    if (player.x > goal.x && player.y > goal.y) {
-        if (currentLevel < 3) {
-            currentLevel++;
-            player.x = 30; player.y = 30;
-            levelDisp.innerText = currentLevel;
-            rewardText.innerText = levels[currentLevel].reward;
-        } else {
-            alert("¡LO LOGRASTE! Envía captura de este mensaje: PREMIO NETFLIX 15 DÍAS");
+    let newHead = { x: snakeX, y: snakeY };
+
+    // Game Over: Colisión con paredes o consigo mismo
+    if (snakeX < 0 || snakeX >= canvas.width || snakeY < 0 || snakeY >= canvas.height || collision(newHead, snake)) {
+        clearInterval(game);
+        alert(`¡FIN DEL JUEGO! Tus puntos: ${score}\n\nEnvía una captura para reclamar tu premio.\n\nNivel 1 (50 pts): Sin premio\nNivel 2 (100 pts): HBO Max\nNivel 3 (200 pts): Netflix 15 Días`);
+        resetGame(); // Reiniciar para el siguiente intento
+    }
+
+    snake.unshift(newHead); // Añade la nueva cabeza
+}
+
+// Función de colisión con el cuerpo
+function collision(head, array) {
+    for (let i = 0; i < array.length; i++) {
+        if (head.x == array[i].x && head.y == array[i].y) {
+            return true;
         }
     }
-    draw();
-}, {passive: false});
+    return false;
+}
 
-draw();
+// Reiniciar el juego
+function resetGame() {
+    snake = [{ x: 8 * box, y: 8 * box }];
+    generateFood();
+    score = 0;
+    scoreEl.innerHTML = score;
+    d = undefined; // Borrar dirección para empezar quieto
+    game = setInterval(draw, 100);
+}
+
+// Iniciar el juego
+let game = setInterval(draw, 100);
