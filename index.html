@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Snake - Juego de la Culebrita</title>
     <style>
         * {
@@ -18,16 +18,19 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
+            padding: 10px;
+            overflow-x: hidden;
         }
 
         .container {
             background: white;
             border-radius: 20px;
-            padding: 30px;
+            padding: 20px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             max-width: 600px;
             width: 100%;
+            max-height: 95vh;
+            overflow-y: auto;
         }
 
         h1 {
@@ -205,15 +208,63 @@
 
         @media (max-width: 600px) {
             .container {
-                padding: 20px;
+                padding: 15px;
+                border-radius: 15px;
             }
 
             h1 {
                 font-size: 1.5em;
+                margin-bottom: 15px;
             }
 
             .info {
                 flex-direction: column;
+                margin-bottom: 15px;
+            }
+
+            .score, .level {
+                padding: 12px;
+            }
+
+            #gameCanvas {
+                width: 100%;
+                height: auto;
+                max-width: 400px;
+            }
+
+            button {
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+
+            .levels {
+                padding: 15px;
+                margin-top: 15px;
+            }
+
+            .level-item {
+                padding: 8px;
+                font-size: 0.9em;
+            }
+
+            .instructions {
+                padding: 12px;
+                font-size: 0.85em;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .container {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 1.3em;
+            }
+
+            #gameCanvas {
+                width: 100%;
+                height: auto;
             }
         }
     </style>
