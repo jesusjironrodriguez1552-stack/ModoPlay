@@ -3,27 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Reto Streaming - La Culebrita</title>
+    <title>Reto Culebrita</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="game-container">
         <h1>RETO CULEBRITA</h1>
-        <p>Envía tu captura de puntaje</p>
+        <div id="scoreboard">
+            <span id="score-label">Puntos: </span><span id="score">0</span>
+        </div>
         <canvas id="snakeCanvas"></canvas>
-        <h2 style="color:white;">Puntos: <span id="score">0</span></h2>
-        <p style="color:white; font-size: 0.8em;">
-            Nivel 1 (50 pts): Sin premio<br>
-            Nivel 2 (100 pts): HBO Max<br>
-            Nivel 3 (200 pts): Netflix 15 Días
-        </p>
-        <div id="controls-mobile">
-            <button onclick="changeDirection('UP')">⬆️</button>
-            <div>
-                <button onclick="changeDirection('LEFT')">⬅️</button>
-                <button onclick="changeDirection('RIGHT')">➡️</button>
+        <div id="levels-info">
+            <p>Nivel 1 (50 pts): Sin premio</p>
+            <p>Nivel 2 (100 pts): Perfil HBO</p>
+            <p>Nivel 3 (200 pts): Netflix 15 días</p>
+        </div>
+        <div id="controls">
+            <button class="btn-up" onclick="setDir('UP')">▲</button>
+            <div class="middle-btns">
+                <button onclick="setDir('LEFT')">◀</button>
+                <button onclick="setDir('RIGHT')">▶</button>
             </div>
-            <button onclick="changeDirection('DOWN')">⬇️</button>
+            <button class="btn-down" onclick="setDir('DOWN')">▼</button>
         </div>
     </div>
     <script src="script.js"></script>
