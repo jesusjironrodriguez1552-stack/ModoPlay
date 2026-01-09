@@ -1,32 +1,515 @@
 <!DOCTYPE html>
-<html lang="es"> 
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Reto Culebrita</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Snake - Juego de la Culebrita</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            gap: 10px;
+        }
+
+        .score, .level {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            flex: 1;
+            text-align: center;
+        }
+
+        .score h3, .level h3 {
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .score p, .level p {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+
+        #gameCanvas {
+            display: block;
+            margin: 0 auto;
+            background: #1a1a2e;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            touch-action: none;
+        }
+
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.1em;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            margin: 5px;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .levels {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f7f7f7;
+            border-radius: 10px;
+        }
+
+        .levels h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .level-item {
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .level-easy {
+            background: #e8f5e9;
+            border-left: 4px solid #4caf50;
+        }
+
+        .level-medium {
+            background: #fff3e0;
+            border-left: 4px solid #ff9800;
+        }
+
+        .level-hard {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+        }
+
+        .level-item.completed {
+            opacity: 0.6;
+            background: #e0e0e0;
+        }
+
+        .level-item.completed::after {
+            content: "✓ Completado";
+            color: #4caf50;
+            font-weight: bold;
+        }
+
+        .prize {
+            font-weight: bold;
+            color: #764ba2;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 400px;
+            animation: modalShow 0.3s;
+        }
+
+        @keyframes modalShow {
+            from {
+                transform: scale(0.7);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .modal h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .modal p {
+            font-size: 1.2em;
+            margin: 15px 0;
+        }
+
+        .instructions {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            .info {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
-    <div id="game-container">
-        <h1>RETO CULEBRITA</h1>
-        <div id="scoreboard">
-            <span id="score-label">Puntos: </span><span id="score">0</span>
-        </div>
-        <canvas id="snakeCanvas"></canvas>
-        <div id="levels-info">
-            <p>Nivel 1 (50 pts): Sin premio</p>
-            <p>Nivel 2 (100 pts): Perfil HBO</p>
-            <p>Nivel 3 (200 pts): Netflix 15 días</p>
-        </div>
-        <div id="controls">
-            <button class="btn-up" onclick="setDir('UP')">▲</button>
-            <div class="middle-btns">
-                <button onclick="setDir('LEFT')">◀</button>
-                <button onclick="setDir('RIGHT')">▶</button>
+    <div class="container">
+        <h1>🐍 Snake - Culebrita</h1>
+        
+        <div class="info">
+            <div class="score">
+                <h3>Puntos</h3>
+                <p id="scoreDisplay">0</p>
             </div>
-            <button class="btn-down" onclick="setDir('DOWN')">▼</button>
+            <div class="level">
+                <h3>Nivel Actual</h3>
+                <p id="levelDisplay">-</p>
+            </div>
+        </div>
+
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+        <div class="controls">
+            <button id="startBtn">Iniciar Juego</button>
+            <button id="pauseBtn" style="display:none;">Pausar</button>
+        </div>
+
+        <div class="levels">
+            <h3>🏆 Niveles y Premios</h3>
+            <div class="level-item level-easy" id="level1">
+                <span><strong>Nivel 1 - Fácil:</strong> 50 puntos</span>
+                <span class="prize">Sin premio</span>
+            </div>
+            <div class="level-item level-medium" id="level2">
+                <span><strong>Nivel 2 - Medio:</strong> 100 puntos</span>
+                <span class="prize">🎬 HBO Max</span>
+            </div>
+            <div class="level-item level-hard" id="level3">
+                <span><strong>Nivel 3 - Imposible:</strong> 200 puntos</span>
+                <span class="prize">📺 Netflix 15 días</span>
+            </div>
+        </div>
+
+        <div class="instructions">
+            <strong>Controles:</strong> Usa las flechas del teclado o desliza en pantalla táctil
         </div>
     </div>
-    <script src="script.js"></script>
+
+    <div class="modal" id="gameOverModal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Game Over</h2>
+            <p id="modalMessage"></p>
+            <p><strong>Puntuación Final:</strong> <span id="finalScore"></span></p>
+            <button onclick="location.reload()">Jugar de Nuevo</button>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreDisplay = document.getElementById('scoreDisplay');
+        const levelDisplay = document.getElementById('levelDisplay');
+        const startBtn = document.getElementById('startBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const modal = document.getElementById('gameOverModal');
+
+        const gridSize = 20;
+        const tileCount = canvas.width / gridSize;
+
+        let snake = [{x: 10, y: 10}];
+        let food = {x: 15, y: 15};
+        let dx = 0;
+        let dy = 0;
+        let score = 0;
+        let gameLoop;
+        let gameRunning = false;
+        let gamePaused = false;
+        let completedLevels = new Set();
+
+        // Touch controls
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        });
+
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        });
+
+        canvas.addEventListener('touchend', (e) => {
+            if (!gameRunning) return;
+            
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+            
+            const diffX = touchEndX - touchStartX;
+            const diffY = touchEndY - touchStartY;
+            
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                if (diffX > 0 && dx === 0) { dx = 1; dy = 0; }
+                else if (diffX < 0 && dx === 0) { dx = -1; dy = 0; }
+            } else {
+                if (diffY > 0 && dy === 0) { dx = 0; dy = 1; }
+                else if (diffY < 0 && dy === 0) { dx = 0; dy = -1; }
+            }
+        });
+
+        // Keyboard controls
+        document.addEventListener('keydown', (e) => {
+            if (!gameRunning) return;
+            
+            switch(e.key) {
+                case 'ArrowUp':
+                    if (dy === 0) { dx = 0; dy = -1; }
+                    break;
+                case 'ArrowDown':
+                    if (dy === 0) { dx = 0; dy = 1; }
+                    break;
+                case 'ArrowLeft':
+                    if (dx === 0) { dx = -1; dy = 0; }
+                    break;
+                case 'ArrowRight':
+                    if (dx === 0) { dx = 1; dy = 0; }
+                    break;
+            }
+        });
+
+        function drawGame() {
+            // Clear canvas
+            ctx.fillStyle = '#1a1a2e';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw grid
+            ctx.strokeStyle = '#2a2a3e';
+            for (let i = 0; i < tileCount; i++) {
+                ctx.beginPath();
+                ctx.moveTo(i * gridSize, 0);
+                ctx.lineTo(i * gridSize, canvas.height);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(0, i * gridSize);
+                ctx.lineTo(canvas.width, i * gridSize);
+                ctx.stroke();
+            }
+
+            // Draw snake
+            snake.forEach((segment, index) => {
+                if (index === 0) {
+                    ctx.fillStyle = '#4caf50';
+                } else {
+                    ctx.fillStyle = '#81c784';
+                }
+                ctx.fillRect(segment.x * gridSize, segment.y * gridSize, gridSize - 2, gridSize - 2);
+                ctx.strokeStyle = '#2e7d32';
+                ctx.strokeRect(segment.x * gridSize, segment.y * gridSize, gridSize - 2, gridSize - 2);
+            });
+
+            // Draw food
+            ctx.fillStyle = '#f44336';
+            ctx.beginPath();
+            ctx.arc(food.x * gridSize + gridSize/2, food.y * gridSize + gridSize/2, gridSize/2 - 2, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        function moveSnake() {
+            if (gamePaused) return;
+
+            const head = {x: snake[0].x + dx, y: snake[0].y + dy};
+
+            // Check wall collision
+            if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) {
+                endGame(false);
+                return;
+            }
+
+            // Check self collision
+            for (let segment of snake) {
+                if (head.x === segment.x && head.y === segment.y) {
+                    endGame(false);
+                    return;
+                }
+            }
+
+            snake.unshift(head);
+
+            // Check food collision
+            if (head.x === food.x && head.y === food.y) {
+                score += 10;
+                scoreDisplay.textContent = score;
+                generateFood();
+                checkLevelUp();
+            } else {
+                snake.pop();
+            }
+
+            drawGame();
+        }
+
+        function generateFood() {
+            food = {
+                x: Math.floor(Math.random() * tileCount),
+                y: Math.floor(Math.random() * tileCount)
+            };
+
+            // Make sure food doesn't spawn on snake
+            for (let segment of snake) {
+                if (food.x === segment.x && food.y === segment.y) {
+                    generateFood();
+                    return;
+                }
+            }
+        }
+
+        function checkLevelUp() {
+            if (score >= 50 && !completedLevels.has(1)) {
+                completedLevels.add(1);
+                levelDisplay.textContent = "Nivel 1";
+                document.getElementById('level1').classList.add('completed');
+            }
+            if (score >= 100 && !completedLevels.has(2)) {
+                completedLevels.add(2);
+                levelDisplay.textContent = "Nivel 2";
+                document.getElementById('level2').classList.add('completed');
+                showPrizeModal('¡Nivel 2 Completado!', '¡Felicidades! Has ganado HBO Max 🎬');
+            }
+            if (score >= 200 && !completedLevels.has(3)) {
+                completedLevels.add(3);
+                levelDisplay.textContent = "Nivel 3";
+                document.getElementById('level3').classList.add('completed');
+                showPrizeModal('¡Nivel 3 IMPOSIBLE Completado!', '¡INCREÍBLE! Has ganado Netflix 15 días 📺');
+            }
+        }
+
+        function showPrizeModal(title, message) {
+            gamePaused = true;
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').textContent = message;
+            document.getElementById('finalScore').textContent = score;
+            modal.style.display = 'flex';
+            
+            setTimeout(() => {
+                modal.style.display = 'none';
+                gamePaused = false;
+            }, 3000);
+        }
+
+        function endGame(won) {
+            gameRunning = false;
+            clearInterval(gameLoop);
+            
+            document.getElementById('modalTitle').textContent = won ? '¡Ganaste!' : 'Game Over';
+            document.getElementById('modalMessage').textContent = won ? '¡Completaste todos los niveles!' : 'La serpiente chocó';
+            document.getElementById('finalScore').textContent = score;
+            modal.style.display = 'flex';
+            
+            startBtn.style.display = 'inline-block';
+            pauseBtn.style.display = 'none';
+        }
+
+        function startGame() {
+            snake = [{x: 10, y: 10}];
+            dx = 1;
+            dy = 0;
+            score = 0;
+            completedLevels.clear();
+            scoreDisplay.textContent = '0';
+            levelDisplay.textContent = '-';
+            gameRunning = true;
+            gamePaused = false;
+            
+            document.querySelectorAll('.level-item').forEach(item => {
+                item.classList.remove('completed');
+            });
+            
+            generateFood();
+            drawGame();
+            
+            gameLoop = setInterval(moveSnake, 100);
+            
+            startBtn.style.display = 'none';
+            pauseBtn.style.display = 'inline-block';
+        }
+
+        function togglePause() {
+            gamePaused = !gamePaused;
+            pauseBtn.textContent = gamePaused ? 'Reanudar' : 'Pausar';
+        }
+
+        startBtn.addEventListener('click', startGame);
+        pauseBtn.addEventListener('click', togglePause);
+
+        // Initial draw
+        drawGame();
+    </script>
 </body>
 </html>
