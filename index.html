@@ -3,16 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Reto Streaming</title>
+    <title>Reto Streaming - La Culebrita</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div id="game-container">
-        <div id="ui">
-            <h2>Nivel: <span id="level-display">1</span></h2>
-            <p id="reward-text">Meta: ¡Llega al final!</p>
+        <h1>RETO CULEBRITA</h1>
+        <p>Envía tu captura de puntaje</p>
+        <canvas id="snakeCanvas"></canvas>
+        <h2 style="color:white;">Puntos: <span id="score">0</span></h2>
+        <p style="color:white; font-size: 0.8em;">
+            Nivel 1 (50 pts): Sin premio<br>
+            Nivel 2 (100 pts): HBO Max<br>
+            Nivel 3 (200 pts): Netflix 15 Días
+        </p>
+        <div id="controls-mobile">
+            <button onclick="changeDirection('UP')">⬆️</button>
+            <div>
+                <button onclick="changeDirection('LEFT')">⬅️</button>
+                <button onclick="changeDirection('RIGHT')">➡️</button>
+            </div>
+            <button onclick="changeDirection('DOWN')">⬇️</button>
         </div>
-        <canvas id="gameCanvas"></canvas>
     </div>
     <script src="script.js"></script>
 </body>
