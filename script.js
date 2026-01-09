@@ -1,131 +1,87 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
-const scoreEl = document.getElementById('score');
+const levelDisp = document.getElementById('level-display');
+const rewardText = document.getElementById('reward-text');
 
-// Ajuste de pantalla completa
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+canvas.width = 350;
+canvas.height = 500;
 
-let score = 0;
-let isDragging = false;
+let currentLevel = 1;
+let player = { x: 30, y: 30, radius: 10 };
+let goal = { x: 300, y: 450, w: 40, h: 40 };
 
-// POSICIÓN CORREGIDA: Movido a la derecha (x: 200) para dar espacio a estirar
-const startX = 200;
-const startY = canvas.height - 180;
-
-let bird = { x: startX, y: startY, radius: 20, color: '#e74c3c', vx: 0, vy: 0, launched: false };
-const anchor = { x: startX, y: startY };
-
-// Objetivo (Precios Altos)
-let target = { x: canvas.width - 120, y: canvas.height - 110, width: 60, height: 60, color: '#2ecc71', alive: true };
+// Definición de Niveles (Obstáculos)
+const levels = {
+    1: { obstacles: [{x: 0, y: 150, w: 250, h: 40}, {x: 100, y: 300, w: 250, h: 40}], reward: "Sigue así..." },
+    2: { obstacles: [{x: 0, y: 100, w: 300, h: 25}, {x: 50, y: 200, w: 300, h: 25}, {x: 0, y: 300, w: 300, h: 25}, {x: 50, y: 400, w: 300, h: 25}], reward: "PREMIO: 1 Perfil HBO MAX" },
+    3: { obstacles: [{x: 0, y: 50, w: 320, h: 15}, {x: 30, y: 120, w: 320, h: 15}, {x: 0, y: 190, w: 320, h: 15}, {x: 30, y: 260, w: 320, h: 15}, {x: 0, y: 330, w: 320, h: 15}, {x: 30, y: 400, w: 320, h: 15}], reward: "IMPOSIBLE: Netflix 15 Días" }
+};
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    // Dibujar Suelo
-    ctx.fillStyle = '#2ed573';
-    ctx.fillRect(0, canvas.height - 50, canvas.width, 50);
+    // Dibujar Meta
+    ctx.fillStyle = "#f1c40f";
+    ctx.fillRect(goal.x, goal.y, goal.w, goal.h);
+    ctx.fillStyle = "black";
+    ctx.fillText("META", goal.x + 5, goal.y + 25);
 
-    // Dibujar Resortera
-    ctx.beginPath();
-    ctx.moveTo(anchor.x, anchor.y);
-    ctx.lineTo(bird.x, bird.y);
-    ctx.strokeStyle = '#4b2c20';
-    ctx.lineWidth = 4;
-    ctx.stroke();
+    // Dibujar Obstáculos
+    ctx.fillStyle = "#e74c3c";
+    levels[currentLevel].obstacles.forEach(obs => {
+        ctx.fillRect(obs.x, obs.y, obs.w, obs.h);
+    });
 
-    // Dibujar Proyectil (Tu logo o círculo)
+    // Dibujar Jugador
     ctx.beginPath();
-    ctx.arc(bird.x, bird.y, bird.radius, 0, Math.PI * 2);
-    ctx.fillStyle = bird.color;
+    ctx.arc(player.x, player.y, player.radius, 0, Math.PI * 2);
+    ctx.fillStyle = "#3498db";
     ctx.fill();
-    ctx.strokeStyle = "white";
-    ctx.stroke();
     ctx.closePath();
-
-    // Dibujar Objetivo
-    if (target.alive) {
-        ctx.fillStyle = target.color;
-        ctx.fillRect(target.x, target.y, target.width, target.height);
-        ctx.fillStyle = "black";
-        ctx.font = "bold 12px Arial";
-        ctx.fillText("PRECIO ALTO", target.x - 10, target.y - 10);
-    }
-
-    update();
-    requestAnimationFrame(draw);
 }
 
-function update() {
-    if (bird.launched) {
-        bird.x += bird.vx;
-        bird.y += bird.vy;
-        bird.vy += 0.6; // Gravedad un poco más pesada
-
-        // Colisión
-        if (target.alive && bird.x + bird.radius > target.x && bird.x - bird.radius < target.x + target.width &&
-            bird.y + bird.radius > target.y && bird.y - bird.radius < target.y + target.height) {
-            target.alive = false;
-            score += 100;
-            scoreEl.innerText = score;
-            setTimeout(() => {
-                alert("¡Nivel Superado! Avisa al soporte por tu descuento.");
-                resetGame();
-            }, 100);
-        }
-
-        // Reiniciar si sale de límites
-        if (bird.y > canvas.height || bird.x > canvas.width || bird.x < 0) {
-            resetGame();
-        }
-    }
-}
-
-// Eventos táctiles y mouse
-canvas.addEventListener('mousedown', startDrag);
-canvas.addEventListener('mousemove', drag);
-canvas.addEventListener('mouseup', launch);
-
-canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startDrag(e.touches[0]); }, {passive: false});
-canvas.addEventListener('touchmove', (e) => { e.preventDefault(); drag(e.touches[0]); }, {passive: false});
-canvas.addEventListener('touchend', launch);
-
-function startDrag(e) {
-    if (bird.launched) return;
-    const rect = canvas.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
+function checkCollision(nx, ny) {
+    // Bordes
+    if (nx < 10 || nx > canvas.width - 10 || ny < 10 || ny > canvas.height - 10) return true;
     
-    // Detectar si tocamos cerca del pájaro
-    if (Math.hypot(mx - bird.x, my - bird.y) < 50) {
-        isDragging = true;
+    // Obstáculos
+    let hit = false;
+    levels[currentLevel].obstacles.forEach(obs => {
+        if (nx + 10 > obs.x && nx - 10 < obs.x + obs.w && ny + 10 > obs.y && ny - 10 < obs.y + obs.h) {
+            hit = true;
+        }
+    });
+    return hit;
+}
+
+canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    let touch = e.touches[0];
+    let rect = canvas.getBoundingClientRect();
+    let nx = touch.clientX - rect.left;
+    let ny = touch.clientY - rect.top;
+
+    if (!checkCollision(nx, ny)) {
+        player.x = nx;
+        player.y = ny;
+    } else {
+        // Si choca, regresa al inicio del nivel
+        player.x = 30;
+        player.y = 30;
     }
-}
 
-function drag(e) {
-    if (!isDragging) return;
-    const rect = canvas.getBoundingClientRect();
-    bird.x = e.clientX - rect.left;
-    bird.y = e.clientY - rect.top;
-}
-
-function launch() {
-    if (!isDragging) return;
-    isDragging = false;
-    bird.launched = true;
-    // POTENCIA CORREGIDA: Se multiplicó por 0.35 para que vuele más lejos
-    bird.vx = (anchor.x - bird.x) * 0.35; 
-    bird.vy = (anchor.y - bird.y) * 0.35;
-}
-
-function resetGame() {
-    bird.x = startX;
-    bird.y = startY;
-    bird.vx = 0;
-    bird.vy = 0;
-    bird.launched = false;
-    target.alive = true;
-    target.x = Math.random() * (canvas.width - 250) + 200;
-}
+    // Ganar Nivel
+    if (player.x > goal.x && player.y > goal.y) {
+        if (currentLevel < 3) {
+            currentLevel++;
+            player.x = 30; player.y = 30;
+            levelDisp.innerText = currentLevel;
+            rewardText.innerText = levels[currentLevel].reward;
+        } else {
+            alert("¡LO LOGRASTE! Envía captura de este mensaje: PREMIO NETFLIX 15 DÍAS");
+        }
+    }
+    draw();
+}, {passive: false});
 
 draw();
