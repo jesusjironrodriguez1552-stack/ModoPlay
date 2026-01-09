@@ -206,6 +206,113 @@
             color: #666;
         }
 
+        .instructions-modal {
+            display: flex;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .instructions-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalShow 0.3s;
+        }
+
+        .instructions-content h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .control-section {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f7f7f7;
+            border-radius: 10px;
+        }
+
+        .control-section h3 {
+            color: #764ba2;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .arrows-diagram {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .arrow-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .arrow-example {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            font-size: 1.5em;
+        }
+
+        .arrow-valid {
+            color: #4caf50;
+            font-weight: bold;
+        }
+
+        .arrow-invalid {
+            color: #f44336;
+            font-weight: bold;
+        }
+
+        .example-text {
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        .touch-example {
+            text-align: center;
+            padding: 15px;
+            background: #e3f2fd;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .touch-example p {
+            margin: 8px 0;
+            font-size: 1.1em;
+        }
+
+        .swipe-icon {
+            font-size: 2em;
+            margin: 10px 0;
+        }
+
+        .start-game-btn {
+            width: 100%;
+            margin-top: 20px;
+            padding: 15px;
+            font-size: 1.2em;
+        }
+
         @media (max-width: 600px) {
             .container {
                 padding: 15px;
@@ -270,6 +377,128 @@
     </style>
 </head>
 <body>
+    <div class="instructions-modal" id="instructionsModal">
+        <div class="instructions-content">
+            <h2>📖 Cómo Jugar Snake</h2>
+            
+            <div class="control-section">
+                <h3>📱 Controles en Celular</h3>
+                <div class="touch-example">
+                    <p><strong>Desliza el dedo sobre la pantalla</strong></p>
+                    <p>hacia la dirección donde deseas girar</p>
+                    <div class="swipe-icon">👆 ↑ ↓ ← →</div>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3>⌨️ Controles en PC</h3>
+                <p style="text-align: center; margin: 10px 0;">
+                    <strong>Usa las flechas del teclado</strong><br>
+                    ↑ ↓ ← →
+                </p>
+            </div>
+
+            <div class="control-section">
+                <h3>⚠️ Regla Importante: NO PUEDES RETROCEDER</h3>
+                <p style="margin-bottom: 15px;">La serpiente solo puede girar 90 grados (perpendicular)</p>
+                
+                <div class="arrows-diagram">
+                    <p><strong>Si vas hacia la DERECHA →</strong></p>
+                    <div class="arrow-row">
+                        <div class="arrow-example">
+                            <span>→</span>
+                            <span>➜</span>
+                            <span class="arrow-valid">↑ ✓</span>
+                        </div>
+                        <div class="arrow-example">
+                            <span>→</span>
+                            <span>➜</span>
+                            <span class="arrow-valid">↓ ✓</span>
+                        </div>
+                    </div>
+                    <div class="arrow-example">
+                        <span>→</span>
+                        <span>➜</span>
+                        <span class="arrow-invalid">← ✗ (chocas contigo)</span>
+                    </div>
+                </div>
+
+                <div class="arrows-diagram">
+                    <p><strong>Si vas hacia ARRIBA ↑</strong></p>
+                    <div class="arrow-row">
+                        <div class="arrow-example">
+                            <span>↑</span>
+                            <span>➜</span>
+                            <span class="arrow-valid">← ✓</span>
+                        </div>
+                        <div class="arrow-example">
+                            <span>↑</span>
+                            <span>➜</span>
+                            <span class="arrow-valid">→ ✓</span>
+                        </div>
+                    </div>
+                    <div class="arrow-example">
+                        <span>↑</span>
+                        <span>➜</span>
+                        <span class="arrow-invalid">↓ ✗ (chocas contigo)</span>
+                    </div>
+                </div>
+
+                <div class="arrows-diagram">
+                    <p><strong>Si vas hacia la IZQUIERDA ←</strong></p>
+                    <div class="arrow-row">
+                        <div class="arrow-example">
+                            <span>←</span>
+                            <span>➜</span>
+                            <span class="arrow-valid">↑ ✓</span>
+                        </div>
+                        <div class="arrow-example">
+                            <span>←</span>
+                            <span>➜</span>
+                            <span class="arrow-valid">↓ ✓</span>
+                        </div>
+                    </div>
+                    <div class="arrow-example">
+                        <span>←</span>
+                        <span>➜</span>
+                        <span class="arrow-invalid">→ ✗ (chocas contigo)</span>
+                    </div>
+                </div>
+
+                <div class="arrows-diagram">
+                    <p><strong>Si vas hacia ABAJO ↓</strong></p>
+                    <div class="arrow-row">
+                        <div class="arrow-example">
+                            <span>↓</span>
+                            <span>➜</span>
+                            <span class="arrow-valid">← ✓</span>
+                        </div>
+                        <div class="arrow-example">
+                            <span>↓</span>
+                            <span>➜</span>
+                            <span class="arrow-valid">→ ✓</span>
+                        </div>
+                    </div>
+                    <div class="arrow-example">
+                        <span>↓</span>
+                        <span>➜</span>
+                        <span class="arrow-invalid">↑ ✗ (chocas contigo)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="control-section">
+                <h3>🎯 Objetivo</h3>
+                <p>• Come las manzanas rojas 🔴 para crecer</p>
+                <p>• Cada manzana = 10 puntos</p>
+                <p>• No choques con las paredes ni contigo mismo</p>
+                <p>• Alcanza los niveles para ganar premios</p>
+            </div>
+
+            <button class="start-game-btn" onclick="closeInstructions()">¡Entendido, Jugar Ahora!</button>
+        </div>
+    </div>
+
     <div class="container">
         <h1>🐍 Snake - Culebrita</h1>
         
@@ -589,6 +818,10 @@
 
         startBtn.addEventListener('click', startGame);
         pauseBtn.addEventListener('click', togglePause);
+
+        function closeInstructions() {
+            document.getElementById('instructionsModal').style.display = 'none';
+        }
 
         // Initial draw
         drawGame();
