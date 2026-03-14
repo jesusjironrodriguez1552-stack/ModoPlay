@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Netflix Admin</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:100vh}
+.sidebar{position:fixed;top:0;left:0;width:220px;height:100vh;background:#141414;border-right:1px solid #222;display:flex;flex-direction:column;z-index:100}
+.logo{padding:20px;font-size:20px;font-weight:700;color:#E50914;border-bottom:1px solid #222;letter-spacing:2px}
+.nav{flex:1;padding:12px 0}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:14px;color:#999;cursor:pointer}
+.nav-item:hover,.nav-item.active{background:#1e1e1e;color:#fff}
+.nav-item.active{border-left:3px solid #E50914}
+.main{margin-left:220px;padding:24px;min-height:100vh}
+.page{display:none}.page.active{display:block}
+h2{font-size:18px;font-weight:500;margin-bottom:20px;color:#fff}
+.card{background:#141414;border:1px solid #222;border-radius:10px;padding:20px;margin-bottom:16px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.stat{background:#1e1e1e;border-radius:8px;padding:16px}
+.stat-label{font-size:12px;color:#666;margin-bottom:6px}
+.stat-value{font-size:24px;font-weight:500;color:#fff}
+.btn{padding:8px 16px;border-radius:8px;border:1px solid #333;background:#1e1e1e;color:#fff;cursor:pointer;font-size:13px}
+.btn:hover{background:#2a2a2a}
+.btn-red{background:#E50914;color:#fff;border-color:#E50914}
+.btn-red:hover{background:#c40812}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:10px 12px;border-bottom:1px solid #222;font-weight:500;font-size:12px;color:#666}
+td{padding:10px 12px;border-bottom:1px solid #1a1a1a;color:#ccc}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#1a1a1a}
+input,select,textarea{width:100%;padding:8px 12px;border:1px solid #333;border-radius:8px;background:#1e1e1e;color:#fff;font-size:13px;margin-bottom:12px}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#E50914}
+label{font-size:13px;color:#888;display:block;margin-bottom:4px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500}
+.badge-green{background:#0d2b1a;color:#4caf50}
+.badge-red{background:#2b0d0d;color:#f44336}
+.badge-amber{background:#2b200d;color:#ff9800}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:200;align-items:center;justify-content:center}
+.modal.open{display:flex}
+.modal-box{background:#141414;border-radius:10px;padding:24px;width:500px;max-width:95vw;border:1px solid #333}
+.modal-title{font-size:16px;font-weight:500;margin-bottom:16px;color:#fff}
+.flex{display:flex;align-items:center;gap:8px}
+.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0a0a0a}
+.login-box{background:#141414;border:1px solid #222;border-radius:10px;padding:32px;width:360px}
+.tag{display:inline-block;padding:2px 8px;font-size:11px;border-radius:20px;background:#1e1e1e;color:#888}
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:#0a0a0a}
+::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
+</style>
+</head>
+<body>
+
+<div id="login-screen" class="login-wrap">
+  <div class="login-box">
+    <div style="font-size:24px;font-weight:700;color:#E50914;letter-spacing:2px;margin-bottom:4px">NETFLIX</div>
+    <div style="font-size:13px;color:#666;margin-bottom:24px">Panel de administración</div>
+    <label>Usuario</label>
+    <input id="admin-user" type="text" placeholder="admin">
+    <label>Contraseña</label>
+    <input id="admin-pass" type="password" placeholder="••••••••">
+    <div id="login-err" style="color:#f44336;font-size:12px;margin-bottom:8px;display:none">Usuario o contraseña incorrectos</div>
+    <button class="btn btn-red" style="width:100%;margin-top:4px" onclick="doLogin()">Ingresar</button>
+  </div>
+</div>
+
+<div id="app" style="display:none">
+  <div class="sidebar">
+    <div class="logo">NETFLIX</div>
+    <nav class="nav">
+      <div class="nav-item active" onclick="showPage('dashboard',this)">📊 Dashboard</div>
+      <div class="nav-item" onclick="showPage('peliculas',this)">🎬 Películas</div>
+      <div class="nav-item" onclick="showPage('series',this)">📺 Series</div>
+      <div class="nav-item" onclick="showPage('usuarios',this)">👥 Usuarios</div>
+      <div class="nav-item" onclick="showPage('importar',this)">⬇ Importar catálogo</div>
+    </nav>
+    <div style="padding:16px;border-top:1px solid #222">
+      <button class="btn" style="width:100%;font-size:12px" onclick="logout()">Cerrar sesión</button>
+    </div>
+  </div>
+
+  <div class="main">
+
+    <div id="page-dashboard" class="page active">
+      <h2>Dashboard</h2>
+      <div class="stats">
+        <div class="stat"><div class="stat-label">Películas</div><div class="stat-value" id="stat-peliculas">—</div></div>
+        <div class="stat"><div class="stat-label">Series</div><div class="stat-value" id="stat-series">—</div></div>
+        <div class="stat"><div class="stat-label">Usuarios activos</div><div class="stat-value" id="stat-usuarios">—</div></div>
+        <div class="stat"><div class="stat-label">Vencen en 3 días</div><div class="stat-value" id="stat-vencen" style="color:#E50914">—</div></div>
+      </div>
+      <div class="card">
+        <div style="font-size:14px;font-weight:500;margin-bottom:16px">Usuarios próximos a vencer</div>
+        <table><thead><tr><th>Nombre</th><th>Correo</th><th>Vence</th><th>Estado</th></tr></thead>
+        <tbody id="tbody-vencen"></tbody></table>
+      </div>
+    </div>
+
+    <div id="page-peliculas" class="page">
+      <div class="flex" style="margin-bottom:20px;justify-content:space-between">
+        <h2 style="margin:0">Películas</h2>
+        <div class="flex">
+          <input type="text" id="search-pel" placeholder="Buscar..." style="width:200px;margin:0" oninput="filterPeliculas()">
+          <button class="btn btn-red" onclick="openModal('modal-add-pelicula')">+ Agregar</button>
+        </div>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <table><thead><tr><th>Título</th><th>Género</th><th>TMDB ID</th><th>Acciones</th></tr></thead>
+        <tbody id="tbody-peliculas"></tbody></table>
+      </div>
+    </div>
+
+    <div id="page-series" class="page">
+      <div class="flex" style="margin-bottom:20px;justify-content:space-between">
+        <h2 style="margin:0">Series</h2>
+        <div class="flex">
+          <input type="text" id="search-ser" placeholder="Buscar..." style="width:200px;margin:0" oninput="filterSeries()">
+          <button class="btn btn-red" onclick="openModal('modal-add-serie')">+ Agregar</button>
+        </div>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <table><thead><tr><th>Título</th><th>Género</th><th>TMDB ID</th><th>Acciones</th></tr></thead>
+        <tbody id="tbody-series"></tbody></table>
+      </div>
+    </div>
+
+    <div id="page-usuarios" class="page">
+      <div class="flex" style="margin-bottom:20px;justify-content:space-between">
+        <h2 style="margin:0">Usuarios</h2>
+        <button class="btn btn-red" onclick="openModal('modal-add-usuario')">+ Agregar usuario</button>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <table><thead><tr><th>Correo</th><th>Nombre</th><th>Vence</th><th>Estado</th><th>Acciones</th></tr></thead>
+        <tbody id="tbody-usuarios"></tbody></table>
+      </div>
+    </div>
+
+    <div id="page-importar" class="page">
+      <h2>Importar catálogo</h2>
+      <div class="card" style="margin-bottom:16px">
+        <div style="font-size:14px;font-weight:500;margin-bottom:16px">Importar desde TMDB (Netflix)</div>
+        <div class="form-row">
+          <div>
+            <label>Región</label>
+            <select id="imp-region">
+              <option value="PE">Perú</option><option value="MX">México</option>
+              <option value="AR">Argentina</option><option value="ES">España</option>
+              <option value="US">Estados Unidos</option>
+            </select>
+          </div>
+          <div>
+            <label>Páginas (20 items c/u)</label>
+            <input type="number" id="imp-paginas" value="5" min="1" max="20">
+          </div>
+        </div>
+        <div class="flex">
+          <button class="btn btn-red" onclick="importarTMDB('movie')">Importar películas</button>
+          <button class="btn btn-red" onclick="importarTMDB('tv')">Importar series</button>
+        </div>
+        <div id="imp-log" style="margin-top:16px;font-size:12px;color:#888;background:#1e1e1e;padding:12px;border-radius:8px;display:none;max-height:200px;overflow-y:auto;font-family:monospace"></div>
+      </div>
+      <div class="card">
+        <div style="font-size:14px;font-weight:500;margin-bottom:16px">Agregar manualmente por TMDB ID</div>
+        <div class="form-row">
+          <div><label>TMDB ID</label><input type="text" id="man-tmdbid" placeholder="ej: 1084242"></div>
+          <div><label>Tipo</label><select id="man-tipo"><option value="movie">Película</option><option value="tv">Serie</option></select></div>
+        </div>
+        <button class="btn btn-red" onclick="buscarTMDB()">Buscar y agregar</button>
+        <div id="man-result" style="margin-top:12px;font-size:13px;color:#888"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODALES -->
+<div class="modal" id="modal-add-pelicula">
+  <div class="modal-box">
+    <div class="modal-title">Agregar película</div>
+    <label>TMDB ID</label><input id="ap-tmdb" placeholder="ej: 1084242">
+    <label>Título</label><input id="ap-titulo">
+    <label>Género</label><input id="ap-genero">
+    <label>Sinopsis</label><textarea id="ap-sinopsis" rows="3" style="resize:none"></textarea>
+    <label>URL Imagen</label><input id="ap-imagen">
+    <div class="flex" style="justify-content:flex-end;gap:8px;margin-top:4px">
+      <button class="btn" onclick="closeModal('modal-add-pelicula')">Cancelar</button>
+      <button class="btn btn-red" onclick="addPelicula()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal-add-serie">
+  <div class="modal-box">
+    <div class="modal-title">Agregar serie</div>
+    <label>TMDB ID</label><input id="as-tmdb" placeholder="ej: 1399">
+    <label>Título</label><input id="as-titulo">
+    <label>Género</label><input id="as-genero">
+    <label>Sinopsis</label><textarea id="as-sinopsis" rows="3" style="resize:none"></textarea>
+    <label>URL Imagen</label><input id="as-imagen">
+    <div class="flex" style="justify-content:flex-end;gap:8px;margin-top:4px">
+      <button class="btn" onclick="closeModal('modal-add-serie')">Cancelar</button>
+      <button class="btn btn-red" onclick="addSerie()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal-add-usuario">
+  <div class="modal-box">
+    <div class="modal-title">Agregar usuario</div>
+    <label>Correo</label><input id="au-correo" type="email">
+    <label>Contraseña</label><input id="au-pass" type="password">
+    <label>Nombre</label><input id="au-nombre">
+    <label>Fecha de expiración</label><input id="au-fecha" type="date">
+    <div class="flex" style="justify-content:flex-end;gap:8px;margin-top:4px">
+      <button class="btn" onclick="closeModal('modal-add-usuario')">Cancelar</button>
+      <button class="btn btn-red" onclick="addUsuario()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal-renovar">
+  <div class="modal-box">
+    <div class="modal-title">Renovar membresía</div>
+    <div id="renovar-nombre" style="font-size:13px;color:#888;margin-bottom:12px"></div>
+    <label>Nueva fecha de expiración</label>
+    <input id="renovar-fecha" type="date">
+    <input type="hidden" id="renovar-id">
+    <div class="flex" style="justify-content:flex-end;gap:8px;margin-top:4px">
+      <button class="btn" onclick="closeModal('modal-renovar')">Cancelar</button>
+      <button class="btn btn-red" onclick="renovarUsuario()">Renovar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL='https://ngnutcjeuknwiaebduun.supabase.co';
+const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nbnV0Y2pldWtud2lhZWJkdXVuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MzA2NzMzMSwiZXhwIjoyMDg4NjQzMzMxfQ.fCR9D9ZpMYJJJN7DK84kzq7Aq7qdl7gAvBa_xMZhmv4';
+const TMDB_TOKEN='eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3YWIyYjAzZmZhZjM5YjQwYzY1ODJjNGZiMTk4OWQ5ZCIsIm5iZiI6MTc3MzQ0ODkwNy45NjYsInN1YiI6IjY5YjRhZWNiNmRiMTcyZTRjNjA4ZTA3MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.FxR21tOcS7NAzgFz6NtzbNOtVrsEEEwxpNj1hCLuYzQ';
+const ADMIN_USER='admin';
+const ADMIN_PASS='netflix2026';
+let allPeliculas=[],allSeries=[],allUsuarios=[];
+const GENEROS_MAP={28:'Acción',12:'Aventura',16:'Animación',35:'Comedia',80:'Crimen',99:'Documental',18:'Drama',10751:'Familia',14:'Fantasía',36:'Historia',27:'Terror',9648:'Misterio',10749:'Romance',878:'Ciencia Ficción',53:'Suspenso',10759:'Acción y Aventura',10765:'Sci-Fi y Fantasía'};
+
+async function sb(tabla,method='GET',body=null,extra=''){
+  const res=await fetch(`${SUPABASE_URL}/rest/v1/${tabla}${extra}`,{method,headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json','Prefer':method==='POST'?'return=minimal':''},body:body?JSON.stringify(body):null});
+  if(method==='GET')return res.json();
+  return res;
+}
+
+function doLogin(){
+  const u=document.getElementById('admin-user').value;
+  const p=document.getElementById('admin-pass').value;
+  if(u===ADMIN_USER&&p===ADMIN_PASS){
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='block';
+    loadAll();
+  }else{document.getElementById('login-err').style.display='block';}
+}
+function logout(){document.getElementById('app').style.display='none';document.getElementById('login-screen').style.display='flex';}
+function showPage(name,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  el.classList.add('active');
+}
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+async function loadAll(){loadDashboard();loadPeliculas();loadSeries();loadUsuarios();}
+
+async function loadDashboard(){
+  const[pels,sers,usrs]=await Promise.all([sb('peliculas','GET',null,'?select=id'),sb('series','GET',null,'?select=id'),sb('usuarios','GET',null,'?select=correo,nombre,fecha_expiracion,activo')]);
+  document.getElementById('stat-peliculas').textContent=pels.length||0;
+  document.getElementById('stat-series').textContent=sers.length||0;
+  document.getElementById('stat-usuarios').textContent=usrs.filter(u=>u.activo!==false).length;
+  const hoy=new Date();
+  const vencen=usrs.filter(u=>{const d=Math.ceil((new Date(u.fecha_expiracion)-hoy)/(864e5));return d>=0&&d<=3;});
+  document.getElementById('stat-vencen').textContent=vencen.length;
+  document.getElementById('tbody-vencen').innerHTML=vencen.length?vencen.map(u=>{const d=Math.ceil((new Date(u.fecha_expiracion)-hoy)/(864e5));return`<tr><td>${u.nombre||'—'}</td><td>${u.correo}</td><td>${u.fecha_expiracion?.substring(0,10)}</td><td><span class="badge badge-amber">${d===0?'Hoy':d+' día(s)'}</span></td></tr>`;}).join(''):'<tr><td colspan="4" style="color:#666;text-align:center;padding:20px">Ningún usuario próximo a vencer</td></tr>';
+}
+
+async function loadPeliculas(){allPeliculas=await sb('peliculas','GET',null,'?order=titulo&limit=500');renderPeliculas(allPeliculas);}
+function renderPeliculas(list){document.getElementById('tbody-peliculas').innerHTML=list.map(p=>`<tr><td><div style="font-weight:500;color:#fff">${p.titulo}</div></td><td><span class="tag">${p.genero||'—'}</span></td><td style="color:#666;font-size:12px">${p.tmdb_id||'—'}</td><td><button class="btn" style="font-size:12px;color:#f44336;padding:4px 10px" onclick="deletePelicula('${p.id}','${p.titulo.replace(/'/g,"\\'")}')">Eliminar</button></td></tr>`).join('');}
+function filterPeliculas(){const q=document.getElementById('search-pel').value.toLowerCase();renderPeliculas(allPeliculas.filter(p=>(p.titulo||'').toLowerCase().includes(q)));}
+
+async function loadSeries(){allSeries=await sb('series','GET',null,'?order=titulo&limit=500');renderSeries(allSeries);}
+function renderSeries(list){document.getElementById('tbody-series').innerHTML=list.map(s=>`<tr><td><div style="font-weight:500;color:#fff">${s.titulo}</div></td><td><span class="tag">${s.genero||'—'}</span></td><td style="color:#666;font-size:12px">${s.tmdb_id||'—'}</td><td><button class="btn" style="font-size:12px;color:#f44336;padding:4px 10px" onclick="deleteSerie('${s.id}','${s.titulo.replace(/'/g,"\\'")}')">Eliminar</button></td></tr>`).join('');}
+function filterSeries(){const q=document.getElementById('search-ser').value.toLowerCase();renderSeries(allSeries.filter(s=>(s.titulo||'').toLowerCase().includes(q)));}
+
+async function loadUsuarios(){
+  allUsuarios=await sb('usuarios','GET',null,'?order=fecha_expiracion');
+  const hoy=new Date();
+  document.getElementById('tbody-usuarios').innerHTML=allUsuarios.map(u=>{
+    const d=Math.ceil((new Date(u.fecha_expiracion)-hoy)/(864e5));
+    const badge=d<0?'<span class="badge badge-red">Vencido</span>':d<=3?'<span class="badge badge-amber">Vence pronto</span>':'<span class="badge badge-green">Activo</span>';
+    return`<tr><td>${u.correo}</td><td>${u.nombre||'—'}</td><td>${u.fecha_expiracion?.substring(0,10)||'—'}</td><td>${badge}</td><td><div class="flex"><button class="btn" style="font-size:12px;padding:4px 10px" onclick="openRenovar('${u.id}','${u.correo}')">Renovar</button><button class="btn" style="font-size:12px;color:#f44336;padding:4px 10px" onclick="deleteUsuario('${u.id}','${u.correo}')">Eliminar</button></div></td></tr>`;
+  }).join('');
+}
+
+async function addPelicula(){
+  const row={tmdb_id:document.getElementById('ap-tmdb').value,titulo:document.getElementById('ap-titulo').value,genero:document.getElementById('ap-genero').value,sinopsis:document.getElementById('ap-sinopsis').value,url_imagen:document.getElementById('ap-imagen').value,url_video:''};
+  if(!row.titulo){alert('El título es requerido');return;}
+  await sb('peliculas','POST',row);closeModal('modal-add-pelicula');loadPeliculas();loadDashboard();
+}
+async function addSerie(){
+  const row={tmdb_id:document.getElementById('as-tmdb').value,titulo:document.getElementById('as-titulo').value,genero:document.getElementById('as-genero').value,sinopsis:document.getElementById('as-sinopsis').value,url_imagen:document.getElementById('as-imagen').value};
+  if(!row.titulo){alert('El título es requerido');return;}
+  await sb('series','POST',row);closeModal('modal-add-serie');loadSeries();loadDashboard();
+}
+async function addUsuario(){
+  const row={correo:document.getElementById('au-correo').value,contrasena:document.getElementById('au-pass').value,nombre:document.getElementById('au-nombre').value,fecha_expiracion:document.getElementById('au-fecha').value,activo:true};
+  if(!row.correo||!row.contrasena){alert('Correo y contraseña son requeridos');return;}
+  await sb('usuarios','POST',row);closeModal('modal-add-usuario');loadUsuarios();loadDashboard();
+}
+function openRenovar(id,correo){
+  document.getElementById('renovar-id').value=id;
+  document.getElementById('renovar-nombre').textContent=correo;
+  const d=new Date();d.setMonth(d.getMonth()+1);
+  document.getElementById('renovar-fecha').value=d.toISOString().substring(0,10);
+  openModal('modal-renovar');
+}
+async function renovarUsuario(){
+  const id=document.getElementById('renovar-id').value;
+  const fecha=document.getElementById('renovar-fecha').value;
+  await fetch(`${SUPABASE_URL}/rest/v1/usuarios?id=eq.${id}`,{method:'PATCH',headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json'},body:JSON.stringify({fecha_expiracion:fecha,activo:true})});
+  closeModal('modal-renovar');loadUsuarios();loadDashboard();
+}
+async function deletePelicula(id,titulo){if(!confirm(`¿Eliminar "${titulo}"?`))return;await fetch(`${SUPABASE_URL}/rest/v1/peliculas?id=eq.${id}`,{method:'DELETE',headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});loadPeliculas();loadDashboard();}
+async function deleteSerie(id,titulo){if(!confirm(`¿Eliminar "${titulo}"?`))return;await fetch(`${SUPABASE_URL}/rest/v1/series?id=eq.${id}`,{method:'DELETE',headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});loadSeries();loadDashboard();}
+async function deleteUsuario(id,correo){if(!confirm(`¿Eliminar usuario "${correo}"?`))return;await fetch(`${SUPABASE_URL}/rest/v1/usuarios?id=eq.${id}`,{method:'DELETE',headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`}});loadUsuarios();loadDashboard();}
+
+async function buscarTMDB(){
+  const tmdbId=document.getElementById('man-tmdbid').value.trim();
+  const tipo=document.getElementById('man-tipo').value;
+  const res=document.getElementById('man-result');
+  if(!tmdbId){res.textContent='Ingresa un TMDB ID';return;}
+  res.textContent='Buscando...';
+  try{
+    const r=await fetch(`https://api.themoviedb.org/3/${tipo==='movie'?'movie':'tv'}/${tmdbId}?language=es-419`,{headers:{'Authorization':`Bearer ${TMDB_TOKEN}`}});
+    const d=await r.json();
+    if(d.success===false){res.textContent='No encontrado en TMDB';return;}
+    const titulo=d.title||d.name||'';
+    const sinopsis=d.overview||'';
+    const genero=d.genres?.map(g=>g.name).join(', ')||'';
+    const imagen=d.poster_path?`https://image.tmdb.org/t/p/w500${d.poster_path}`:'';
+    if(tipo==='movie'){await sb('peliculas','POST',{tmdb_id:tmdbId,titulo,sinopsis,genero,url_imagen:imagen,url_video:''});loadPeliculas();}
+    else{await sb('series','POST',{tmdb_id:tmdbId,titulo,sinopsis,genero,url_imagen:imagen});loadSeries();}
+    res.innerHTML=`<span style="color:#4caf50">✓ Agregado: ${titulo}</span>`;
+    loadDashboard();
+  }catch(e){res.textContent='Error: '+e.message;}
+}
+
+async function importarTMDB(tipo){
+  const region=document.getElementById('imp-region').value;
+  const paginas=parseInt(document.getElementById('imp-paginas').value)||5;
+  const log=document.getElementById('imp-log');
+  log.style.display='block';log.textContent='';
+  let total=0;
+  for(let p=1;p<=paginas;p++){
+    const r=await fetch(`https://api.themoviedb.org/3/discover/${tipo}?language=es-419&sort_by=popularity.desc&watch_region=${region}&with_watch_providers=8&page=${p}`,{headers:{'Authorization':`Bearer ${TMDB_TOKEN}`}});
+    const d=await r.json();
+    if(!d.results?.length)break;
+    const rows=d.results.map(item=>tipo==='movie'?{tmdb_id:item.id.toString(),titulo:item.title||item.original_title||'',sinopsis:item.overview||'',genero:item.genre_ids?.map(id=>GENEROS_MAP[id]).filter(Boolean).join(', ')||'Sin género',url_imagen:item.poster_path?`https://image.tmdb.org/t/p/w500${item.poster_path}`:'',url_video:''}:{tmdb_id:item.id.toString(),titulo:item.name||item.original_name||'',sinopsis:item.overview||'',genero:item.genre_ids?.map(id=>GENEROS_MAP[id]).filter(Boolean).join(', ')||'Sin género',url_imagen:item.poster_path?`https://image.tmdb.org/t/p/w500${item.poster_path}`:''});
+    const tabla=tipo==='movie'?'peliculas':'series';
+    const res=await fetch(`${SUPABASE_URL}/rest/v1/${tabla}`,{method:'POST',headers:{'apikey':SUPABASE_KEY,'Authorization':`Bearer ${SUPABASE_KEY}`,'Content-Type':'application/json','Prefer':'resolution=merge-duplicates'},body:JSON.stringify(rows)});
+    total+=rows.length;
+    log.textContent+=`Página ${p}/${paginas} — ${rows.length} items (${res.status===201?'OK':res.status})\n`;
+    log.scrollTop=log.scrollHeight;
+    await new Promise(r=>setTimeout(r,300));
+  }
+  log.textContent+=`\n✓ Completado: ${total} items importados`;
+  tipo==='movie'?loadPeliculas():loadSeries();
+  loadDashboard();
+}
+
+document.getElementById('admin-pass').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+</script>
+</body>
+</html>
