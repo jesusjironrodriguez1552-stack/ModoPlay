@@ -102,6 +102,7 @@ tbody tr:last-child td{border-bottom:none}
 .badge-amber{background:var(--amber-dim);color:var(--amber)}.badge-amber::before{background:var(--amber)}
 .badge-proc{background:var(--proc-dim);color:var(--proc)}.badge-proc::before{background:var(--proc);animation:pDot 1s infinite}
 .badge-gray{background:#1e1e1e;color:#777}.badge-gray::before{background:#555}
+.badge-blue{background:var(--blue-dim);color:var(--blue)}.badge-blue::before{background:var(--blue)}
 @keyframes pDot{0%,100%{opacity:1}50%{opacity:.2}}
 
 /* TOOLBAR */
@@ -130,6 +131,7 @@ tbody tr:last-child td{border-bottom:none}
 .srv-info{flex:1}.srv-name{font-size:13px;font-weight:500;margin-bottom:4px}
 .srv-detail{font-size:11px;color:var(--muted);font-family:var(--mono)}
 .srv-status{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--green)}
+.srv-status.offline{color:var(--err)}
 .speed-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
 .speed-box{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center}
 .speed-val{font-size:22px;font-weight:500;font-family:var(--mono)}
@@ -143,6 +145,18 @@ tbody tr:last-child td{border-bottom:none}
 .act-title{font-size:13px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .act-sub{font-size:11px;color:var(--muted);margin-top:2px}
 
+/* AZURE STATUS PANEL */
+.azure-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.azure-panel-title{font-size:13px;font-weight:500;margin-bottom:14px;display:flex;align-items:center;gap:8px;justify-content:space-between}
+.azure-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.azure-kv{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px}
+.azure-kv-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.azure-kv-val{font-size:15px;font-weight:500;font-family:var(--mono);color:var(--text)}
+.azure-kv-val.ok{color:var(--green)}
+.azure-kv-val.err{color:var(--err)}
+.azure-kv-val.proc{color:var(--proc)}
+.azure-err-box{background:var(--err-dim);border:1px solid rgba(239,68,68,.25);border-radius:8px;padding:14px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--err);margin-top:12px}
+
 /* EMPTY */
 .empty{text-align:center;padding:60px 20px;color:var(--muted)}
 .empty .icon{font-size:40px;margin-bottom:12px;opacity:.4}
@@ -152,13 +166,15 @@ tbody tr:last-child td{border-bottom:none}
 #toast{position:fixed;bottom:24px;right:24px;background:#222;border:1px solid #333;border-left:3px solid var(--green);color:var(--text);padding:12px 18px;border-radius:10px;font-size:13px;opacity:0;transform:translateY(8px);transition:.3s;z-index:9999;max-width:300px;pointer-events:none}
 #toast.show{opacity:1;transform:translateY(0)}
 
-@media(max-width:1100px){.stats{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:1100px){.stats{grid-template-columns:repeat(3,1fr)}.azure-row{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:900px){
   .stats{grid-template-columns:repeat(2,1fr)}
   .sidebar{width:60px}
   .sidebar-logo span,.nav-item span,.nav-group,.sidebar-footer{display:none}
   .nav-item{justify-content:center;padding:14px}
   .main{padding:20px 16px}
+  .srv-grid{grid-template-columns:1fr}
+  .azure-row{grid-template-columns:repeat(2,1fr)}
 }
 </style>
 </head>
@@ -236,17 +252,19 @@ tbody tr:last-child td{border-bottom:none}
       <!-- TRACTOR -->
       <div id="page-tractor" class="page">
         <div class="page-header">
-          <div class="page-title">Monitor del Tractor 🚜 <small>Azure VM · 20.201.73.185 · /home/ubuntu/cine_env/</small></div>
+          <div class="page-title">Monitor del Tractor 🚜 <small>Azure VM · 20.213.8.19 · Puerto 5000</small></div>
           <button class="btn btn-primary" onclick="loadAll()">↻ Actualizar ahora</button>
         </div>
+
+        <!-- Tarjetas de servidor -->
         <div class="srv-grid">
           <div class="srv-card">
             <div class="srv-icon">☁️</div>
             <div class="srv-info">
               <div class="srv-name">Servidor Azure</div>
-              <div class="srv-detail">20.201.73.185 · ubuntu · Puerto 22</div>
+              <div class="srv-detail">20.213.8.19 · Puerto 5000</div>
             </div>
-            <div class="srv-status"><span class="live-dot"></span>Online</div>
+            <div class="srv-status" id="azure-srv-status"><span class="live-dot off"></span>Verificando...</div>
           </div>
           <div class="srv-card">
             <div class="srv-icon">📁</div>
@@ -263,11 +281,44 @@ tbody tr:last-child td{border-bottom:none}
             </div>
           </div>
         </div>
+
+        <!-- Panel de estado Azure -->
+        <div class="azure-panel" id="azure-status-panel">
+          <div class="azure-panel-title">
+            <div style="display:flex;align-items:center;gap:8px">
+              <span style="width:6px;height:6px;border-radius:50%;background:var(--blue);display:inline-block"></span>
+              Estado del servidor Flask · <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">http://20.213.8.19:5000/status</span>
+            </div>
+            <span id="azure-ping-label" class="badge badge-gray">—</span>
+          </div>
+          <div class="azure-row" id="azure-kv-row">
+            <div class="azure-kv"><div class="azure-kv-label">Estado</div><div class="azure-kv-val" id="az-estado">—</div></div>
+            <div class="azure-kv"><div class="azure-kv-label">En proceso</div><div class="azure-kv-val proc" id="az-proc">—</div></div>
+            <div class="azure-kv"><div class="azure-kv-label">Completadas</div><div class="azure-kv-val ok" id="az-done">—</div></div>
+            <div class="azure-kv"><div class="azure-kv-label">Errores</div><div class="azure-kv-val err" id="az-err">—</div></div>
+          </div>
+          <!-- Campos extra que vengan del servidor -->
+          <div id="azure-extra-row" style="display:none;margin-top:10px">
+            <div class="azure-row" id="azure-extra-kv"></div>
+          </div>
+          <!-- Error de conexión -->
+          <div class="azure-err-box" id="azure-conn-err" style="display:none">
+            ⚠️ No se pudo conectar con el servidor Flask. Verifica que esté corriendo y que el puerto 5000 esté abierto en el firewall de Azure.
+          </div>
+          <!-- Raw JSON para debug -->
+          <details style="margin-top:12px">
+            <summary style="font-size:11px;color:var(--muted);cursor:pointer;user-select:none">Ver respuesta JSON completa</summary>
+            <pre id="azure-raw" style="font-size:11px;font-family:var(--mono);color:#555;margin-top:8px;white-space:pre-wrap;word-break:break-all;background:var(--surface2);padding:12px;border-radius:8px;border:1px solid var(--border)">—</pre>
+          </details>
+        </div>
+
+        <!-- Contadores Supabase -->
         <div class="speed-grid">
           <div class="speed-box"><div class="speed-val" id="spd-proc" style="color:var(--proc)">0</div><div class="speed-label">En proceso</div></div>
           <div class="speed-box"><div class="speed-val" id="spd-done" style="color:var(--green)">0</div><div class="speed-label">Completadas</div></div>
           <div class="speed-box"><div class="speed-val" id="spd-err" style="color:var(--err)">0</div><div class="speed-label">Errores</div></div>
         </div>
+
         <div class="card">
           <div class="card-title"><span class="dot" style="background:var(--proc)"></span>Descargas activas</div>
           <div id="tractor-activas"><div class="empty"><div class="icon">😴</div><p>El tractor no está descargando nada ahora mismo</p></div></div>
@@ -347,208 +398,313 @@ tbody tr:last-child td{border-bottom:none}
 <div id="toast"></div>
 
 <script>
-const S_URL='https://ngnutcjeuknwiaebduun.supabase.co';
-const S_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nbnV0Y2pldWtud2lhZWJkdXVuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MzA2NzMzMSwiZXhwIjoyMDg4NjQzMzMxfQ.fCR9D9ZpMYJJJN7DK84kzq7Aq7qdl7gAvBa_xMZhmv4';
-const CREDS={user:'admin',pass:'netflix2026'};
-const RELOAD=10000;
+/* ─── CONFIG ─────────────────────────────────────────────── */
+const S_URL  = 'https://ngnutcjeuknwiaebduun.supabase.co';
+const S_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nbnV0Y2pldWtud2lhZWJkdXVuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MzA2NzMzMSwiZXhwIjoyMDg4NjQzMzMxfQ.fCR9D9ZpMYJJJN7DK84kzq7Aq7qdl7gAvBa_xMZhmv4';
+const AZURE_STATUS_URL = 'http://20.213.8.19:5000/status';   // ← tu servidor Flask
+const CREDS  = { user: 'admin', pass: 'netflix2026' };
+const RELOAD = 10000;  // ms entre actualizaciones automáticas
 
-let allPeliculas=[],allSeries=[],allUsuarios=[];
-let pelPage=1,pelFiltered=[];
-const PER_PAGE=50;
-let timer=null,prevProcIds=new Set();
+let allPeliculas = [], allSeries = [], allUsuarios = [];
+let pelPage = 1, pelFiltered = [];
+const PER_PAGE = 50;
+let timer = null, prevProcIds = new Set();
 
-function doLogin(){
-  const u=document.getElementById('admin-user').value.trim();
-  const p=document.getElementById('admin-pass').value;
-  const err=document.getElementById('login-err');
-  if(u===CREDS.user&&p===CREDS.pass){
-    err.style.display='none';
-    document.getElementById('login-screen').style.display='none';
-    document.getElementById('app').style.display='block';
+/* ─── AUTH ───────────────────────────────────────────────── */
+function doLogin() {
+  const u = document.getElementById('admin-user').value.trim();
+  const p = document.getElementById('admin-pass').value;
+  const err = document.getElementById('login-err');
+  if (u === CREDS.user && p === CREDS.pass) {
+    err.style.display = 'none';
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
     loadAll();
-    timer=setInterval(loadAll,RELOAD);
+    timer = setInterval(loadAll, RELOAD);
   } else {
-    err.style.display='block';
-    document.getElementById('admin-pass').value='';
+    err.style.display = 'block';
+    document.getElementById('admin-pass').value = '';
   }
 }
-function doLogout(){clearInterval(timer);location.reload();}
+function doLogout() { clearInterval(timer); location.reload(); }
 
-function showPage(name,el){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('page-'+name).classList.add('active');
+/* ─── NAV ────────────────────────────────────────────────── */
+function showPage(name, el) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
   el.classList.add('active');
 }
 
-async function sb(tabla,query=''){
-  try{
-    const r=await fetch(`${S_URL}/rest/v1/${tabla}${query}`,{headers:{'apikey':S_KEY,'Authorization':`Bearer ${S_KEY}`}});
-    if(!r.ok)throw new Error(`HTTP ${r.status}`);
+/* ─── SUPABASE ───────────────────────────────────────────── */
+async function sb(tabla, query = '') {
+  try {
+    const r = await fetch(`${S_URL}/rest/v1/${tabla}${query}`, {
+      headers: { 'apikey': S_KEY, 'Authorization': `Bearer ${S_KEY}` }
+    });
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
     return r.json();
-  }catch(e){console.warn(`[sb] ${tabla}:`,e.message);return[];}
+  } catch (e) {
+    console.warn(`[sb] ${tabla}:`, e.message);
+    return [];
+  }
 }
 
-async function loadAll(){
-  try{
-    const [total,listos,enProc,errores,usrs]=await Promise.all([
-      sb('peliculas','?select=id'),
-      sb('peliculas','?estado=eq.completado&select=id'),
-      sb('peliculas','?estado=eq.en_proceso&select=id,titulo'),
-      sb('peliculas','?estado=eq.error&select=id,titulo'),
-      sb('usuarios','?select=id,email,plan,activo,created_at&order=created_at.desc&limit=200')
+/* ─── AZURE STATUS ───────────────────────────────────────── */
+async function loadAzureStatus() {
+  const connErr  = document.getElementById('azure-conn-err');
+  const pingLbl  = document.getElementById('azure-ping-label');
+  const srvStat  = document.getElementById('azure-srv-status');
+  const rawEl    = document.getElementById('azure-raw');
+
+  try {
+    const t0 = Date.now();
+    const res = await fetch(AZURE_STATUS_URL, {
+      method: 'GET',
+      // timeout: no hay fetch timeout nativo, usamos AbortController
+      signal: AbortSignal.timeout(8000)
+    });
+    const ms = Date.now() - t0;
+
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+    const data = await res.json();
+    connErr.style.display = 'none';
+
+    // Actualizar estado del servidor
+    srvStat.innerHTML = '<span class="live-dot"></span>Online';
+    srvStat.className = 'srv-status';
+    pingLbl.textContent = `${ms} ms`;
+    pingLbl.className = 'badge badge-green';
+    rawEl.textContent = JSON.stringify(data, null, 2);
+
+    // Campos principales conocidos (ajusta según tu respuesta real)
+    // Intentamos varios nombres posibles para ser robustos
+    const estado = data.status || data.estado || data.state || 'ok';
+    const proc   = data.en_proceso ?? data.processing ?? data.active ?? data.running ?? '—';
+    const done   = data.completado ?? data.completed   ?? data.done    ?? '—';
+    const errN   = data.error      ?? data.errors      ?? data.failed  ?? '—';
+
+    set('az-estado', estado);
+    set('az-proc',   proc);
+    set('az-done',   done);
+    set('az-err',    errN);
+
+    // Campos extra: cualquier otra clave del JSON que no sea las principales
+    const known = new Set(['status','estado','state','en_proceso','processing','active','running',
+                           'completado','completed','done','error','errors','failed']);
+    const extras = Object.entries(data).filter(([k]) => !known.has(k));
+    const extraRow  = document.getElementById('azure-extra-row');
+    const extraGrid = document.getElementById('azure-extra-kv');
+    if (extras.length) {
+      extraRow.style.display = 'block';
+      extraGrid.innerHTML = extras.map(([k, v]) => `
+        <div class="azure-kv">
+          <div class="azure-kv-label">${esc(k)}</div>
+          <div class="azure-kv-val">${esc(String(v))}</div>
+        </div>`).join('');
+    } else {
+      extraRow.style.display = 'none';
+    }
+
+  } catch (e) {
+    connErr.style.display = 'flex';
+    srvStat.innerHTML = '<span class="live-dot off"></span>Offline';
+    srvStat.className = 'srv-status offline';
+    pingLbl.textContent = 'Sin respuesta';
+    pingLbl.className = 'badge badge-red';
+    rawEl.textContent = 'Error: ' + e.message;
+    console.warn('[azure]', e.message);
+  }
+}
+
+/* ─── LOAD ALL ───────────────────────────────────────────── */
+async function loadAll() {
+  try {
+    // Llamadas en paralelo: Supabase + Azure
+    const [total, listos, enProc, errores, usrs] = await Promise.all([
+      sb('peliculas', '?select=id'),
+      sb('peliculas', '?estado=eq.completado&select=id'),
+      sb('peliculas', '?estado=eq.en_proceso&select=id,titulo'),
+      sb('peliculas', '?estado=eq.error&select=id,titulo'),
+      sb('usuarios',  '?select=id,email,plan,activo,created_at&order=created_at.desc&limit=200')
     ]);
 
-    const totalN=arr(total).length,listosN=arr(listos).length,procN=arr(enProc).length,errN=arr(errores).length,usrN=arr(usrs).length;
+    // Azure en paralelo también (no bloqueante)
+    loadAzureStatus();
 
-    set('stat-total',totalN);set('stat-proc',procN);set('stat-listos',listosN);set('stat-errores',errN);set('stat-usuarios',usrN);
-    set('badge-proc',procN);
+    const totalN = arr(total).length, listosN = arr(listos).length,
+          procN  = arr(enProc).length, errN = arr(errores).length,
+          usrN   = arr(usrs).length;
 
-    // live dot
-    const now=new Date();
-    document.getElementById('live-dot').className='live-dot';
-    set('live-text','En vivo · '+now.toLocaleTimeString('es-PE'));
-    set('last-sync',now.toLocaleTimeString('es-PE'));
+    set('stat-total',    totalN);
+    set('stat-proc',     procN);
+    set('stat-listos',   listosN);
+    set('stat-errores',  errN);
+    set('stat-usuarios', usrN);
+    set('badge-proc',    procN);
 
-    // progreso
-    const pct=totalN>0?(listosN/totalN*100).toFixed(1):0;
-    document.getElementById('main-progress').style.width=pct+'%';
-    set('progress-pct',pct+'%');
-    set('progress-counts',`${listosN} / ${totalN}`);
-    set('progress-text',`${listosN} completadas · ${procN} en proceso · ${errN} errores · ${totalN-listosN-procN-errN} pendientes`);
+    // Live dot
+    const now = new Date();
+    document.getElementById('live-dot').className = 'live-dot';
+    set('live-text', 'En vivo · ' + now.toLocaleTimeString('es-PE'));
+    set('last-sync',  now.toLocaleTimeString('es-PE'));
 
-    // tractor counters
-    set('spd-proc',procN);set('spd-done',listosN);set('spd-err',errN);
+    // Progreso
+    const pct = totalN > 0 ? (listosN / totalN * 100).toFixed(1) : 0;
+    document.getElementById('main-progress').style.width = pct + '%';
+    set('progress-pct',    pct + '%');
+    set('progress-counts', `${listosN} / ${totalN}`);
+    set('progress-text',   `${listosN} completadas · ${procN} en proceso · ${errN} errores · ${totalN - listosN - procN - errN} pendientes`);
 
-    // notificar nuevas descargas
-    const newIds=new Set(arr(enProc).map(p=>p.id));
-    arr(enProc).forEach(p=>{if(!prevProcIds.has(p.id))toast('Iniciando: '+p.titulo,true);});
-    prevProcIds=newIds;
+    // Tractor counters (Supabase)
+    set('spd-proc', procN);
+    set('spd-done', listosN);
+    set('spd-err',  errN);
 
-    // listas
-    renderListaProc(arr(enProc).slice(0,6));
-    renderListaErr(arr(errores).slice(0,6));
+    // Notificar nuevas descargas
+    const newIds = new Set(arr(enProc).map(p => p.id));
+    arr(enProc).forEach(p => { if (!prevProcIds.has(p.id)) toast('Iniciando: ' + p.titulo, true); });
+    prevProcIds = newIds;
+
+    // Listas
+    renderListaProc(arr(enProc).slice(0, 6));
+    renderListaErr(arr(errores).slice(0, 6));
     renderTractorActivas(arr(enProc));
     renderTractorErrores(arr(errores));
 
-    // usuarios
-    allUsuarios=arr(usrs);
+    // Usuarios
+    allUsuarios = arr(usrs);
     renderUsuarios(allUsuarios);
-    set('usuarios-count',`${usrN} usuarios registrados`);
+    set('usuarios-count', `${usrN} usuarios registrados`);
 
     loadPeliculas();
     loadSeries();
-  }catch(e){console.error('[loadAll]',e);}
+
+  } catch (e) { console.error('[loadAll]', e); }
 }
 
-async function loadPeliculas(){
-  const data=await sb('peliculas','?select=titulo,estado&order=titulo.asc&limit=1000');
-  allPeliculas=arr(data);
-  set('badge-pel',allPeliculas.length);
+/* ─── PELÍCULAS ──────────────────────────────────────────── */
+async function loadPeliculas() {
+  const data = await sb('peliculas', '?select=titulo,estado&order=titulo.asc&limit=1000');
+  allPeliculas = arr(data);
+  set('badge-pel', allPeliculas.length);
   filterPeliculas();
 }
-function filterPeliculas(){
-  const q=(document.getElementById('search-pel').value||'').toLowerCase();
-  const st=document.getElementById('filter-estado').value;
-  pelFiltered=allPeliculas.filter(p=>{
-    const s=p.estado||'pendiente';
-    return p.titulo.toLowerCase().includes(q)&&(!st||s===st);
+function filterPeliculas() {
+  const q  = (document.getElementById('search-pel').value || '').toLowerCase();
+  const st = document.getElementById('filter-estado').value;
+  pelFiltered = allPeliculas.filter(p => {
+    const s = p.estado || 'pendiente';
+    return p.titulo.toLowerCase().includes(q) && (!st || s === st);
   });
-  pelPage=1;renderPeliculas();
+  pelPage = 1; renderPeliculas();
 }
-function renderPeliculas(){
-  const total=pelFiltered.length,start=(pelPage-1)*PER_PAGE,slice=pelFiltered.slice(start,start+PER_PAGE);
-  set('peliculas-count',`${total} películas`);
-  if(!slice.length){
-    document.getElementById('tbody-peliculas').innerHTML='<tr><td colspan="3"><div class="empty"><div class="icon">🎬</div><p>Sin resultados</p></div></td></tr>';
-    document.getElementById('peliculas-pagination').innerHTML='';return;
+function renderPeliculas() {
+  const total = pelFiltered.length, start = (pelPage - 1) * PER_PAGE,
+        slice = pelFiltered.slice(start, start + PER_PAGE);
+  set('peliculas-count', `${total} películas`);
+  if (!slice.length) {
+    document.getElementById('tbody-peliculas').innerHTML = '<tr><td colspan="3"><div class="empty"><div class="icon">🎬</div><p>Sin resultados</p></div></td></tr>';
+    document.getElementById('peliculas-pagination').innerHTML = ''; return;
   }
-  document.getElementById('tbody-peliculas').innerHTML=slice.map((p,i)=>`
+  document.getElementById('tbody-peliculas').innerHTML = slice.map((p, i) => `
     <tr>
-      <td style="color:var(--muted);font-family:var(--mono);font-size:12px">${start+i+1}</td>
+      <td style="color:var(--muted);font-family:var(--mono);font-size:12px">${start + i + 1}</td>
       <td>${esc(p.titulo)}</td>
       <td>${badgeEstado(p.estado)}</td>
     </tr>`).join('');
-  const pages=Math.ceil(total/PER_PAGE);
-  document.getElementById('peliculas-pagination').innerHTML=pages>1?`
+  const pages = Math.ceil(total / PER_PAGE);
+  document.getElementById('peliculas-pagination').innerHTML = pages > 1 ? `
     <span>Página ${pelPage} de ${pages} · ${total} resultados</span>
     <div style="display:flex;gap:6px">
-      <button class="btn btn-sm" onclick="cambiarPag(-1)" ${pelPage===1?'disabled':''}>← Anterior</button>
-      <button class="btn btn-sm" onclick="cambiarPag(1)" ${pelPage===pages?'disabled':''}>Siguiente →</button>
-    </div>`:`<span>${total} resultados</span>`;
+      <button class="btn btn-sm" onclick="cambiarPag(-1)" ${pelPage === 1 ? 'disabled' : ''}>← Anterior</button>
+      <button class="btn btn-sm" onclick="cambiarPag(1)"  ${pelPage === pages ? 'disabled' : ''}>Siguiente →</button>
+    </div>` : `<span>${total} resultados</span>`;
 }
-function cambiarPag(d){pelPage+=d;renderPeliculas();}
+function cambiarPag(d) { pelPage += d; renderPeliculas(); }
 
-async function loadSeries(){
-  const data=await sb('series','?select=titulo,estado&order=titulo.asc&limit=500');
-  allSeries=arr(data);filterSeries();
+/* ─── SERIES ─────────────────────────────────────────────── */
+async function loadSeries() {
+  const data = await sb('series', '?select=titulo,estado&order=titulo.asc&limit=500');
+  allSeries = arr(data); filterSeries();
 }
-function filterSeries(){
-  const q=(document.getElementById('search-ser').value||'').toLowerCase();
-  const st=document.getElementById('filter-estado-ser').value;
-  const list=allSeries.filter(s=>{const e=s.estado||'pendiente';return s.titulo.toLowerCase().includes(q)&&(!st||e===st);});
-  if(!list.length){document.getElementById('tbody-series').innerHTML='<tr><td colspan="3"><div class="empty"><div class="icon">📺</div><p>Sin series</p></div></td></tr>';return;}
-  document.getElementById('tbody-series').innerHTML=list.map((s,i)=>`
+function filterSeries() {
+  const q  = (document.getElementById('search-ser').value || '').toLowerCase();
+  const st = document.getElementById('filter-estado-ser').value;
+  const list = allSeries.filter(s => {
+    const e = s.estado || 'pendiente';
+    return s.titulo.toLowerCase().includes(q) && (!st || e === st);
+  });
+  if (!list.length) {
+    document.getElementById('tbody-series').innerHTML = '<tr><td colspan="3"><div class="empty"><div class="icon">📺</div><p>Sin series</p></div></td></tr>'; return;
+  }
+  document.getElementById('tbody-series').innerHTML = list.map((s, i) => `
     <tr>
-      <td style="color:var(--muted);font-family:var(--mono);font-size:12px">${i+1}</td>
+      <td style="color:var(--muted);font-family:var(--mono);font-size:12px">${i + 1}</td>
       <td>${esc(s.titulo)}</td>
       <td>${badgeEstado(s.estado)}</td>
     </tr>`).join('');
 }
 
-function renderUsuarios(list){
-  if(!list.length){document.getElementById('tbody-usuarios').innerHTML='<tr><td colspan="5"><div class="empty"><div class="icon">👥</div><p>Sin usuarios</p></div></td></tr>';return;}
-  document.getElementById('tbody-usuarios').innerHTML=list.map((u,i)=>`
+/* ─── USUARIOS ───────────────────────────────────────────── */
+function renderUsuarios(list) {
+  if (!list.length) {
+    document.getElementById('tbody-usuarios').innerHTML = '<tr><td colspan="5"><div class="empty"><div class="icon">👥</div><p>Sin usuarios</p></div></td></tr>'; return;
+  }
+  document.getElementById('tbody-usuarios').innerHTML = list.map((u, i) => `
     <tr>
-      <td style="color:var(--muted);font-family:var(--mono);font-size:12px">${i+1}</td>
-      <td>${esc(u.email||'—')}</td>
-      <td>${esc(u.plan||'—')}</td>
-      <td>${u.activo!==undefined?`<span class="badge ${u.activo?'badge-green':'badge-red'}">${u.activo?'Activo':'Inactivo'}</span>`:'<span class="badge badge-gray">N/A</span>'}</td>
-      <td style="font-size:12px;color:var(--muted)">${u.created_at?new Date(u.created_at).toLocaleDateString('es-PE'):'—'}</td>
+      <td style="color:var(--muted);font-family:var(--mono);font-size:12px">${i + 1}</td>
+      <td>${esc(u.email || '—')}</td>
+      <td>${esc(u.plan  || '—')}</td>
+      <td>${u.activo !== undefined
+        ? `<span class="badge ${u.activo ? 'badge-green' : 'badge-red'}">${u.activo ? 'Activo' : 'Inactivo'}</span>`
+        : '<span class="badge badge-gray">N/A</span>'}</td>
+      <td style="font-size:12px;color:var(--muted)">${u.created_at ? new Date(u.created_at).toLocaleDateString('es-PE') : '—'}</td>
     </tr>`).join('');
 }
-function filterUsuarios(){
-  const q=(document.getElementById('search-usr').value||'').toLowerCase();
-  renderUsuarios(allUsuarios.filter(u=>(u.email||'').toLowerCase().includes(q)));
+function filterUsuarios() {
+  const q = (document.getElementById('search-usr').value || '').toLowerCase();
+  renderUsuarios(allUsuarios.filter(u => (u.email || '').toLowerCase().includes(q)));
 }
 
-function renderListaProc(list){
-  const el=document.getElementById('list-proceso');
-  if(!list.length){el.innerHTML='<div class="empty"><div class="icon">😴</div><p>Tractor inactivo</p></div>';return;}
-  el.innerHTML=list.map(p=>`
+/* ─── RENDER HELPERS ─────────────────────────────────────── */
+function renderListaProc(list) {
+  const el = document.getElementById('list-proceso');
+  if (!list.length) { el.innerHTML = '<div class="empty"><div class="icon">😴</div><p>Tractor inactivo</p></div>'; return; }
+  el.innerHTML = list.map(p => `
     <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
       <span style="font-size:14px">🔄</span>
       <span style="font-size:12px;color:#bbb;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.titulo)}</span>
       <span class="badge badge-proc">Activo</span>
-    </div>`).join('')+(list.length===6?'<p style="font-size:11px;color:var(--muted);padding-top:8px">+ más en Tractor</p>':'');
+    </div>`).join('') + (list.length === 6 ? '<p style="font-size:11px;color:var(--muted);padding-top:8px">+ más en Tractor</p>' : '');
 }
-function renderListaErr(list){
-  const el=document.getElementById('list-errores');
-  if(!list.length){el.innerHTML='<div class="empty"><div class="icon">✅</div><p>Sin errores</p></div>';return;}
-  el.innerHTML=list.map(p=>`
+function renderListaErr(list) {
+  const el = document.getElementById('list-errores');
+  if (!list.length) { el.innerHTML = '<div class="empty"><div class="icon">✅</div><p>Sin errores</p></div>'; return; }
+  el.innerHTML = list.map(p => `
     <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
       <span style="color:var(--err);font-size:14px">✕</span>
       <span style="font-size:12px;color:#bbb;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.titulo)}</span>
-    </div>`).join('')+(list.length===6?'<p style="font-size:11px;color:var(--muted);padding-top:8px">+ más en Tractor</p>':'');
+    </div>`).join('') + (list.length === 6 ? '<p style="font-size:11px;color:var(--muted);padding-top:8px">+ más en Tractor</p>' : '');
 }
-
-function renderTractorActivas(list){
-  const el=document.getElementById('tractor-activas');
-  if(!list.length){el.innerHTML='<div class="empty"><div class="icon">😴</div><p>El tractor no está descargando nada ahora mismo</p></div>';return;}
-  el.innerHTML='<div class="activity-feed">'+list.map(p=>`
+function renderTractorActivas(list) {
+  const el = document.getElementById('tractor-activas');
+  if (!list.length) { el.innerHTML = '<div class="empty"><div class="icon">😴</div><p>El tractor no está descargando nada ahora mismo</p></div>'; return; }
+  el.innerHTML = '<div class="activity-feed">' + list.map(p => `
     <div class="activity-item new-item">
       <div class="act-icon">🔄</div>
       <div class="act-body">
         <div class="act-title">${esc(p.titulo)}</div>
-        <div class="act-sub">en_proceso · Azure 20.201.73.185</div>
+        <div class="act-sub">en_proceso · Azure 20.213.8.19</div>
       </div>
       <span class="badge badge-proc">Activo</span>
-    </div>`).join('')+'</div>';
+    </div>`).join('') + '</div>';
 }
-function renderTractorErrores(list){
-  const el=document.getElementById('tractor-errores');
-  if(!list.length){el.innerHTML='<div class="empty"><div class="icon">✅</div><p>Sin errores registrados</p></div>';return;}
-  el.innerHTML='<div class="activity-feed">'+list.map(p=>`
+function renderTractorErrores(list) {
+  const el = document.getElementById('tractor-errores');
+  if (!list.length) { el.innerHTML = '<div class="empty"><div class="icon">✅</div><p>Sin errores registrados</p></div>'; return; }
+  el.innerHTML = '<div class="activity-feed">' + list.map(p => `
     <div class="activity-item">
       <div class="act-icon">❌</div>
       <div class="act-body">
@@ -556,24 +712,30 @@ function renderTractorErrores(list){
         <div class="act-sub">Link caído o archivo no encontrado (404)</div>
       </div>
       <span class="badge badge-red">Error</span>
-    </div>`).join('')+'</div>';
+    </div>`).join('') + '</div>';
 }
 
-function badgeEstado(estado){
-  const s=estado||'pendiente';
-  const map={completado:{cls:'badge-green',label:'Completado'},en_proceso:{cls:'badge-proc',label:'En proceso'},pendiente:{cls:'badge-amber',label:'Pendiente'},error:{cls:'badge-red',label:'Error'}};
-  const{cls,label}=map[s]||{cls:'badge-gray',label:s};
-  return`<span class="badge ${cls}">${label}</span>`;
+/* ─── UTILS ──────────────────────────────────────────────── */
+function badgeEstado(estado) {
+  const s = estado || 'pendiente';
+  const map = {
+    completado: { cls: 'badge-green', label: 'Completado' },
+    en_proceso: { cls: 'badge-proc',  label: 'En proceso' },
+    pendiente:  { cls: 'badge-amber', label: 'Pendiente'  },
+    error:      { cls: 'badge-red',   label: 'Error'      }
+  };
+  const { cls, label } = map[s] || { cls: 'badge-gray', label: s };
+  return `<span class="badge ${cls}">${label}</span>`;
 }
-function arr(v){return Array.isArray(v)?v:[];}
-function set(id,val){const el=document.getElementById(id);if(el)el.textContent=val;}
-function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function toast(msg,ok=true){
-  const el=document.getElementById('toast');
-  el.textContent=(ok?'✓ ':'✕ ')+msg;
-  el.style.borderLeftColor=ok?'var(--green)':'var(--err)';
+function arr(v)  { return Array.isArray(v) ? v : []; }
+function set(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
+function esc(s)  { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function toast(msg, ok = true) {
+  const el = document.getElementById('toast');
+  el.textContent = (ok ? '✓ ' : '✕ ') + msg;
+  el.style.borderLeftColor = ok ? 'var(--green)' : 'var(--err)';
   el.classList.add('show');
-  setTimeout(()=>el.classList.remove('show'),3500);
+  setTimeout(() => el.classList.remove('show'), 3500);
 }
 </script>
 </body>
