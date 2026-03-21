@@ -1,182 +1,118 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Netflix Admin - Control Total</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:100vh}
-.sidebar{position:fixed;top:0;left:0;width:220px;height:100vh;background:#141414;border-right:1px solid #222;display:flex;flex-direction:column;z-index:100}
-.logo{padding:20px;font-size:20px;font-weight:700;color:#E50914;border-bottom:1px solid #222;letter-spacing:2px}
-.nav{flex:1;padding:12px 0}
-.nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:14px;color:#999;cursor:pointer}
-.nav-item:hover,.nav-item.active{background:#1e1e1e;color:#fff}
-.nav-item.active{border-left:3px solid #E50914}
-.main{margin-left:220px;padding:24px;min-height:100vh}
-.page{display:none}.page.active{display:block}
-h2{font-size:18px;font-weight:500;margin-bottom:20px;color:#fff}
-.card{background:#141414;border:1px solid #222;border-radius:10px;padding:20px;margin-bottom:16px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
-.stat{background:#1e1e1e;border-radius:8px;padding:16px}
-.stat-label{font-size:12px;color:#666;margin-bottom:6px}
-.stat-value{font-size:24px;font-weight:500;color:#fff}
-.btn{padding:8px 16px;border-radius:8px;border:1px solid #333;background:#1e1e1e;color:#fff;cursor:pointer;font-size:13px}
-.btn:hover{background:#2a2a2a}
-.btn-red{background:#E50914;color:#fff;border-color:#E50914}
-.btn-red:hover{background:#c40812}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{text-align:left;padding:10px 12px;border-bottom:1px solid #222;font-weight:500;font-size:12px;color:#666}
-td{padding:10px 12px;border-bottom:1px solid #1a1a1a;color:#ccc}
-.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500}
-.badge-green{background:#0d2b1a;color:#4caf50}
-.badge-red{background:#2b0d0d;color:#f44336}
-.badge-amber{background:#2b200d;color:#ff9800}
-.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0a0a0a}
-.login-box{background:#141414;border:1px solid #222;border-radius:10px;padding:32px;width:360px}
-.console{background:#000;color:#0f0;font-family:monospace;padding:15px;border-radius:8px;height:200px;overflow-y:auto;border:1px solid #333;font-size:12px;line-height:1.5}
-.progress-container{background:#333;height:12px;border-radius:10px;overflow:hidden;margin:10px 0}
-.progress-bar{background:#E50914;height:100%;width:0%;transition:width 0.5s ease}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Netflix Admin - Fix</title>
+    <style>
+        /* Mantenemos tu estilo original */
+        *{box-sizing:border-box;margin:0;padding:0}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:100vh}
+        .sidebar{position:fixed;top:0;left:0;width:220px;height:100vh;background:#141414;border-right:1px solid #222;display:flex;flex-direction:column;z-index:100}
+        .logo{padding:20px;font-size:20px;font-weight:700;color:#E50914;letter-spacing:2px}
+        .nav{flex:1;padding:12px 0}
+        .nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:14px;color:#999;cursor:pointer}
+        .nav-item:hover,.nav-item.active{background:#1e1e1e;color:#fff}
+        .nav-item.active{border-left:3px solid #E50914}
+        .main{margin-left:220px;padding:24px;min-height:100vh}
+        .page{display:none}.page.active{display:block}
+        .card{background:#141414;border:1px solid #222;border-radius:10px;padding:20px;margin-bottom:16px}
+        .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+        .stat{background:#1e1e1e;border-radius:8px;padding:16px}
+        .stat-label{font-size:12px;color:#666;margin-bottom:6px}
+        .stat-value{font-size:24px;font-weight:500;color:#fff}
+        table{width:100%;border-collapse:collapse;font-size:13px}
+        th{text-align:left;padding:10px 12px;border-bottom:1px solid #222;color:#666}
+        td{padding:10px 12px;border-bottom:1px solid #1a1a1a;color:#ccc}
+        .btn-red{background:#E50914;color:#fff;border:none;padding:10px;border-radius:5px;cursor:pointer;width:100%}
+    </style>
 </head>
 <body>
 
-<div id="login-screen" class="login-wrap">
-  <div class="login-box">
-    <div style="font-size:24px;font-weight:700;color:#E50914;letter-spacing:2px;margin-bottom:4px">NETFLIX</div>
-    <div style="font-size:13px;color:#666;margin-bottom:24px">Panel de administración</div>
-    <label>Usuario</label>
-    <input id="admin-user" type="text" style="width:100%;padding:8px;margin-bottom:12px;background:#1e1e1e;border:1px solid #333;color:#fff" value="admin">
-    <label>Contraseña</label>
-    <input id="admin-pass" type="password" style="width:100%;padding:8px;margin-bottom:12px;background:#1e1e1e;border:1px solid #333;color:#fff" value="netflix2026">
-    <button class="btn btn-red" style="width:100%" onclick="doLogin()">Ingresar</button>
-  </div>
+<div id="login-screen" class="sidebar" style="position:relative; width:100%; height:100vh; justify-content:center; align-items:center; border:none; background:#000">
+    <div style="background:#141414; padding:40px; border-radius:10px; width:350px; border:1px solid #222">
+        <div class="logo" style="text-align:center; padding:0; margin-bottom:20px">NETFLIX</div>
+        <input id="admin-user" type="text" value="admin" style="width:100%; padding:10px; margin-bottom:10px; background:#222; border:1px solid #333; color:#fff">
+        <input id="admin-pass" type="password" value="netflix2026" style="width:100%; padding:10px; margin-bottom:20px; background:#222; border:1px solid #333; color:#fff">
+        <button class="btn-red" onclick="doLogin()">Ingresar</button>
+    </div>
 </div>
 
 <div id="app" style="display:none">
-  <div class="sidebar">
-    <div class="logo">NETFLIX</div>
-    <nav class="nav">
-      <div class="nav-item active" onclick="showPage('dashboard',this)">📊 Dashboard</div>
-      <div class="nav-item" onclick="showPage('tractor',this)">🚜 Tractor Azure</div>
-      <div class="nav-item" onclick="showPage('peliculas',this)">🎬 Películas</div>
-      <div class="nav-item" onclick="showPage('series',this)">📺 Series</div>
-      <div class="nav-item" onclick="showPage('usuarios',this)">👥 Usuarios</div>
-    </nav>
-    <div style="padding:16px;border-top:1px solid #222">
-      <button class="btn" style="width:100%" onclick="logout()">Cerrar sesión</button>
-    </div>
-  </div>
-
-  <div class="main">
-    <div id="page-dashboard" class="page active">
-      <h2>Dashboard de Ventas</h2>
-      <div class="stats">
-        <div class="stat"><div class="stat-label">Catálogo Total</div><div class="stat-value" id="stat-total">—</div></div>
-        <div class="stat"><div class="stat-label">Videos Listos</div><div class="stat-value" id="stat-listos" style="color:#4caf50">—</div></div>
-        <div class="stat"><div class="stat-label">Links Rotos</div><div class="stat-value" id="stat-errores" style="color:#f44336">—</div></div>
-        <div class="stat"><div class="stat-label">Usuarios Activos</div><div class="stat-value" id="stat-usuarios">—</div></div>
-      </div>
-      <div class="card">
-        <h3>Estado de Carga a Archive.org</h3>
-        <div class="progress-container"><div id="main-progress" class="progress-bar"></div></div>
-        <p id="progress-text" style="font-size:12px; color:#888">Calculando progreso...</p>
-      </div>
+    <div class="sidebar">
+        <div class="logo">NETFLIX</div>
+        <nav class="nav">
+            <div class="nav-item active" onclick="showPage('dashboard',this)">📊 Dashboard</div>
+            <div class="nav-item" onclick="showPage('peliculas',this)">🎬 Películas</div>
+        </nav>
+        <button style="background:none; border:none; color:#666; padding:20px; cursor:pointer" onclick="location.reload()">Cerrar sesión</button>
     </div>
 
-    <div id="page-tractor" class="page">
-      <h2>Monitor del Tractor (Azure)</h2>
-      <div style="display:grid; grid-template-columns: 1.5fr 1fr; gap:16px">
-        <div class="card">
-          <div style="margin-bottom:15px; display:flex; justify-content:space-between; align-items:center">
-            <span>Consola de Proceso en Vivo</span>
-            <span class="badge badge-green">Azure Online</span>
-          </div>
-          <div id="tractor-console" class="console">
-            > Conectado a Supabase...<br>
-            > Buscando registros con estado 'pendiente'...<br>
-            > Tractor listo para iniciar descarga masiva.
-          </div>
+    <div class="main">
+        <div id="page-dashboard" class="page active">
+            <h2>Dashboard</h2>
+            <div class="stats">
+                <div class="stat"><div class="stat-label">Total Películas</div><div id="stat-total" class="stat-value">...</div></div>
+            </div>
         </div>
-        <div class="card">
-          <h3>Control Manual</h3>
-          <p style="font-size:12px; color:#666; margin-bottom:15px">Usa esto solo si el proceso automático se detiene.</p>
-          <button class="btn btn-red" style="width:100%; margin-bottom:10px" onclick="loadDashboard()">🔄 Refrescar Estados</button>
-          <button class="btn" style="width:100%" onclick="window.open('https://archive.org/details/@tu_usuario', '_blank')">🌐 Ver mi Archive.org</button>
-        </div>
-      </div>
-      <div class="card" style="margin-top:20px">
-        <h3>Últimos 10 Errores Detectados (Links Rotos)</h3>
-        <table style="margin-top:10px">
-          <thead><tr><th>ID</th><th>Título</th><th>Estado</th></tr></thead>
-          <tbody id="tbody-errores"></tbody>
-        </table>
-      </div>
-    </div>
 
-    <div id="page-peliculas" class="page"><h2>Películas</h2><div class="card" id="tbody-peliculas">Cargando...</div></div>
-    <div id="page-series" class="page"><h2>Series</h2><div class="card" id="tbody-series">Cargando...</div></div>
-    <div id="page-usuarios" class="page"><h2>Usuarios</h2><div class="card" id="tbody-usuarios">Cargando...</div></div>
-  </div>
+        <div id="page-peliculas" class="page">
+            <h2>Películas en Base de Datos</h2>
+            <div class="card" style="padding:0">
+                <table>
+                    <thead><tr><th>Título</th><th>URL de Video</th></tr></thead>
+                    <tbody id="tbody-peliculas">
+                        <tr><td colspan="2" style="text-align:center; padding:40px">Cargando datos de Supabase...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script>
-const SUPABASE_URL='https://ngnutcjeuknwiaebduun.supabase.co';
-const SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nbnV0Y2pldWtud2lhZWJkdXVuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MzA2NzMzMSwiZXhwIjoyMDg4NjQzMzMxfQ.fCR9D9ZpMYJJJN7DK84kzq7Aq7qdl7gAvBa_xMZhmv4';
-
-async function sb(tabla, extra=''){
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/${tabla}${extra}`, {
-    headers: {'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`}
-  });
-  return res.json();
-}
+const S_URL = 'https://ngnutcjeuknwiaebduun.supabase.co';
+const S_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nbnV0Y2pldWtud2lhZWJkdXVuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MzA2NzMzMSwiZXhwIjoyMDg4NjQzMzMxfQ.fCR9D9ZpMYJJJN7DK84kzq7Aq7qdl7gAvBa_xMZhmv4';
 
 function doLogin(){
-  document.getElementById('login-screen').style.display='none';
-  document.getElementById('app').style.display='block';
-  loadDashboard();
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').style.display = 'block';
+    loadPeliculas();
 }
 
 function showPage(name, el){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-  document.getElementById('page-'+name).classList.add('active');
-  el.classList.add('active');
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    el.classList.add('active');
 }
 
-async function loadDashboard(){
-  // Consultas paralelas para velocidad
-  const [total, listos, errores, usuarios] = await Promise.all([
-    sb('peliculas', '?select=id'),
-    sb('peliculas', '?estado=eq.completado&select=id'),
-    sb('peliculas', '?estado=eq.error&select=id,titulo'),
-    sb('usuarios', '?select=id')
-  ]);
+async function loadPeliculas() {
+    try {
+        const res = await fetch(`${S_URL}/rest/v1/peliculas?select=titulo,url_video&limit=100`, {
+            headers: { 'apikey': S_KEY, 'Authorization': `Bearer ${S_KEY}` }
+        });
+        const data = await res.json();
+        
+        // Actualizar contador
+        document.getElementById('stat-total').textContent = data.length + "+";
 
-  // Actualizar Cards
-  document.getElementById('stat-total').textContent = total.length;
-  document.getElementById('stat-listos').textContent = listos.length;
-  document.getElementById('stat-errores').textContent = errores.length;
-  document.getElementById('stat-usuarios').textContent = usuarios.length;
-
-  // Actualizar Barra
-  const pct = total.length > 0 ? (listos.length / total.length * 100).toFixed(1) : 0;
-  document.getElementById('main-progress').style.width = pct + '%';
-  document.getElementById('progress-text').textContent = `${pct}% del catálogo ya está en tu servidor (${listos.length} de ${total.length})`;
-
-  // Llenar tabla de errores en la pestaña Tractor
-  const errTable = document.getElementById('tbody-errores');
-  errTable.innerHTML = errores.slice(0,10).map(e => `
-    <tr><td>${e.id}</td><td>${e.titulo}</td><td><span class="badge badge-red">Link Roto</span></td></tr>
-  `).join('');
-
-  // Simular consola
-  const consola = document.getElementById('tractor-console');
-  consola.innerHTML += `<br>> [${new Date().toLocaleTimeString()}] Actualizando datos... OK.`;
-  consola.scrollTop = consola.scrollHeight;
+        // Llenar tabla
+        const tbody = document.getElementById('tbody-peliculas');
+        if (data.length > 0) {
+            tbody.innerHTML = data.map(p => `
+                <tr>
+                    <td style="color:#fff; font-weight:500">${p.titulo}</td>
+                    <td style="color:#666; font-size:11px">${p.url_video ? p.url_video.substring(0, 50) + '...' : 'Sin URL'}</td>
+                </tr>
+            `).join('');
+        } else {
+            tbody.innerHTML = '<tr><td colspan="2">No se encontraron películas.</td></tr>';
+        }
+    } catch (err) {
+        document.getElementById('tbody-peliculas').innerHTML = '<tr><td colspan="2" style="color:red">Error de conexión con Supabase.</td></tr>';
+    }
 }
-
-function logout(){ location.reload(); }
 </script>
 </body>
 </html>
