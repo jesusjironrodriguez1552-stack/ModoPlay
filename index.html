@@ -3,157 +3,577 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Netflix Admin Pro - MODO TRACTOR</title>
+<title>Netflix Admin Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+:root {
+  --red:#E50914; --red-dim:rgba(229,9,20,.12);
+  --bg:#080808; --surface:#111; --surface2:#191919;
+  --border:rgba(255,255,255,.07);
+  --text:#f0f0f0; --muted:#666;
+  --green:#22c55e; --green-dim:rgba(34,197,94,.1);
+  --amber:#f59e0b; --amber-dim:rgba(245,158,11,.1);
+  --blue:#3b82f6; --blue-dim:rgba(59,130,246,.1);
+  --err:#ef4444; --err-dim:rgba(239,68,68,.1);
+  --proc:#a855f7; --proc-dim:rgba(168,85,247,.1);
+  --radius:10px;
+  --font:'DM Sans',sans-serif;
+  --mono:'DM Mono',monospace;
+}
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:100vh}
-.sidebar{position:fixed;top:0;left:0;width:220px;height:100vh;background:#141414;border-right:1px solid #222;display:flex;flex-direction:column;z-index:100}
-.logo{padding:20px;font-size:20px;font-weight:700;color:#E50914;border-bottom:1px solid #222;letter-spacing:2px}
-.nav{flex:1;padding:12px 0}
-.nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:14px;color:#999;cursor:pointer}
-.nav-item:hover,.nav-item.active{background:#1e1e1e;color:#fff}
-.nav-item.active{border-left:3px solid #E50914}
-.main{margin-left:220px;padding:24px;min-height:100vh}
-.page{display:none}.page.active{display:block}
-h2{font-size:18px;font-weight:500;margin-bottom:20px;color:#fff}
-.card{background:#141414;border:1px solid #222;border-radius:10px;padding:20px;margin-bottom:16px}
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
-.stat{background:#1e1e1e;border-radius:8px;padding:16px}
-.stat-label{font-size:12px;color:#666;margin-bottom:6px}
-.stat-value{font-size:24px;font-weight:500;color:#fff}
-.btn{padding:8px 16px;border-radius:8px;border:1px solid #333;background:#1e1e1e;color:#fff;cursor:pointer;font-size:13px}
-.btn-red{background:#E50914;color:#fff;border:none}
+html,body{height:100%;font-family:var(--font);background:var(--bg);color:var(--text);font-size:14px;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:5px;height:5px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
+
+/* LOGIN */
+#login-screen{display:flex;justify-content:center;align-items:center;height:100vh;background:radial-gradient(ellipse at 50% 40%,#1a0000 0%,#080808 60%)}
+.login-box{width:360px;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:36px;box-shadow:0 40px 80px rgba(0,0,0,.6)}
+.login-logo{text-align:center;font-size:28px;font-weight:600;color:var(--red);letter-spacing:3px;margin-bottom:8px}
+.login-sub{text-align:center;color:var(--muted);font-size:12px;margin-bottom:32px;letter-spacing:1px;text-transform:uppercase}
+.login-box label{display:block;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.login-box input{width:100%;padding:10px 14px;border:1px solid var(--border);border-radius:8px;background:var(--surface2);color:var(--text);font-family:var(--font);font-size:14px;margin-bottom:16px;transition:border .2s}
+.login-box input:focus{outline:none;border-color:var(--red)}
+.btn-login{width:100%;padding:12px;background:var(--red);color:#fff;border:none;border-radius:8px;font-family:var(--font);font-size:14px;font-weight:500;cursor:pointer;transition:opacity .2s}
+.btn-login:hover{opacity:.88}
+.login-err{display:none;color:var(--err);font-size:12px;text-align:center;margin-top:10px}
+
+/* LAYOUT */
+#app{display:none;height:100vh;overflow:hidden}
+.layout{display:flex;height:100%}
+
+/* SIDEBAR */
+.sidebar{width:230px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
+.sidebar-logo{padding:22px 20px;font-size:20px;font-weight:600;color:var(--red);letter-spacing:3px;border-bottom:1px solid var(--border)}
+.sidebar-logo span{display:block;font-size:10px;font-weight:400;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:2px}
+.nav{flex:1;padding:12px 0;overflow-y:auto}
+.nav-group{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;padding:16px 20px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;color:#888;cursor:pointer;transition:all .15s;font-size:13px;border-left:2px solid transparent}
+.nav-item:hover{background:var(--surface2);color:var(--text)}
+.nav-item.active{background:var(--red-dim);color:#fff;border-left-color:var(--red)}
+.nav-item .icon{font-size:15px;width:18px;text-align:center}
+.nav-badge{margin-left:auto;background:var(--red);color:#fff;font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;min-width:20px;text-align:center}
+.nav-badge.nb-green{background:var(--green)}
+.sidebar-footer{padding:16px;border-top:1px solid var(--border)}
+.btn-logout{width:100%;padding:9px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--muted);font-family:var(--font);font-size:12px;cursor:pointer;transition:all .2s}
+.btn-logout:hover{border-color:#555;color:var(--text)}
+
+/* MAIN */
+.main{flex:1;overflow-y:auto;padding:28px 32px;background:var(--bg)}
+.page{display:none;animation:fadeIn .2s ease}.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:10px}
+.page-title{font-size:20px;font-weight:500}
+.page-title small{display:block;font-size:12px;color:var(--muted);font-weight:400;margin-top:2px}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;position:relative;overflow:hidden;transition:border-color .2s}
+.stat:hover{border-color:#333}
+.stat::after{content:'';position:absolute;top:0;right:0;width:3px;height:100%}
+.stat.s-green::after{background:var(--green)}.stat.s-red::after{background:var(--err)}
+.stat.s-amber::after{background:var(--amber)}.stat.s-blue::after{background:var(--blue)}.stat.s-proc::after{background:var(--proc)}
+.stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+.stat-value{font-size:26px;font-weight:500;font-family:var(--mono);line-height:1}
+.stat-change{font-size:11px;color:var(--muted);margin-top:6px}
+
+/* CARD */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
+.card-title{font-size:13px;font-weight:500;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card-title .dot{width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0}
+
+/* PROGRESS */
+.progress-bar{background:#1e1e1e;height:8px;border-radius:4px;overflow:hidden;margin:10px 0}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--red),#ff6b6b);border-radius:4px;transition:width .8s ease}
+.progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border)}
 table{width:100%;border-collapse:collapse;font-size:13px}
-th{text-align:left;padding:10px 12px;border-bottom:1px solid #222;font-weight:500;font-size:12px;color:#666}
-td{padding:10px 12px;border-bottom:1px solid #1a1a1a;color:#ccc}
-input,select,textarea{width:100%;padding:8px 12px;border:1px solid #333;border-radius:8px;background:#1e1e1e;color:#fff;margin-bottom:12px}
-.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500}
-.badge-green{background:#0d2b1a;color:#4caf50}
-.badge-red{background:#2b0d0d;color:#f44336}
-.badge-amber{background:#2b200d;color:#ff9800}
+thead th{padding:11px 16px;text-align:left;font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:1px;background:var(--surface);border-bottom:1px solid var(--border)}
+tbody tr{transition:background .1s}
+tbody tr:hover{background:var(--surface2)}
+tbody td{padding:11px 16px;border-bottom:1px solid rgba(255,255,255,.04);color:#bbb;font-size:13px}
+tbody tr:last-child td{border-bottom:none}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:500}
+.badge::before{content:'';width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.badge-green{background:var(--green-dim);color:var(--green)}.badge-green::before{background:var(--green)}
+.badge-red{background:var(--err-dim);color:var(--err)}.badge-red::before{background:var(--err)}
+.badge-amber{background:var(--amber-dim);color:var(--amber)}.badge-amber::before{background:var(--amber)}
+.badge-proc{background:var(--proc-dim);color:var(--proc)}.badge-proc::before{background:var(--proc);animation:pDot 1s infinite}
+.badge-gray{background:#1e1e1e;color:#777}.badge-gray::before{background:#555}
+@keyframes pDot{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* TOOLBAR */
+.toolbar{display:flex;gap:10px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+.search-input{padding:9px 14px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);font-family:var(--font);font-size:13px;flex:1;min-width:200px;max-width:320px;transition:border .2s}
+.search-input:focus{outline:none;border-color:#444}
+.search-input::placeholder{color:var(--muted)}
+.filter-select{padding:9px 28px 9px 12px;border:1px solid var(--border);border-radius:8px;background:var(--surface);color:var(--text);font-family:var(--font);font-size:13px;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23666' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;min-width:160px}
+.filter-select:focus{outline:none;border-color:#444}
+.btn{padding:8px 16px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;font-family:var(--font);font-size:13px;transition:all .15s}
+.btn:hover{border-color:#444}.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn-sm{padding:5px 12px;font-size:12px}
+.btn-primary{background:var(--red);border-color:transparent;color:#fff}
+.btn-primary:hover{opacity:.88;border-color:transparent}
+
+/* LIVE */
+.live-label{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);padding:5px 12px;background:var(--surface2);border-radius:20px;border:1px solid var(--border)}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+.live-dot.off{background:var(--err);animation:none}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* TRACTOR */
+.srv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.srv-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;align-items:center;gap:14px}
+.srv-icon{font-size:26px}
+.srv-info{flex:1}.srv-name{font-size:13px;font-weight:500;margin-bottom:4px}
+.srv-detail{font-size:11px;color:var(--muted);font-family:var(--mono)}
+.srv-status{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--green)}
+.speed-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.speed-box{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center}
+.speed-val{font-size:22px;font-weight:500;font-family:var(--mono)}
+.speed-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
+.activity-feed{display:flex;flex-direction:column;gap:6px;max-height:400px;overflow-y:auto}
+.activity-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:8px;background:var(--surface2);border:1px solid var(--border)}
+.activity-item.new-item{border-color:var(--proc);animation:highlight .6s ease}
+@keyframes highlight{0%{background:var(--proc-dim)}100%{background:var(--surface2)}}
+.act-icon{font-size:18px;flex-shrink:0;width:24px;text-align:center}
+.act-body{flex:1;overflow:hidden}
+.act-title{font-size:13px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.act-sub{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* EMPTY */
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty .icon{font-size:40px;margin-bottom:12px;opacity:.4}
+.empty p{font-size:13px}
+
+/* TOAST */
+#toast{position:fixed;bottom:24px;right:24px;background:#222;border:1px solid #333;border-left:3px solid var(--green);color:var(--text);padding:12px 18px;border-radius:10px;font-size:13px;opacity:0;transform:translateY(8px);transition:.3s;z-index:9999;max-width:300px;pointer-events:none}
+#toast.show{opacity:1;transform:translateY(0)}
+
+@media(max-width:1100px){.stats{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:900px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .sidebar{width:60px}
+  .sidebar-logo span,.nav-item span,.nav-group,.sidebar-footer{display:none}
+  .nav-item{justify-content:center;padding:14px}
+  .main{padding:20px 16px}
+}
 </style>
 </head>
 <body>
 
-<div id="login-screen" style="display:flex; justify-content:center; align-items:center; height:100vh; background:#000">
-    <div class="card" style="width:360px">
-        <div class="logo" style="text-align:center; border:none">NETFLIX</div>
-        <input id="admin-user" type="text" value="admin">
-        <input id="admin-pass" type="password" value="netflix2026">
-        <button class="btn btn-red" style="width:100%" onclick="doLogin()">Ingresar</button>
-    </div>
+<!-- LOGIN -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">NETFLIX</div>
+    <div class="login-sub">Panel de Administración</div>
+    <label>Usuario</label>
+    <input id="admin-user" type="text" placeholder="admin" autocomplete="username">
+    <label>Contraseña</label>
+    <input id="admin-pass" type="password" placeholder="••••••••" autocomplete="current-password"
+           onkeydown="if(event.key==='Enter')doLogin()">
+    <button class="btn-login" onclick="doLogin()">Ingresar</button>
+    <div class="login-err" id="login-err">Usuario o contraseña incorrectos</div>
+  </div>
 </div>
 
-<div id="app" style="display:none">
+<!-- APP -->
+<div id="app">
+  <div class="layout">
     <div class="sidebar">
-        <div class="logo">NETFLIX</div>
-        <nav class="nav">
-            <div class="nav-item active" onclick="showPage('dashboard',this)">📊 Dashboard</div>
-            <div class="nav-item" onclick="showPage('peliculas',this)">🎬 Películas</div>
-            <div class="nav-item" onclick="showPage('series',this)">📺 Series</div>
-            <div class="nav-item" onclick="showPage('usuarios',this)">👥 Usuarios</div>
-        </nav>
-        <div style="padding:16px; border-top:1px solid #222"><button class="btn" style="width:100%" onclick="location.reload()">Salir</button></div>
+      <div class="sidebar-logo">NETFLIX<span>Admin Pro</span></div>
+      <nav class="nav">
+        <div class="nav-group">Principal</div>
+        <div class="nav-item active" onclick="showPage('dashboard',this)"><span class="icon">📊</span><span>Dashboard</span></div>
+        <div class="nav-group">Monitor</div>
+        <div class="nav-item" onclick="showPage('tractor',this)"><span class="icon">🚜</span><span>Tractor</span><span class="nav-badge nb-green" id="badge-proc">0</span></div>
+        <div class="nav-group">Catálogo</div>
+        <div class="nav-item" onclick="showPage('peliculas',this)"><span class="icon">🎬</span><span>Películas</span><span class="nav-badge" id="badge-pel">0</span></div>
+        <div class="nav-item" onclick="showPage('series',this)"><span class="icon">📺</span><span>Series</span></div>
+        <div class="nav-group">Gestión</div>
+        <div class="nav-item" onclick="showPage('usuarios',this)"><span class="icon">👥</span><span>Usuarios</span></div>
+      </nav>
+      <div class="sidebar-footer">
+        <button class="btn-logout" onclick="doLogout()">← Cerrar sesión</button>
+      </div>
     </div>
 
     <div class="main">
-        <div id="page-dashboard" class="page active">
-            <h2>Dashboard en Vivo</h2>
-            <div class="stats">
-                <div class="stat"><div class="stat-label">Total Catálogo</div><div id="stat-total" class="stat-value">0</div></div>
-                <div class="stat"><div class="stat-label">Videos Listos</div><div id="stat-listos" class="stat-value" style="color:#4caf50">0</div></div>
-                <div class="stat"><div class="stat-label">Links Rotos</div><div id="stat-errores" class="stat-value" style="color:#f44336">0</div></div>
-                <div class="stat"><div class="stat-label">Usuarios</div><div id="stat-usuarios" class="stat-value">0</div></div>
-            </div>
-            <div class="card">
-                <h3>Progreso General de Descargas</h3>
-                <div style="background:#333; height:12px; border-radius:10px; overflow:hidden; margin:10px 0">
-                    <div id="main-progress" style="background:#E50914; height:100%; width:0%; transition:0.5s"></div>
-                </div>
-                <p id="progress-text" style="font-size:12px; color:#888">Sincronizando estados...</p>
-            </div>
-        </div>
 
-        <div id="page-peliculas" class="page">
-            <div style="display:flex; justify-content:space-between; margin-bottom:15px">
-                <h2 style="margin:0">Películas</h2>
-                <input type="text" id="search-pel" placeholder="Buscar..." style="width:250px; margin:0" oninput="filterPeliculas()">
-            </div>
-            <div class="card" style="padding:0">
-                <table>
-                    <thead><tr><th>Título</th><th>Estado</th></tr></thead>
-                    <tbody id="tbody-peliculas"></tbody>
-                </table>
-            </div>
+      <!-- DASHBOARD -->
+      <div id="page-dashboard" class="page active">
+        <div class="page-header">
+          <div class="page-title">Dashboard <small>Resumen en tiempo real</small></div>
+          <div class="live-label"><span class="live-dot" id="live-dot"></span><span id="live-text">Conectando...</span></div>
         </div>
+        <div class="stats">
+          <div class="stat s-blue"><div class="stat-label">Total catálogo</div><div id="stat-total" class="stat-value">–</div><div class="stat-change">películas</div></div>
+          <div class="stat s-proc"><div class="stat-label">En proceso</div><div id="stat-proc" class="stat-value" style="color:var(--proc)">–</div><div class="stat-change">descargando ahora</div></div>
+          <div class="stat s-green"><div class="stat-label">Completadas</div><div id="stat-listos" class="stat-value" style="color:var(--green)">–</div><div class="stat-change">listas para ver</div></div>
+          <div class="stat s-red"><div class="stat-label">Con error</div><div id="stat-errores" class="stat-value" style="color:var(--err)">–</div><div class="stat-change">links rotos</div></div>
+          <div class="stat s-amber"><div class="stat-label">Usuarios</div><div id="stat-usuarios" class="stat-value" style="color:var(--amber)">–</div><div class="stat-change">registrados</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="dot"></span>Progreso general del catálogo</div>
+          <div class="progress-label"><span id="progress-pct">0%</span><span id="progress-counts">0 / 0</span></div>
+          <div class="progress-bar"><div id="main-progress" class="progress-fill" style="width:0%"></div></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px" id="progress-text">Calculando...</div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="card">
+            <div class="card-title"><span class="dot" style="background:var(--proc)"></span>Descargando ahora</div>
+            <div id="list-proceso"><div class="empty"><div class="icon">😴</div><p>Tractor inactivo</p></div></div>
+          </div>
+          <div class="card">
+            <div class="card-title"><span class="dot" style="background:var(--err)"></span>Últimos errores</div>
+            <div id="list-errores"><div class="empty"><div class="icon">✅</div><p>Sin errores</p></div></div>
+          </div>
+        </div>
+      </div>
 
-        <div id="page-series" class="page"><h2>Series</h2><div class="card">En mantenimiento...</div></div>
-        <div id="page-usuarios" class="page"><h2>Usuarios</h2><div class="card">En mantenimiento...</div></div>
+      <!-- TRACTOR -->
+      <div id="page-tractor" class="page">
+        <div class="page-header">
+          <div class="page-title">Monitor del Tractor 🚜 <small>Azure VM · 20.201.73.185 · /home/ubuntu/cine_env/</small></div>
+          <button class="btn btn-primary" onclick="loadAll()">↻ Actualizar ahora</button>
+        </div>
+        <div class="srv-grid">
+          <div class="srv-card">
+            <div class="srv-icon">☁️</div>
+            <div class="srv-info">
+              <div class="srv-name">Servidor Azure</div>
+              <div class="srv-detail">20.201.73.185 · ubuntu · Puerto 22</div>
+            </div>
+            <div class="srv-status"><span class="live-dot"></span>Online</div>
+          </div>
+          <div class="srv-card">
+            <div class="srv-icon">📁</div>
+            <div class="srv-info">
+              <div class="srv-name">Entorno activo</div>
+              <div class="srv-detail">source cine_env/bin/activate</div>
+            </div>
+          </div>
+          <div class="srv-card">
+            <div class="srv-icon">🕐</div>
+            <div class="srv-info">
+              <div class="srv-name">Última sincronización</div>
+              <div class="srv-detail" id="last-sync">—</div>
+            </div>
+          </div>
+        </div>
+        <div class="speed-grid">
+          <div class="speed-box"><div class="speed-val" id="spd-proc" style="color:var(--proc)">0</div><div class="speed-label">En proceso</div></div>
+          <div class="speed-box"><div class="speed-val" id="spd-done" style="color:var(--green)">0</div><div class="speed-label">Completadas</div></div>
+          <div class="speed-box"><div class="speed-val" id="spd-err" style="color:var(--err)">0</div><div class="speed-label">Errores</div></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="dot" style="background:var(--proc)"></span>Descargas activas</div>
+          <div id="tractor-activas"><div class="empty"><div class="icon">😴</div><p>El tractor no está descargando nada ahora mismo</p></div></div>
+        </div>
+        <div class="card">
+          <div class="card-title"><span class="dot" style="background:var(--err)"></span>Log de errores</div>
+          <div id="tractor-errores"><div class="empty"><div class="icon">✅</div><p>Sin errores registrados</p></div></div>
+        </div>
+      </div>
+
+      <!-- PELÍCULAS -->
+      <div id="page-peliculas" class="page">
+        <div class="page-header">
+          <div class="page-title">Películas <small id="peliculas-count">Cargando...</small></div>
+        </div>
+        <div class="toolbar">
+          <input class="search-input" id="search-pel" type="search" placeholder="🔍  Buscar película..." oninput="filterPeliculas()">
+          <select class="filter-select" id="filter-estado" onchange="filterPeliculas()">
+            <option value="">Todos los estados</option>
+            <option value="completado">✅  Completado</option>
+            <option value="en_proceso">🔄  En proceso</option>
+            <option value="pendiente">⏳  Pendiente</option>
+            <option value="error">❌  Error</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>#</th><th>Título</th><th>Estado</th></tr></thead>
+            <tbody id="tbody-peliculas"><tr><td colspan="3" style="text-align:center;color:var(--muted);padding:40px">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+        <div id="peliculas-pagination" style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;font-size:12px;color:var(--muted)"></div>
+      </div>
+
+      <!-- SERIES -->
+      <div id="page-series" class="page">
+        <div class="page-header">
+          <div class="page-title">Series <small>Catálogo completo</small></div>
+        </div>
+        <div class="toolbar">
+          <input class="search-input" id="search-ser" type="search" placeholder="🔍  Buscar serie..." oninput="filterSeries()">
+          <select class="filter-select" id="filter-estado-ser" onchange="filterSeries()">
+            <option value="">Todos los estados</option>
+            <option value="completado">✅  Completado</option>
+            <option value="en_proceso">🔄  En proceso</option>
+            <option value="pendiente">⏳  Pendiente</option>
+            <option value="error">❌  Error</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>#</th><th>Título</th><th>Estado</th></tr></thead>
+            <tbody id="tbody-series"><tr><td colspan="3" style="text-align:center;color:var(--muted);padding:40px">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- USUARIOS -->
+      <div id="page-usuarios" class="page">
+        <div class="page-header">
+          <div class="page-title">Usuarios <small id="usuarios-count">Cargando...</small></div>
+        </div>
+        <div class="toolbar">
+          <input class="search-input" id="search-usr" type="search" placeholder="🔍  Buscar usuario..." oninput="filterUsuarios()">
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>#</th><th>Email</th><th>Plan</th><th>Estado</th><th>Registrado</th></tr></thead>
+            <tbody id="tbody-usuarios"><tr><td colspan="5" style="text-align:center;color:var(--muted);padding:40px">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
+  </div>
 </div>
+<div id="toast"></div>
 
 <script>
-const S_URL = 'https://ngnutcjeuknwiaebduun.supabase.co';
-const S_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nbnV0Y2pldWtud2lhZWJkdXVuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MzA2NzMzMSwiZXhwIjoyMDg4NjQzMzMxfQ.fCR9D9ZpMYJJJN7DK84kzq7Aq7qdl7gAvBa_xMZhmv4';
-let allPeliculas = [];
+const S_URL='https://ngnutcjeuknwiaebduun.supabase.co';
+const S_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nbnV0Y2pldWtud2lhZWJkdXVuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MzA2NzMzMSwiZXhwIjoyMDg4NjQzMzMxfQ.fCR9D9ZpMYJJJN7DK84kzq7Aq7qdl7gAvBa_xMZhmv4';
+const CREDS={user:'admin',pass:'netflix2026'};
+const RELOAD=10000;
+
+let allPeliculas=[],allSeries=[],allUsuarios=[];
+let pelPage=1,pelFiltered=[];
+const PER_PAGE=50;
+let timer=null,prevProcIds=new Set();
 
 function doLogin(){
+  const u=document.getElementById('admin-user').value.trim();
+  const p=document.getElementById('admin-pass').value;
+  const err=document.getElementById('login-err');
+  if(u===CREDS.user&&p===CREDS.pass){
+    err.style.display='none';
     document.getElementById('login-screen').style.display='none';
     document.getElementById('app').style.display='block';
     loadAll();
-    setInterval(loadAll, 15000); // Actualiza cada 15 seg
+    timer=setInterval(loadAll,RELOAD);
+  } else {
+    err.style.display='block';
+    document.getElementById('admin-pass').value='';
+  }
+}
+function doLogout(){clearInterval(timer);location.reload();}
+
+function showPage(name,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  el.classList.add('active');
 }
 
-function showPage(name, el){
-    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
-    document.getElementById('page-'+name).classList.add('active');
-    el.classList.add('active');
-}
-
-async function sb(tabla, query=''){
-    const r = await fetch(`${S_URL}/rest/v1/${tabla}${query}`, {
-        headers: {'apikey': S_KEY, 'Authorization': `Bearer ${S_KEY}`}
-    });
+async function sb(tabla,query=''){
+  try{
+    const r=await fetch(`${S_URL}/rest/v1/${tabla}${query}`,{headers:{'apikey':S_KEY,'Authorization':`Bearer ${S_KEY}`}});
+    if(!r.ok)throw new Error(`HTTP ${r.status}`);
     return r.json();
+  }catch(e){console.warn(`[sb] ${tabla}:`,e.message);return[];}
 }
 
 async function loadAll(){
-    try {
-        const [total, listos, errores, usrs, pels] = await Promise.all([
-            sb('peliculas', '?select=id'),
-            sb('peliculas', '?estado=eq.completado&select=id'),
-            sb('peliculas', '?estado=eq.error&select=id'),
-            sb('usuarios', '?select=id'),
-            sb('peliculas', '?select=titulo,estado&limit=100')
-        ]);
+  try{
+    const [total,listos,enProc,errores,usrs]=await Promise.all([
+      sb('peliculas','?select=id'),
+      sb('peliculas','?estado=eq.completado&select=id'),
+      sb('peliculas','?estado=eq.en_proceso&select=id,titulo'),
+      sb('peliculas','?estado=eq.error&select=id,titulo'),
+      sb('usuarios','?select=id,email,plan,activo,created_at&order=created_at.desc&limit=200')
+    ]);
 
-        document.getElementById('stat-total').textContent = total.length || 0;
-        document.getElementById('stat-listos').textContent = listos.length || 0;
-        document.getElementById('stat-errores').textContent = errores.length || 0;
-        document.getElementById('stat-usuarios').textContent = usrs.length || 0;
+    const totalN=arr(total).length,listosN=arr(listos).length,procN=arr(enProc).length,errN=arr(errores).length,usrN=arr(usrs).length;
 
-        const pct = total.length > 0 ? (listos.length / total.length * 100).toFixed(1) : 0;
-        document.getElementById('main-progress').style.width = pct + '%';
-        document.getElementById('progress-text').textContent = `${pct}% del catálogo procesado.`;
+    set('stat-total',totalN);set('stat-proc',procN);set('stat-listos',listosN);set('stat-errores',errN);set('stat-usuarios',usrN);
+    set('badge-proc',procN);
 
-        allPeliculas = pels;
-        renderPeliculas(allPeliculas);
-    } catch(e) { console.error("Error:", e); }
+    // live dot
+    const now=new Date();
+    document.getElementById('live-dot').className='live-dot';
+    set('live-text','En vivo · '+now.toLocaleTimeString('es-PE'));
+    set('last-sync',now.toLocaleTimeString('es-PE'));
+
+    // progreso
+    const pct=totalN>0?(listosN/totalN*100).toFixed(1):0;
+    document.getElementById('main-progress').style.width=pct+'%';
+    set('progress-pct',pct+'%');
+    set('progress-counts',`${listosN} / ${totalN}`);
+    set('progress-text',`${listosN} completadas · ${procN} en proceso · ${errN} errores · ${totalN-listosN-procN-errN} pendientes`);
+
+    // tractor counters
+    set('spd-proc',procN);set('spd-done',listosN);set('spd-err',errN);
+
+    // notificar nuevas descargas
+    const newIds=new Set(arr(enProc).map(p=>p.id));
+    arr(enProc).forEach(p=>{if(!prevProcIds.has(p.id))toast('Iniciando: '+p.titulo,true);});
+    prevProcIds=newIds;
+
+    // listas
+    renderListaProc(arr(enProc).slice(0,6));
+    renderListaErr(arr(errores).slice(0,6));
+    renderTractorActivas(arr(enProc));
+    renderTractorErrores(arr(errores));
+
+    // usuarios
+    allUsuarios=arr(usrs);
+    renderUsuarios(allUsuarios);
+    set('usuarios-count',`${usrN} usuarios registrados`);
+
+    loadPeliculas();
+    loadSeries();
+  }catch(e){console.error('[loadAll]',e);}
 }
 
-function renderPeliculas(list){
-    document.getElementById('tbody-peliculas').innerHTML = list.map(p=>`
-        <tr>
-            <td>${p.titulo}</td>
-            <td><span class="badge ${p.estado==='completado'?'badge-green':p.estado==='error'?'badge-red':'badge-amber'}">${p.estado || 'pendiente'}</span></td>
-        </tr>
-    `).join('');
+async function loadPeliculas(){
+  const data=await sb('peliculas','?select=titulo,estado&order=titulo.asc&limit=1000');
+  allPeliculas=arr(data);
+  set('badge-pel',allPeliculas.length);
+  filterPeliculas();
 }
-
 function filterPeliculas(){
-    const q = document.getElementById('search-pel').value.toLowerCase();
-    renderPeliculas(allPeliculas.filter(p=>p.titulo.toLowerCase().includes(q)));
+  const q=(document.getElementById('search-pel').value||'').toLowerCase();
+  const st=document.getElementById('filter-estado').value;
+  pelFiltered=allPeliculas.filter(p=>{
+    const s=p.estado||'pendiente';
+    return p.titulo.toLowerCase().includes(q)&&(!st||s===st);
+  });
+  pelPage=1;renderPeliculas();
+}
+function renderPeliculas(){
+  const total=pelFiltered.length,start=(pelPage-1)*PER_PAGE,slice=pelFiltered.slice(start,start+PER_PAGE);
+  set('peliculas-count',`${total} películas`);
+  if(!slice.length){
+    document.getElementById('tbody-peliculas').innerHTML='<tr><td colspan="3"><div class="empty"><div class="icon">🎬</div><p>Sin resultados</p></div></td></tr>';
+    document.getElementById('peliculas-pagination').innerHTML='';return;
+  }
+  document.getElementById('tbody-peliculas').innerHTML=slice.map((p,i)=>`
+    <tr>
+      <td style="color:var(--muted);font-family:var(--mono);font-size:12px">${start+i+1}</td>
+      <td>${esc(p.titulo)}</td>
+      <td>${badgeEstado(p.estado)}</td>
+    </tr>`).join('');
+  const pages=Math.ceil(total/PER_PAGE);
+  document.getElementById('peliculas-pagination').innerHTML=pages>1?`
+    <span>Página ${pelPage} de ${pages} · ${total} resultados</span>
+    <div style="display:flex;gap:6px">
+      <button class="btn btn-sm" onclick="cambiarPag(-1)" ${pelPage===1?'disabled':''}>← Anterior</button>
+      <button class="btn btn-sm" onclick="cambiarPag(1)" ${pelPage===pages?'disabled':''}>Siguiente →</button>
+    </div>`:`<span>${total} resultados</span>`;
+}
+function cambiarPag(d){pelPage+=d;renderPeliculas();}
+
+async function loadSeries(){
+  const data=await sb('series','?select=titulo,estado&order=titulo.asc&limit=500');
+  allSeries=arr(data);filterSeries();
+}
+function filterSeries(){
+  const q=(document.getElementById('search-ser').value||'').toLowerCase();
+  const st=document.getElementById('filter-estado-ser').value;
+  const list=allSeries.filter(s=>{const e=s.estado||'pendiente';return s.titulo.toLowerCase().includes(q)&&(!st||e===st);});
+  if(!list.length){document.getElementById('tbody-series').innerHTML='<tr><td colspan="3"><div class="empty"><div class="icon">📺</div><p>Sin series</p></div></td></tr>';return;}
+  document.getElementById('tbody-series').innerHTML=list.map((s,i)=>`
+    <tr>
+      <td style="color:var(--muted);font-family:var(--mono);font-size:12px">${i+1}</td>
+      <td>${esc(s.titulo)}</td>
+      <td>${badgeEstado(s.estado)}</td>
+    </tr>`).join('');
+}
+
+function renderUsuarios(list){
+  if(!list.length){document.getElementById('tbody-usuarios').innerHTML='<tr><td colspan="5"><div class="empty"><div class="icon">👥</div><p>Sin usuarios</p></div></td></tr>';return;}
+  document.getElementById('tbody-usuarios').innerHTML=list.map((u,i)=>`
+    <tr>
+      <td style="color:var(--muted);font-family:var(--mono);font-size:12px">${i+1}</td>
+      <td>${esc(u.email||'—')}</td>
+      <td>${esc(u.plan||'—')}</td>
+      <td>${u.activo!==undefined?`<span class="badge ${u.activo?'badge-green':'badge-red'}">${u.activo?'Activo':'Inactivo'}</span>`:'<span class="badge badge-gray">N/A</span>'}</td>
+      <td style="font-size:12px;color:var(--muted)">${u.created_at?new Date(u.created_at).toLocaleDateString('es-PE'):'—'}</td>
+    </tr>`).join('');
+}
+function filterUsuarios(){
+  const q=(document.getElementById('search-usr').value||'').toLowerCase();
+  renderUsuarios(allUsuarios.filter(u=>(u.email||'').toLowerCase().includes(q)));
+}
+
+function renderListaProc(list){
+  const el=document.getElementById('list-proceso');
+  if(!list.length){el.innerHTML='<div class="empty"><div class="icon">😴</div><p>Tractor inactivo</p></div>';return;}
+  el.innerHTML=list.map(p=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+      <span style="font-size:14px">🔄</span>
+      <span style="font-size:12px;color:#bbb;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.titulo)}</span>
+      <span class="badge badge-proc">Activo</span>
+    </div>`).join('')+(list.length===6?'<p style="font-size:11px;color:var(--muted);padding-top:8px">+ más en Tractor</p>':'');
+}
+function renderListaErr(list){
+  const el=document.getElementById('list-errores');
+  if(!list.length){el.innerHTML='<div class="empty"><div class="icon">✅</div><p>Sin errores</p></div>';return;}
+  el.innerHTML=list.map(p=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+      <span style="color:var(--err);font-size:14px">✕</span>
+      <span style="font-size:12px;color:#bbb;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.titulo)}</span>
+    </div>`).join('')+(list.length===6?'<p style="font-size:11px;color:var(--muted);padding-top:8px">+ más en Tractor</p>':'');
+}
+
+function renderTractorActivas(list){
+  const el=document.getElementById('tractor-activas');
+  if(!list.length){el.innerHTML='<div class="empty"><div class="icon">😴</div><p>El tractor no está descargando nada ahora mismo</p></div>';return;}
+  el.innerHTML='<div class="activity-feed">'+list.map(p=>`
+    <div class="activity-item new-item">
+      <div class="act-icon">🔄</div>
+      <div class="act-body">
+        <div class="act-title">${esc(p.titulo)}</div>
+        <div class="act-sub">en_proceso · Azure 20.201.73.185</div>
+      </div>
+      <span class="badge badge-proc">Activo</span>
+    </div>`).join('')+'</div>';
+}
+function renderTractorErrores(list){
+  const el=document.getElementById('tractor-errores');
+  if(!list.length){el.innerHTML='<div class="empty"><div class="icon">✅</div><p>Sin errores registrados</p></div>';return;}
+  el.innerHTML='<div class="activity-feed">'+list.map(p=>`
+    <div class="activity-item">
+      <div class="act-icon">❌</div>
+      <div class="act-body">
+        <div class="act-title">${esc(p.titulo)}</div>
+        <div class="act-sub">Link caído o archivo no encontrado (404)</div>
+      </div>
+      <span class="badge badge-red">Error</span>
+    </div>`).join('')+'</div>';
+}
+
+function badgeEstado(estado){
+  const s=estado||'pendiente';
+  const map={completado:{cls:'badge-green',label:'Completado'},en_proceso:{cls:'badge-proc',label:'En proceso'},pendiente:{cls:'badge-amber',label:'Pendiente'},error:{cls:'badge-red',label:'Error'}};
+  const{cls,label}=map[s]||{cls:'badge-gray',label:s};
+  return`<span class="badge ${cls}">${label}</span>`;
+}
+function arr(v){return Array.isArray(v)?v:[];}
+function set(id,val){const el=document.getElementById(id);if(el)el.textContent=val;}
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function toast(msg,ok=true){
+  const el=document.getElementById('toast');
+  el.textContent=(ok?'✓ ':'✕ ')+msg;
+  el.style.borderLeftColor=ok?'var(--green)':'var(--err)';
+  el.classList.add('show');
+  setTimeout(()=>el.classList.remove('show'),3500);
 }
 </script>
 </body>
