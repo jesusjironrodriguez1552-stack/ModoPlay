@@ -1,40 +1,46 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Netflix Admin - Fix</title>
-    <style>
-        /* Mantenemos tu estilo original */
-        *{box-sizing:border-box;margin:0;padding:0}
-        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:100vh}
-        .sidebar{position:fixed;top:0;left:0;width:220px;height:100vh;background:#141414;border-right:1px solid #222;display:flex;flex-direction:column;z-index:100}
-        .logo{padding:20px;font-size:20px;font-weight:700;color:#E50914;letter-spacing:2px}
-        .nav{flex:1;padding:12px 0}
-        .nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:14px;color:#999;cursor:pointer}
-        .nav-item:hover,.nav-item.active{background:#1e1e1e;color:#fff}
-        .nav-item.active{border-left:3px solid #E50914}
-        .main{margin-left:220px;padding:24px;min-height:100vh}
-        .page{display:none}.page.active{display:block}
-        .card{background:#141414;border:1px solid #222;border-radius:10px;padding:20px;margin-bottom:16px}
-        .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
-        .stat{background:#1e1e1e;border-radius:8px;padding:16px}
-        .stat-label{font-size:12px;color:#666;margin-bottom:6px}
-        .stat-value{font-size:24px;font-weight:500;color:#fff}
-        table{width:100%;border-collapse:collapse;font-size:13px}
-        th{text-align:left;padding:10px 12px;border-bottom:1px solid #222;color:#666}
-        td{padding:10px 12px;border-bottom:1px solid #1a1a1a;color:#ccc}
-        .btn-red{background:#E50914;color:#fff;border:none;padding:10px;border-radius:5px;cursor:pointer;width:100%}
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Netflix Admin Pro - MODO TRACTOR</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0a0a0a;color:#fff;min-height:100vh}
+.sidebar{position:fixed;top:0;left:0;width:220px;height:100vh;background:#141414;border-right:1px solid #222;display:flex;flex-direction:column;z-index:100}
+.logo{padding:20px;font-size:20px;font-weight:700;color:#E50914;border-bottom:1px solid #222;letter-spacing:2px}
+.nav{flex:1;padding:12px 0}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:14px;color:#999;cursor:pointer}
+.nav-item:hover,.nav-item.active{background:#1e1e1e;color:#fff}
+.nav-item.active{border-left:3px solid #E50914}
+.main{margin-left:220px;padding:24px;min-height:100vh}
+.page{display:none}.page.active{display:block}
+h2{font-size:18px;font-weight:500;margin-bottom:20px;color:#fff}
+.card{background:#141414;border:1px solid #222;border-radius:10px;padding:20px;margin-bottom:16px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
+.stat{background:#1e1e1e;border-radius:8px;padding:16px}
+.stat-label{font-size:12px;color:#666;margin-bottom:6px}
+.stat-value{font-size:24px;font-weight:500;color:#fff}
+.btn{padding:8px 16px;border-radius:8px;border:1px solid #333;background:#1e1e1e;color:#fff;cursor:pointer;font-size:13px}
+.btn-red{background:#E50914;color:#fff;border:none}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:10px 12px;border-bottom:1px solid #222;font-weight:500;font-size:12px;color:#666}
+td{padding:10px 12px;border-bottom:1px solid #1a1a1a;color:#ccc}
+input,select,textarea{width:100%;padding:8px 12px;border:1px solid #333;border-radius:8px;background:#1e1e1e;color:#fff;margin-bottom:12px}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500}
+.badge-green{background:#0d2b1a;color:#4caf50}
+.badge-red{background:#2b0d0d;color:#f44336}
+.badge-amber{background:#2b200d;color:#ff9800}
+</style>
 </head>
 <body>
 
-<div id="login-screen" class="sidebar" style="position:relative; width:100%; height:100vh; justify-content:center; align-items:center; border:none; background:#000">
-    <div style="background:#141414; padding:40px; border-radius:10px; width:350px; border:1px solid #222">
-        <div class="logo" style="text-align:center; padding:0; margin-bottom:20px">NETFLIX</div>
-        <input id="admin-user" type="text" value="admin" style="width:100%; padding:10px; margin-bottom:10px; background:#222; border:1px solid #333; color:#fff">
-        <input id="admin-pass" type="password" value="netflix2026" style="width:100%; padding:10px; margin-bottom:20px; background:#222; border:1px solid #333; color:#fff">
-        <button class="btn-red" onclick="doLogin()">Ingresar</button>
+<div id="login-screen" style="display:flex; justify-content:center; align-items:center; height:100vh; background:#000">
+    <div class="card" style="width:360px">
+        <div class="logo" style="text-align:center; border:none">NETFLIX</div>
+        <input id="admin-user" type="text" value="admin">
+        <input id="admin-pass" type="password" value="netflix2026">
+        <button class="btn btn-red" style="width:100%" onclick="doLogin()">Ingresar</button>
     </div>
 </div>
 
@@ -44,74 +50,110 @@
         <nav class="nav">
             <div class="nav-item active" onclick="showPage('dashboard',this)">📊 Dashboard</div>
             <div class="nav-item" onclick="showPage('peliculas',this)">🎬 Películas</div>
+            <div class="nav-item" onclick="showPage('series',this)">📺 Series</div>
+            <div class="nav-item" onclick="showPage('usuarios',this)">👥 Usuarios</div>
         </nav>
-        <button style="background:none; border:none; color:#666; padding:20px; cursor:pointer" onclick="location.reload()">Cerrar sesión</button>
+        <div style="padding:16px; border-top:1px solid #222"><button class="btn" style="width:100%" onclick="location.reload()">Salir</button></div>
     </div>
 
     <div class="main">
         <div id="page-dashboard" class="page active">
-            <h2>Dashboard</h2>
+            <h2>Dashboard en Vivo</h2>
             <div class="stats">
-                <div class="stat"><div class="stat-label">Total Películas</div><div id="stat-total" class="stat-value">...</div></div>
+                <div class="stat"><div class="stat-label">Total Catálogo</div><div id="stat-total" class="stat-value">0</div></div>
+                <div class="stat"><div class="stat-label">Videos Listos</div><div id="stat-listos" class="stat-value" style="color:#4caf50">0</div></div>
+                <div class="stat"><div class="stat-label">Links Rotos</div><div id="stat-errores" class="stat-value" style="color:#f44336">0</div></div>
+                <div class="stat"><div class="stat-label">Usuarios</div><div id="stat-usuarios" class="stat-value">0</div></div>
+            </div>
+            <div class="card">
+                <h3>Progreso General de Descargas</h3>
+                <div style="background:#333; height:12px; border-radius:10px; overflow:hidden; margin:10px 0">
+                    <div id="main-progress" style="background:#E50914; height:100%; width:0%; transition:0.5s"></div>
+                </div>
+                <p id="progress-text" style="font-size:12px; color:#888">Sincronizando estados...</p>
             </div>
         </div>
 
         <div id="page-peliculas" class="page">
-            <h2>Películas en Base de Datos</h2>
+            <div style="display:flex; justify-content:space-between; margin-bottom:15px">
+                <h2 style="margin:0">Películas</h2>
+                <input type="text" id="search-pel" placeholder="Buscar..." style="width:250px; margin:0" oninput="filterPeliculas()">
+            </div>
             <div class="card" style="padding:0">
                 <table>
-                    <thead><tr><th>Título</th><th>URL de Video</th></tr></thead>
-                    <tbody id="tbody-peliculas">
-                        <tr><td colspan="2" style="text-align:center; padding:40px">Cargando datos de Supabase...</td></tr>
-                    </tbody>
+                    <thead><tr><th>Título</th><th>Estado</th></tr></thead>
+                    <tbody id="tbody-peliculas"></tbody>
                 </table>
             </div>
         </div>
+
+        <div id="page-series" class="page"><h2>Series</h2><div class="card">En mantenimiento...</div></div>
+        <div id="page-usuarios" class="page"><h2>Usuarios</h2><div class="card">En mantenimiento...</div></div>
     </div>
 </div>
 
 <script>
 const S_URL = 'https://ngnutcjeuknwiaebduun.supabase.co';
 const S_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nbnV0Y2pldWtud2lhZWJkdXVuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MzA2NzMzMSwiZXhwIjoyMDg4NjQzMzMxfQ.fCR9D9ZpMYJJJN7DK84kzq7Aq7qdl7gAvBa_xMZhmv4';
+let allPeliculas = [];
 
 function doLogin(){
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-    loadPeliculas();
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='block';
+    loadAll();
+    setInterval(loadAll, 15000); // Actualiza cada 15 seg
 }
 
 function showPage(name, el){
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-    document.getElementById('page-' + name).classList.add('active');
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+    document.getElementById('page-'+name).classList.add('active');
     el.classList.add('active');
 }
 
-async function loadPeliculas() {
-    try {
-        const res = await fetch(`${S_URL}/rest/v1/peliculas?select=titulo,url_video&limit=100`, {
-            headers: { 'apikey': S_KEY, 'Authorization': `Bearer ${S_KEY}` }
-        });
-        const data = await res.json();
-        
-        // Actualizar contador
-        document.getElementById('stat-total').textContent = data.length + "+";
+async function sb(tabla, query=''){
+    const r = await fetch(`${S_URL}/rest/v1/${tabla}${query}`, {
+        headers: {'apikey': S_KEY, 'Authorization': `Bearer ${S_KEY}`}
+    });
+    return r.json();
+}
 
-        // Llenar tabla
-        const tbody = document.getElementById('tbody-peliculas');
-        if (data.length > 0) {
-            tbody.innerHTML = data.map(p => `
-                <tr>
-                    <td style="color:#fff; font-weight:500">${p.titulo}</td>
-                    <td style="color:#666; font-size:11px">${p.url_video ? p.url_video.substring(0, 50) + '...' : 'Sin URL'}</td>
-                </tr>
-            `).join('');
-        } else {
-            tbody.innerHTML = '<tr><td colspan="2">No se encontraron películas.</td></tr>';
-        }
-    } catch (err) {
-        document.getElementById('tbody-peliculas').innerHTML = '<tr><td colspan="2" style="color:red">Error de conexión con Supabase.</td></tr>';
-    }
+async function loadAll(){
+    try {
+        const [total, listos, errores, usrs, pels] = await Promise.all([
+            sb('peliculas', '?select=id'),
+            sb('peliculas', '?estado=eq.completado&select=id'),
+            sb('peliculas', '?estado=eq.error&select=id'),
+            sb('usuarios', '?select=id'),
+            sb('peliculas', '?select=titulo,estado&limit=100')
+        ]);
+
+        document.getElementById('stat-total').textContent = total.length || 0;
+        document.getElementById('stat-listos').textContent = listos.length || 0;
+        document.getElementById('stat-errores').textContent = errores.length || 0;
+        document.getElementById('stat-usuarios').textContent = usrs.length || 0;
+
+        const pct = total.length > 0 ? (listos.length / total.length * 100).toFixed(1) : 0;
+        document.getElementById('main-progress').style.width = pct + '%';
+        document.getElementById('progress-text').textContent = `${pct}% del catálogo procesado.`;
+
+        allPeliculas = pels;
+        renderPeliculas(allPeliculas);
+    } catch(e) { console.error("Error:", e); }
+}
+
+function renderPeliculas(list){
+    document.getElementById('tbody-peliculas').innerHTML = list.map(p=>`
+        <tr>
+            <td>${p.titulo}</td>
+            <td><span class="badge ${p.estado==='completado'?'badge-green':p.estado==='error'?'badge-red':'badge-amber'}">${p.estado || 'pendiente'}</span></td>
+        </tr>
+    `).join('');
+}
+
+function filterPeliculas(){
+    const q = document.getElementById('search-pel').value.toLowerCase();
+    renderPeliculas(allPeliculas.filter(p=>p.titulo.toLowerCase().includes(q)));
 }
 </script>
 </body>
