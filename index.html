@@ -734,11 +734,27 @@ function formatETA(totalMin){
   return `~${d}d ${hr}h`;
 }
 
+/* ─── COUNT EXACTO ──────────────────────────────── */
+async function sbCount(tabla, query=''){
+  try{
+    const r=await fetch(S_URL+'/rest/v1/'+tabla+query,{
+      method:'HEAD',
+      headers:{'apikey':S_KEY,'Authorization':'Bearer '+S_KEY,'Prefer':'count=exact'}
+    });
+    const ct=r.headers.get('content-range');
+    if(ct){ const m=ct.match(/\/(\d+)/); if(m) return parseInt(m[1]); }
+    return 0;
+  }catch(e){ return 0; }
+}
+
 /* ─── PELÍCULAS ─────────────────────────────────── */
 async function loadPeliculas(){
-  const data=await sb('peliculas','?select=titulo,genero,estado&order=titulo.asc&limit=2000');
+  const [data, total] = await Promise.all([
+    sb('peliculas','?select=titulo,genero,estado&order=titulo.asc&limit=2000'),
+    sbCount('peliculas')
+  ]);
   allPeliculas=arr(data);
-  set('badge-pel',allPeliculas.length);
+  set('badge-pel', total || allPeliculas.length);
   filterPeliculas();
 }
 function filterPeliculas(){
@@ -749,19 +765,27 @@ function filterPeliculas(){
 }
 function renderPeliculas(){
   const total=pelFiltered.length,start=(pelPage-1)*PER_PAGE,slice=pelFiltered.slice(start,start+PER_PAGE);
-  set('peliculas-count',`${total.toLocaleString()} películas`);
+  set('peliculas-count',total.toLocaleString()+' peliculas');
   const tbody=document.getElementById('tbody-peliculas');
   if(!slice.length){ tbody.innerHTML='<tr><td colspan="4"><div class="empty"><div class="icon">🎬</div><p>Sin resultados</p></div></td></tr>';document.getElementById('peliculas-pagination').innerHTML='';return; }
-  tbody.innerHTML=slice.map((p,i)=>`<tr><td style="color:var(--muted);font-family:var(--mono);font-size:12px">${start+i+1}</td><td>${esc(p.titulo)}</td><td style="color:var(--muted);font-size:12px">${esc(p.genero||'—')}</td><td>${badgeEstado(p.estado)}</td></tr>`).join('');
+  tbody.innerHTML=slice.map((p,i)=>'<tr><td style="color:var(--muted);font-family:var(--mono);font-size:12px">'+(start+i+1)+'</td><td>'+esc(p.titulo)+'</td><td style="color:var(--muted);font-size:12px">'+esc(p.genero||'—')+'</td><td>'+badgeEstado(p.estado)+'</td></tr>').join('');
   renderPag('peliculas-pagination',pelPage,total,'cambiarPelPag');
 }
 function cambiarPelPag(d){ pelPage+=d; renderPeliculas(); }
 
 /* ─── SERIES ────────────────────────────────────── */
 async function loadSeries(){
-  const data=await sb('series','?select=titulo,genero,estado&order=titulo.asc&limit=1000');
+  const [data, total] = await Promise.all([
+    sb('series','?select=titulo,genero,estado&order=titulo.asc&limit=2000'),
+    sbCount('series')
+  ]);
   allSeries=arr(data);
-  set('badge-ser',allSeries.length);
+  set('badge-ser', total || allSeries.length);
+  // Resetear filtro si no fue tocado por el usuario
+  const filtroEl=document.getElementById('filter-estado-ser');
+  if(filtroEl && filtroEl.value && allSeries.filter(s=>(s.estado||'pendiente')===filtroEl.value).length===0){
+    filtroEl.value='';
+  }
   filterSeries();
 }
 function filterSeries(){
@@ -772,19 +796,23 @@ function filterSeries(){
 }
 function renderSeries(){
   const total=serFiltered.length,start=(serPage-1)*PER_PAGE,slice=serFiltered.slice(start,start+PER_PAGE);
-  set('series-count',`${total.toLocaleString()} series`);
+  const allTotal=allSeries.length;
+  set('series-count',total.toLocaleString()+' de '+allTotal.toLocaleString()+' series');
   const tbody=document.getElementById('tbody-series');
-  if(!slice.length){ tbody.innerHTML='<tr><td colspan="4"><div class="empty"><div class="icon">📺</div><p>Sin resultados</p></div></td></tr>';document.getElementById('series-pagination').innerHTML='';return; }
-  tbody.innerHTML=slice.map((s,i)=>`<tr><td style="color:var(--muted);font-family:var(--mono);font-size:12px">${start+i+1}</td><td>${esc(s.titulo)}</td><td style="color:var(--muted);font-size:12px">${esc(s.genero||'—')}</td><td>${badgeEstado(s.estado)}</td></tr>`).join('');
+  if(!slice.length){ tbody.innerHTML='<tr><td colspan="4"><div class="empty"><div class="icon">📺</div><p>Sin resultados para este filtro</p></div></td></tr>';document.getElementById('series-pagination').innerHTML='';return; }
+  tbody.innerHTML=slice.map((s,i)=>'<tr><td style="color:var(--muted);font-family:var(--mono);font-size:12px">'+(start+i+1)+'</td><td>'+esc(s.titulo)+'</td><td style="color:var(--muted);font-size:12px">'+esc(s.genero||'—')+'</td><td>'+badgeEstado(s.estado)+'</td></tr>').join('');
   renderPag('series-pagination',serPage,total,'cambiarSerPag');
 }
 function cambiarSerPag(d){ serPage+=d; renderSeries(); }
 
 /* ─── EPISODIOS ─────────────────────────────────── */
 async function loadEpisodios(){
-  const data=await sb('episodios','?select=titulo,temporada,episodio,estado,archive_url&order=temporada.asc,episodio.asc&limit=5000');
+  const [data, total] = await Promise.all([
+    sb('episodios','?select=titulo,temporada,episodio,estado,archive_url&order=temporada.asc,episodio.asc&limit=5000'),
+    sbCount('episodios')
+  ]);
   allEpisodios=arr(data);
-  set('badge-epi',allEpisodios.length);
+  set('badge-epi', total || allEpisodios.length);
   filterEpisodios();
 }
 function filterEpisodios(){
