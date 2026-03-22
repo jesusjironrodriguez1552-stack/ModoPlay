@@ -16,6 +16,7 @@
   --blue:#3b82f6; --blue-dim:rgba(59,130,246,.1);
   --err:#ef4444; --err-dim:rgba(239,68,68,.1);
   --proc:#a855f7; --proc-dim:rgba(168,85,247,.1);
+  --teal:#14b8a6; --teal-dim:rgba(20,184,166,.1);
   --radius:10px;
   --font:'DM Sans',sans-serif;
   --mono:'DM Mono',monospace;
@@ -39,8 +40,6 @@ html,body{height:100%;font-family:var(--font);background:var(--bg);color:var(--t
 /* LAYOUT */
 #app{display:none;height:100vh;overflow:hidden}
 .layout{display:flex;height:100%}
-
-/* SIDEBAR */
 .sidebar{width:230px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
 .sidebar-logo{padding:22px 20px;font-size:20px;font-weight:600;color:var(--red);letter-spacing:3px;border-bottom:1px solid var(--border)}
 .sidebar-logo span{display:block;font-size:10px;font-weight:400;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-top:2px}
@@ -52,6 +51,7 @@ html,body{height:100%;font-family:var(--font);background:var(--bg);color:var(--t
 .nav-item .icon{font-size:15px;width:18px;text-align:center}
 .nav-badge{margin-left:auto;background:var(--red);color:#fff;font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;min-width:20px;text-align:center}
 .nav-badge.nb-green{background:var(--green)}
+.nav-badge.nb-amber{background:var(--amber);color:#000}
 .sidebar-footer{padding:16px;border-top:1px solid var(--border)}
 .btn-logout{width:100%;padding:9px;border:1px solid var(--border);border-radius:8px;background:transparent;color:var(--muted);font-family:var(--font);font-size:12px;cursor:pointer;transition:all .2s}
 .btn-logout:hover{border-color:#555;color:var(--text)}
@@ -63,27 +63,50 @@ html,body{height:100%;font-family:var(--font);background:var(--bg);color:var(--t
 .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:10px}
 .page-title{font-size:20px;font-weight:500}
 .page-title small{display:block;font-size:12px;color:var(--muted);font-weight:400;margin-top:2px}
+.section-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;margin-top:4px}
 
 /* STATS */
-.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:24px}
+.stats{display:grid;gap:12px;margin-bottom:16px}
 .stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;position:relative;overflow:hidden;transition:border-color .2s}
 .stat:hover{border-color:#333}
 .stat::after{content:'';position:absolute;top:0;right:0;width:3px;height:100%}
 .stat.s-green::after{background:var(--green)}.stat.s-red::after{background:var(--err)}
-.stat.s-amber::after{background:var(--amber)}.stat.s-blue::after{background:var(--blue)}.stat.s-proc::after{background:var(--proc)}
+.stat.s-amber::after{background:var(--amber)}.stat.s-blue::after{background:var(--blue)}
+.stat.s-proc::after{background:var(--proc)}.stat.s-teal::after{background:var(--teal)}
 .stat-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
 .stat-value{font-size:26px;font-weight:500;font-family:var(--mono);line-height:1}
 .stat-change{font-size:11px;color:var(--muted);margin-top:6px}
 
+/* PENDIENTES BIG */
+.pending-hero{background:var(--surface);border:1px solid rgba(245,158,11,.3);border-radius:var(--radius);padding:20px 24px;margin-bottom:16px;display:flex;align-items:center;gap:20px;position:relative;overflow:hidden}
+.pending-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(245,158,11,.05) 0%,transparent 60%);pointer-events:none}
+.pending-hero-icon{font-size:36px;opacity:.8}
+.pending-hero-body{flex:1}
+.pending-hero-label{font-size:11px;color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.pending-hero-value{font-size:42px;font-weight:600;font-family:var(--mono);color:var(--amber);line-height:1}
+.pending-hero-sub{font-size:12px;color:var(--muted);margin-top:6px}
+.pending-eta{background:rgba(245,158,11,.1);border:1px solid rgba(245,158,11,.2);border-radius:8px;padding:12px 16px;text-align:center;min-width:140px}
+.pending-eta-label{font-size:10px;color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
+.pending-eta-val{font-size:16px;font-weight:500;font-family:var(--mono);color:var(--amber)}
+
 /* CARD */
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
-.card-title{font-size:13px;font-weight:500;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card-title{font-size:13px;font-weight:500;margin-bottom:16px;display:flex;align-items:center;gap:8px;justify-content:space-between}
+.card-title-left{display:flex;align-items:center;gap:8px}
 .card-title .dot{width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0}
 
 /* PROGRESS */
 .progress-bar{background:#1e1e1e;height:8px;border-radius:4px;overflow:hidden;margin:10px 0}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--red),#ff6b6b);border-radius:4px;transition:width .8s ease}
+.progress-fill{height:100%;border-radius:4px;transition:width .8s ease}
+.progress-fill.pf-red{background:linear-gradient(90deg,var(--red),#ff6b6b)}
+.progress-fill.pf-green{background:linear-gradient(90deg,var(--green),#4ade80)}
+.progress-fill.pf-teal{background:linear-gradient(90deg,var(--teal),#2dd4bf)}
 .progress-label{display:flex;justify-content:space-between;font-size:11px;color:var(--muted)}
+
+/* DUAL PROGRESS */
+.dual-progress{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.progress-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px}
+.progress-card-title{font-size:12px;font-weight:500;margin-bottom:12px;display:flex;align-items:center;gap:6px}
 
 /* TABLE */
 .table-wrap{overflow-x:auto;border-radius:var(--radius);border:1px solid var(--border)}
@@ -103,6 +126,7 @@ tbody tr:last-child td{border-bottom:none}
 .badge-proc{background:var(--proc-dim);color:var(--proc)}.badge-proc::before{background:var(--proc);animation:pDot 1s infinite}
 .badge-gray{background:#1e1e1e;color:#777}.badge-gray::before{background:#555}
 .badge-blue{background:var(--blue-dim);color:var(--blue)}.badge-blue::before{background:var(--blue)}
+.badge-teal{background:var(--teal-dim);color:var(--teal)}.badge-teal::before{background:var(--teal)}
 @keyframes pDot{0%,100%{opacity:1}50%{opacity:.2}}
 
 /* TOOLBAR */
@@ -132,30 +156,43 @@ tbody tr:last-child td{border-bottom:none}
 .srv-detail{font-size:11px;color:var(--muted);font-family:var(--mono)}
 .srv-status{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--green)}
 .srv-status.offline{color:var(--err)}
-.speed-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.speed-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
 .speed-box{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center}
 .speed-val{font-size:22px;font-weight:500;font-family:var(--mono)}
 .speed-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:4px}
 .activity-feed{display:flex;flex-direction:column;gap:6px;max-height:400px;overflow-y:auto}
 .activity-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:8px;background:var(--surface2);border:1px solid var(--border)}
 .activity-item.new-item{border-color:var(--proc);animation:highlight .6s ease}
+.activity-item.done-item{border-color:var(--green);animation:highlightGreen .6s ease}
 @keyframes highlight{0%{background:var(--proc-dim)}100%{background:var(--surface2)}}
+@keyframes highlightGreen{0%{background:var(--green-dim)}100%{background:var(--surface2)}}
 .act-icon{font-size:18px;flex-shrink:0;width:24px;text-align:center}
 .act-body{flex:1;overflow:hidden}
 .act-title{font-size:13px;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .act-sub{font-size:11px;color:var(--muted);margin-top:2px}
 
-/* AZURE STATUS PANEL */
+/* AZURE */
 .azure-panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px}
 .azure-panel-title{font-size:13px;font-weight:500;margin-bottom:14px;display:flex;align-items:center;gap:8px;justify-content:space-between}
 .azure-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
 .azure-kv{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:12px 14px}
 .azure-kv-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
 .azure-kv-val{font-size:15px;font-weight:500;font-family:var(--mono);color:var(--text)}
-.azure-kv-val.ok{color:var(--green)}
-.azure-kv-val.err{color:var(--err)}
-.azure-kv-val.proc{color:var(--proc)}
+.azure-kv-val.ok{color:var(--green)}.azure-kv-val.err{color:var(--err)}.azure-kv-val.proc{color:var(--proc)}
 .azure-err-box{background:var(--err-dim);border:1px solid rgba(239,68,68,.25);border-radius:8px;padding:14px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--err);margin-top:12px}
+
+/* NOTIFICACIONES */
+#notif-panel{position:fixed;top:20px;right:20px;display:flex;flex-direction:column;gap:8px;z-index:9999;max-width:320px;pointer-events:none}
+.notif{background:#1a1a1a;border:1px solid var(--border);border-radius:12px;padding:12px 16px;display:flex;align-items:flex-start;gap:10px;opacity:0;transform:translateX(20px);transition:.35s cubic-bezier(.22,1,.36,1);pointer-events:auto;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+.notif.show{opacity:1;transform:translateX(0)}
+.notif.notif-done{border-left:3px solid var(--green)}
+.notif.notif-proc{border-left:3px solid var(--proc)}
+.notif-icon{font-size:18px;flex-shrink:0;margin-top:1px}
+.notif-body{flex:1}
+.notif-title{font-size:13px;font-weight:500;color:var(--text)}
+.notif-sub{font-size:11px;color:var(--muted);margin-top:3px}
+.notif-close{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;padding:0;line-height:1;flex-shrink:0}
+.notif-close:hover{color:var(--text)}
 
 /* EMPTY */
 .empty{text-align:center;padding:60px 20px;color:var(--muted)}
@@ -163,22 +200,24 @@ tbody tr:last-child td{border-bottom:none}
 .empty p{font-size:13px}
 
 /* TOAST */
-#toast{position:fixed;bottom:24px;right:24px;background:#222;border:1px solid #333;border-left:3px solid var(--green);color:var(--text);padding:12px 18px;border-radius:10px;font-size:13px;opacity:0;transform:translateY(8px);transition:.3s;z-index:9999;max-width:300px;pointer-events:none}
+#toast{position:fixed;bottom:24px;right:24px;background:#222;border:1px solid #333;border-left:3px solid var(--green);color:var(--text);padding:12px 18px;border-radius:10px;font-size:13px;opacity:0;transform:translateY(8px);transition:.3s;z-index:9998;max-width:300px;pointer-events:none}
 #toast.show{opacity:1;transform:translateY(0)}
 
-@media(max-width:1100px){.stats{grid-template-columns:repeat(3,1fr)}.azure-row{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:1100px){.azure-row{grid-template-columns:repeat(2,1fr)}.speed-grid{grid-template-columns:repeat(2,1fr)}.dual-progress{grid-template-columns:1fr}}
 @media(max-width:900px){
-  .stats{grid-template-columns:repeat(2,1fr)}
   .sidebar{width:60px}
   .sidebar-logo span,.nav-item span,.nav-group,.sidebar-footer{display:none}
   .nav-item{justify-content:center;padding:14px}
   .main{padding:20px 16px}
   .srv-grid{grid-template-columns:1fr}
-  .azure-row{grid-template-columns:repeat(2,1fr)}
+  .pending-hero{flex-direction:column;text-align:center}
 }
 </style>
 </head>
 <body>
+
+<!-- NOTIFICACIONES -->
+<div id="notif-panel"></div>
 
 <!-- LOGIN -->
 <div id="login-screen">
@@ -207,7 +246,8 @@ tbody tr:last-child td{border-bottom:none}
         <div class="nav-item" onclick="showPage('tractor',this)"><span class="icon">🚜</span><span>Tractor</span><span class="nav-badge nb-green" id="badge-proc">0</span></div>
         <div class="nav-group">Catálogo</div>
         <div class="nav-item" onclick="showPage('peliculas',this)"><span class="icon">🎬</span><span>Películas</span><span class="nav-badge" id="badge-pel">0</span></div>
-        <div class="nav-item" onclick="showPage('series',this)"><span class="icon">📺</span><span>Series</span></div>
+        <div class="nav-item" onclick="showPage('series',this)"><span class="icon">📺</span><span>Series</span><span class="nav-badge" id="badge-ser">0</span></div>
+        <div class="nav-item" onclick="showPage('episodios',this)"><span class="icon">🎞️</span><span>Episodios</span><span class="nav-badge" id="badge-epi">0</span></div>
         <div class="nav-group">Gestión</div>
         <div class="nav-item" onclick="showPage('usuarios',this)"><span class="icon">👥</span><span>Usuarios</span></div>
       </nav>
@@ -221,31 +261,77 @@ tbody tr:last-child td{border-bottom:none}
       <!-- DASHBOARD -->
       <div id="page-dashboard" class="page active">
         <div class="page-header">
-          <div class="page-title">Dashboard <small>Resumen en tiempo real</small></div>
+          <div class="page-title">Dashboard <small>Resumen en tiempo real · actualiza cada 10s</small></div>
           <div class="live-label"><span class="live-dot" id="live-dot"></span><span id="live-text">Conectando...</span></div>
         </div>
-        <div class="stats">
-          <div class="stat s-blue"><div class="stat-label">Total catálogo</div><div id="stat-total" class="stat-value">–</div><div class="stat-change">películas</div></div>
-          <div class="stat s-proc"><div class="stat-label">En proceso</div><div id="stat-proc" class="stat-value" style="color:var(--proc)">–</div><div class="stat-change">descargando ahora</div></div>
-          <div class="stat s-green"><div class="stat-label">Completadas</div><div id="stat-listos" class="stat-value" style="color:var(--green)">–</div><div class="stat-change">listas para ver</div></div>
-          <div class="stat s-red"><div class="stat-label">Con error</div><div id="stat-errores" class="stat-value" style="color:var(--err)">–</div><div class="stat-change">links rotos</div></div>
-          <div class="stat s-amber"><div class="stat-label">Usuarios</div><div id="stat-usuarios" class="stat-value" style="color:var(--amber)">–</div><div class="stat-change">registrados</div></div>
+
+        <!-- PENDIENTES HERO -->
+        <div class="pending-hero">
+          <div class="pending-hero-icon">⏳</div>
+          <div class="pending-hero-body">
+            <div class="pending-hero-label">Episodios pendientes</div>
+            <div class="pending-hero-value" id="hero-pendientes">—</div>
+            <div class="pending-hero-sub" id="hero-pendientes-sub">calculando...</div>
+          </div>
+          <div class="pending-eta">
+            <div class="pending-eta-label">Tiempo estimado</div>
+            <div class="pending-eta-val" id="hero-eta">—</div>
+          </div>
         </div>
-        <div class="card">
-          <div class="card-title"><span class="dot"></span>Progreso general del catálogo</div>
-          <div class="progress-label"><span id="progress-pct">0%</span><span id="progress-counts">0 / 0</span></div>
-          <div class="progress-bar"><div id="main-progress" class="progress-fill" style="width:0%"></div></div>
-          <div style="font-size:11px;color:var(--muted);margin-top:4px" id="progress-text">Calculando...</div>
+
+        <!-- STATS PELÍCULAS -->
+        <div class="section-label">🎬 Películas</div>
+        <div class="stats" style="grid-template-columns:repeat(4,1fr)">
+          <div class="stat s-blue"><div class="stat-label">Total</div><div id="stat-pel-total" class="stat-value">–</div><div class="stat-change">películas</div></div>
+          <div class="stat s-proc"><div class="stat-label">En proceso</div><div id="stat-pel-proc" class="stat-value" style="color:var(--proc)">–</div></div>
+          <div class="stat s-green"><div class="stat-label">Completadas</div><div id="stat-pel-done" class="stat-value" style="color:var(--green)">–</div></div>
+          <div class="stat s-red"><div class="stat-label">Con error</div><div id="stat-pel-err" class="stat-value" style="color:var(--err)">–</div></div>
         </div>
+
+        <!-- STATS EPISODIOS -->
+        <div class="section-label">🎞️ Episodios</div>
+        <div class="stats" style="grid-template-columns:repeat(5,1fr);margin-bottom:20px">
+          <div class="stat s-blue"><div class="stat-label">Total</div><div id="stat-epi-total" class="stat-value">–</div></div>
+          <div class="stat s-proc"><div class="stat-label">En proceso</div><div id="stat-epi-proc" class="stat-value" style="color:var(--proc)">–</div></div>
+          <div class="stat s-green"><div class="stat-label">Completados</div><div id="stat-epi-done" class="stat-value" style="color:var(--green)">–</div></div>
+          <div class="stat s-red"><div class="stat-label">Con error</div><div id="stat-epi-err" class="stat-value" style="color:var(--err)">–</div></div>
+          <div class="stat s-amber"><div class="stat-label">Usuarios</div><div id="stat-usuarios" class="stat-value" style="color:var(--amber)">–</div></div>
+        </div>
+
+        <!-- BARRAS DE PROGRESO DOBLES -->
+        <div class="dual-progress">
+          <div class="progress-card">
+            <div class="progress-card-title"><span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block"></span>Episodios completados</div>
+            <div class="progress-label"><span id="pct-completado">0%</span><span id="cnt-completado">0 / 0</span></div>
+            <div class="progress-bar"><div id="bar-completado" class="progress-fill pf-green" style="width:0%"></div></div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px" id="txt-completado">—</div>
+          </div>
+          <div class="progress-card">
+            <div class="progress-card-title"><span style="width:8px;height:8px;border-radius:50%;background:var(--teal);display:inline-block"></span>Subidos a Archive.org</div>
+            <div class="progress-label"><span id="pct-archive">0%</span><span id="cnt-archive">0 / 0</span></div>
+            <div class="progress-bar"><div id="bar-archive" class="progress-fill pf-teal" style="width:0%"></div></div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px" id="txt-archive">episodios con archive_url</div>
+          </div>
+        </div>
+
+        <!-- LISTAS -->
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
           <div class="card">
-            <div class="card-title"><span class="dot" style="background:var(--proc)"></span>Descargando ahora</div>
+            <div class="card-title">
+              <div class="card-title-left"><span class="dot" style="background:var(--proc)"></span>Descargando ahora</div>
+            </div>
             <div id="list-proceso"><div class="empty"><div class="icon">😴</div><p>Tractor inactivo</p></div></div>
           </div>
           <div class="card">
-            <div class="card-title"><span class="dot" style="background:var(--err)"></span>Últimos errores</div>
-            <div id="list-errores"><div class="empty"><div class="icon">✅</div><p>Sin errores</p></div></div>
+            <div class="card-title">
+              <div class="card-title-left"><span class="dot" style="background:var(--green)"></span>Recién completados</div>
+            </div>
+            <div id="list-recien"><div class="empty"><div class="icon">⏳</div><p>Aún no hay completados</p></div></div>
           </div>
+        </div>
+        <div class="card">
+          <div class="card-title"><div class="card-title-left"><span class="dot" style="background:var(--err)"></span>Últimos errores</div></div>
+          <div id="list-errores"><div class="empty"><div class="icon">✅</div><p>Sin errores</p></div></div>
         </div>
       </div>
 
@@ -255,88 +341,69 @@ tbody tr:last-child td{border-bottom:none}
           <div class="page-title">Monitor del Tractor 🚜 <small>Azure VM · 20.213.8.19 · Puerto 5000</small></div>
           <button class="btn btn-primary" onclick="loadAll()">↻ Actualizar ahora</button>
         </div>
-
-        <!-- Tarjetas de servidor -->
         <div class="srv-grid">
           <div class="srv-card">
             <div class="srv-icon">☁️</div>
-            <div class="srv-info">
-              <div class="srv-name">Servidor Azure</div>
-              <div class="srv-detail">20.213.8.19 · Puerto 5000</div>
-            </div>
+            <div class="srv-info"><div class="srv-name">Servidor Azure</div><div class="srv-detail">20.213.8.19 · Puerto 5000</div></div>
             <div class="srv-status" id="azure-srv-status"><span class="live-dot off"></span>Verificando...</div>
           </div>
           <div class="srv-card">
             <div class="srv-icon">📁</div>
-            <div class="srv-info">
-              <div class="srv-name">Entorno activo</div>
-              <div class="srv-detail">source cine_env/bin/activate</div>
-            </div>
+            <div class="srv-info"><div class="srv-name">Entorno activo</div><div class="srv-detail">source cine_env/bin/activate</div></div>
           </div>
           <div class="srv-card">
             <div class="srv-icon">🕐</div>
-            <div class="srv-info">
-              <div class="srv-name">Última sincronización</div>
-              <div class="srv-detail" id="last-sync">—</div>
-            </div>
+            <div class="srv-info"><div class="srv-name">Última sincronización</div><div class="srv-detail" id="last-sync">—</div></div>
           </div>
         </div>
 
-        <!-- Panel de estado Azure -->
-        <div class="azure-panel" id="azure-status-panel">
+        <div class="azure-panel">
           <div class="azure-panel-title">
             <div style="display:flex;align-items:center;gap:8px">
               <span style="width:6px;height:6px;border-radius:50%;background:var(--blue);display:inline-block"></span>
-              Estado del servidor Flask · <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">http://20.213.8.19:5000/status</span>
+              Estado Flask · <span style="font-family:var(--mono);font-size:11px;color:var(--muted)">http://20.213.8.19:5000/status</span>
             </div>
             <span id="azure-ping-label" class="badge badge-gray">—</span>
           </div>
-          <div class="azure-row" id="azure-kv-row">
+          <div class="azure-row">
             <div class="azure-kv"><div class="azure-kv-label">Estado</div><div class="azure-kv-val" id="az-estado">—</div></div>
             <div class="azure-kv"><div class="azure-kv-label">En proceso</div><div class="azure-kv-val proc" id="az-proc">—</div></div>
             <div class="azure-kv"><div class="azure-kv-label">Completadas</div><div class="azure-kv-val ok" id="az-done">—</div></div>
             <div class="azure-kv"><div class="azure-kv-label">Errores</div><div class="azure-kv-val err" id="az-err">—</div></div>
           </div>
-          <!-- Campos extra que vengan del servidor -->
-          <div id="azure-extra-row" style="display:none;margin-top:10px">
-            <div class="azure-row" id="azure-extra-kv"></div>
-          </div>
-          <!-- Error de conexión -->
+          <div id="azure-extra-row" style="display:none;margin-top:10px"><div class="azure-row" id="azure-extra-kv"></div></div>
           <div class="azure-err-box" id="azure-conn-err" style="display:none">
-            ⚠️ No se pudo conectar con el servidor Flask. Verifica que esté corriendo y que el puerto 5000 esté abierto en el firewall de Azure.
+            ⚠️ No se pudo conectar. Verifica que Flask esté corriendo, puerto 5000 abierto en Azure y CORS habilitado.
           </div>
-          <!-- Raw JSON para debug -->
           <details style="margin-top:12px">
-            <summary style="font-size:11px;color:var(--muted);cursor:pointer;user-select:none">Ver respuesta JSON completa</summary>
+            <summary style="font-size:11px;color:var(--muted);cursor:pointer;user-select:none">Ver JSON completo</summary>
             <pre id="azure-raw" style="font-size:11px;font-family:var(--mono);color:#555;margin-top:8px;white-space:pre-wrap;word-break:break-all;background:var(--surface2);padding:12px;border-radius:8px;border:1px solid var(--border)">—</pre>
           </details>
         </div>
 
-        <!-- Contadores Supabase -->
         <div class="speed-grid">
-          <div class="speed-box"><div class="speed-val" id="spd-proc" style="color:var(--proc)">0</div><div class="speed-label">En proceso</div></div>
-          <div class="speed-box"><div class="speed-val" id="spd-done" style="color:var(--green)">0</div><div class="speed-label">Completadas</div></div>
-          <div class="speed-box"><div class="speed-val" id="spd-err" style="color:var(--err)">0</div><div class="speed-label">Errores</div></div>
+          <div class="speed-box"><div class="speed-val" id="spd-proc" style="color:var(--proc)">0</div><div class="speed-label">Epi. en proceso</div></div>
+          <div class="speed-box"><div class="speed-val" id="spd-done" style="color:var(--green)">0</div><div class="speed-label">Epi. completados</div></div>
+          <div class="speed-box"><div class="speed-val" id="spd-err" style="color:var(--err)">0</div><div class="speed-label">Epi. con error</div></div>
+          <div class="speed-box"><div class="speed-val" id="spd-archive" style="color:var(--teal)">0</div><div class="speed-label">En Archive.org</div></div>
         </div>
 
         <div class="card">
-          <div class="card-title"><span class="dot" style="background:var(--proc)"></span>Descargas activas</div>
-          <div id="tractor-activas"><div class="empty"><div class="icon">😴</div><p>El tractor no está descargando nada ahora mismo</p></div></div>
+          <div class="card-title"><div class="card-title-left"><span class="dot" style="background:var(--proc)"></span>Episodios descargando ahora</div></div>
+          <div id="tractor-activas"><div class="empty"><div class="icon">😴</div><p>El tractor no está descargando nada</p></div></div>
         </div>
         <div class="card">
-          <div class="card-title"><span class="dot" style="background:var(--err)"></span>Log de errores</div>
+          <div class="card-title"><div class="card-title-left"><span class="dot" style="background:var(--err)"></span>Episodios con error</div></div>
           <div id="tractor-errores"><div class="empty"><div class="icon">✅</div><p>Sin errores registrados</p></div></div>
         </div>
       </div>
 
       <!-- PELÍCULAS -->
       <div id="page-peliculas" class="page">
-        <div class="page-header">
-          <div class="page-title">Películas <small id="peliculas-count">Cargando...</small></div>
-        </div>
+        <div class="page-header"><div class="page-title">Películas <small id="peliculas-count">Cargando...</small></div></div>
         <div class="toolbar">
           <input class="search-input" id="search-pel" type="search" placeholder="🔍  Buscar película..." oninput="filterPeliculas()">
-          <select class="filter-select" id="filter-estado" onchange="filterPeliculas()">
+          <select class="filter-select" id="filter-estado-pel" onchange="filterPeliculas()">
             <option value="">Todos los estados</option>
             <option value="completado">✅  Completado</option>
             <option value="en_proceso">🔄  En proceso</option>
@@ -346,8 +413,8 @@ tbody tr:last-child td{border-bottom:none}
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>#</th><th>Título</th><th>Estado</th></tr></thead>
-            <tbody id="tbody-peliculas"><tr><td colspan="3" style="text-align:center;color:var(--muted);padding:40px">Cargando...</td></tr></tbody>
+            <thead><tr><th>#</th><th>Título</th><th>Género</th><th>Estado</th></tr></thead>
+            <tbody id="tbody-peliculas"><tr><td colspan="4" style="text-align:center;color:var(--muted);padding:40px">Cargando...</td></tr></tbody>
           </table>
         </div>
         <div id="peliculas-pagination" style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;font-size:12px;color:var(--muted)"></div>
@@ -355,9 +422,7 @@ tbody tr:last-child td{border-bottom:none}
 
       <!-- SERIES -->
       <div id="page-series" class="page">
-        <div class="page-header">
-          <div class="page-title">Series <small>Catálogo completo</small></div>
-        </div>
+        <div class="page-header"><div class="page-title">Series <small id="series-count">Cargando...</small></div></div>
         <div class="toolbar">
           <input class="search-input" id="search-ser" type="search" placeholder="🔍  Buscar serie..." oninput="filterSeries()">
           <select class="filter-select" id="filter-estado-ser" onchange="filterSeries()">
@@ -370,24 +435,50 @@ tbody tr:last-child td{border-bottom:none}
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>#</th><th>Título</th><th>Estado</th></tr></thead>
-            <tbody id="tbody-series"><tr><td colspan="3" style="text-align:center;color:var(--muted);padding:40px">Cargando...</td></tr></tbody>
+            <thead><tr><th>#</th><th>Título</th><th>Género</th><th>Estado</th></tr></thead>
+            <tbody id="tbody-series"><tr><td colspan="4" style="text-align:center;color:var(--muted);padding:40px">Cargando...</td></tr></tbody>
           </table>
         </div>
+        <div id="series-pagination" style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;font-size:12px;color:var(--muted)"></div>
+      </div>
+
+      <!-- EPISODIOS -->
+      <div id="page-episodios" class="page">
+        <div class="page-header"><div class="page-title">Episodios <small id="episodios-count">Cargando...</small></div></div>
+        <div class="toolbar">
+          <input class="search-input" id="search-epi" type="search" placeholder="🔍  Buscar episodio..." oninput="filterEpisodios()">
+          <select class="filter-select" id="filter-estado-epi" onchange="filterEpisodios()">
+            <option value="">Todos los estados</option>
+            <option value="completado">✅  Completado</option>
+            <option value="en_proceso">🔄  En proceso</option>
+            <option value="pendiente">⏳  Pendiente</option>
+            <option value="error">❌  Error</option>
+          </select>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>#</th><th>Título</th><th>T</th><th>Ep</th><th>Archive</th><th>Estado</th></tr></thead>
+            <tbody id="tbody-episodios"><tr><td colspan="6" style="text-align:center;color:var(--muted);padding:40px">Cargando...</td></tr></tbody>
+          </table>
+        </div>
+        <div id="episodios-pagination" style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;font-size:12px;color:var(--muted)"></div>
       </div>
 
       <!-- USUARIOS -->
       <div id="page-usuarios" class="page">
-        <div class="page-header">
-          <div class="page-title">Usuarios <small id="usuarios-count">Cargando...</small></div>
-        </div>
+        <div class="page-header"><div class="page-title">Usuarios <small id="usuarios-count">Cargando...</small></div></div>
         <div class="toolbar">
-          <input class="search-input" id="search-usr" type="search" placeholder="🔍  Buscar usuario..." oninput="filterUsuarios()">
+          <input class="search-input" id="search-usr" type="search" placeholder="🔍  Buscar nombre o correo..." oninput="filterUsuarios()">
+          <select class="filter-select" id="filter-activo" onchange="filterUsuarios()">
+            <option value="">Todos</option>
+            <option value="true">✅  Activos</option>
+            <option value="false">❌  Inactivos</option>
+          </select>
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th>#</th><th>Email</th><th>Plan</th><th>Estado</th><th>Registrado</th></tr></thead>
-            <tbody id="tbody-usuarios"><tr><td colspan="5" style="text-align:center;color:var(--muted);padding:40px">Cargando...</td></tr></tbody>
+            <thead><tr><th>#</th><th>Nombre</th><th>Correo</th><th>Estado</th><th>Expira</th><th>Código</th></tr></thead>
+            <tbody id="tbody-usuarios"><tr><td colspan="6" style="text-align:center;color:var(--muted);padding:40px">Cargando...</td></tr></tbody>
           </table>
         </div>
       </div>
@@ -398,344 +489,447 @@ tbody tr:last-child td{border-bottom:none}
 <div id="toast"></div>
 
 <script>
-/* ─── CONFIG ─────────────────────────────────────────────── */
-const S_URL  = 'https://ngnutcjeuknwiaebduun.supabase.co';
-const S_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nbnV0Y2pldWtud2lhZWJkdXVuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MzA2NzMzMSwiZXhwIjoyMDg4NjQzMzMxfQ.fCR9D9ZpMYJJJN7DK84kzq7Aq7qdl7gAvBa_xMZhmv4';
-const AZURE_STATUS_URL = 'http://20.213.8.19:5000/status';   // ← tu servidor Flask
-const CREDS  = { user: 'admin', pass: 'netflix2026' };
-const RELOAD = 10000;  // ms entre actualizaciones automáticas
+/* ─── CONFIG ─────────────────────────────────────── */
+const S_URL     = 'https://ngnutcjeuknwiaebduun.supabase.co';
+const S_KEY     = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5nbnV0Y2pldWtud2lhZWJkdXVuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MzA2NzMzMSwiZXhwIjoyMDg4NjQzMzMxfQ.fCR9D9ZpMYJJJN7DK84kzq7Aq7qdl7gAvBa_xMZhmv4';
+const AZURE_URL = 'http://20.213.8.19:5000/status';
+const CREDS     = { user:'admin', pass:'netflix2026' };
+const RELOAD    = 10000;
+const PER_PAGE  = 50;
 
-let allPeliculas = [], allSeries = [], allUsuarios = [];
-let pelPage = 1, pelFiltered = [];
-const PER_PAGE = 50;
-let timer = null, prevProcIds = new Set();
+let timer = null;
+// Tracking para notificaciones
+let prevProcIds  = new Set();  // episodios en_proceso
+let prevDoneIds  = new Set();  // episodios completado
+let firstLoad    = true;
 
-/* ─── AUTH ───────────────────────────────────────────────── */
-function doLogin() {
-  const u = document.getElementById('admin-user').value.trim();
-  const p = document.getElementById('admin-pass').value;
-  const err = document.getElementById('login-err');
-  if (u === CREDS.user && p === CREDS.pass) {
-    err.style.display = 'none';
-    document.getElementById('login-screen').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
+let allPeliculas=[], allSeries=[], allEpisodios=[], allUsuarios=[];
+let pelPage=1, pelFiltered=[];
+let serPage=1, serFiltered=[];
+let epiPage=1, epiFiltered=[];
+
+/* ─── AUTH ──────────────────────────────────────── */
+function doLogin(){
+  const u=document.getElementById('admin-user').value.trim();
+  const p=document.getElementById('admin-pass').value;
+  if(u===CREDS.user&&p===CREDS.pass){
+    document.getElementById('login-err').style.display='none';
+    document.getElementById('login-screen').style.display='none';
+    document.getElementById('app').style.display='block';
     loadAll();
-    timer = setInterval(loadAll, RELOAD);
+    timer=setInterval(loadAll,RELOAD);
   } else {
-    err.style.display = 'block';
-    document.getElementById('admin-pass').value = '';
+    document.getElementById('login-err').style.display='block';
+    document.getElementById('admin-pass').value='';
   }
 }
-function doLogout() { clearInterval(timer); location.reload(); }
+function doLogout(){ clearInterval(timer); location.reload(); }
 
-/* ─── NAV ────────────────────────────────────────────────── */
-function showPage(name, el) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  document.getElementById('page-' + name).classList.add('active');
+/* ─── NAV ───────────────────────────────────────── */
+function showPage(name,el){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
   el.classList.add('active');
 }
 
-/* ─── SUPABASE ───────────────────────────────────────────── */
-async function sb(tabla, query = '') {
-  try {
-    const r = await fetch(`${S_URL}/rest/v1/${tabla}${query}`, {
-      headers: { 'apikey': S_KEY, 'Authorization': `Bearer ${S_KEY}` }
+/* ─── SUPABASE ──────────────────────────────────── */
+async function sb(tabla,query=''){
+  try{
+    const r=await fetch(`${S_URL}/rest/v1/${tabla}${query}`,{
+      headers:{'apikey':S_KEY,'Authorization':`Bearer ${S_KEY}`,'Accept':'application/json'}
     });
-    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    if(!r.ok){ const t=await r.text(); throw new Error(`HTTP ${r.status}: ${t.slice(0,120)}`); }
     return r.json();
-  } catch (e) {
-    console.warn(`[sb] ${tabla}:`, e.message);
-    return [];
+  }catch(e){ console.warn(`[sb] ${tabla}:`,e.message); return []; }
+}
+
+/* ─── AZURE STATUS ──────────────────────────────── */
+async function loadAzureStatus(){
+  const connErr=document.getElementById('azure-conn-err');
+  const pingLbl=document.getElementById('azure-ping-label');
+  const srvStat=document.getElementById('azure-srv-status');
+  const rawEl  =document.getElementById('azure-raw');
+  try{
+    const t0=Date.now();
+    const res=await fetch(AZURE_URL,{signal:AbortSignal.timeout(8000)});
+    const ms=Date.now()-t0;
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data=await res.json();
+    connErr.style.display='none';
+    srvStat.innerHTML='<span class="live-dot"></span>Online';
+    srvStat.className='srv-status';
+    pingLbl.textContent=`${ms} ms`;
+    pingLbl.className='badge badge-green';
+    rawEl.textContent=JSON.stringify(data,null,2);
+    set('az-estado', data.status||data.estado||data.state||'ok');
+    set('az-proc',   data.en_proceso??data.processing??data.active??data.running??'—');
+    set('az-done',   data.completado??data.completed??data.done??'—');
+    set('az-err',    data.error??data.errors??data.failed??'—');
+    const known=new Set(['status','estado','state','en_proceso','processing','active','running','completado','completed','done','error','errors','failed']);
+    const extras=Object.entries(data).filter(([k])=>!known.has(k));
+    const extraRow=document.getElementById('azure-extra-row');
+    const extraGrid=document.getElementById('azure-extra-kv');
+    if(extras.length){
+      extraRow.style.display='block';
+      extraGrid.innerHTML=extras.map(([k,v])=>`<div class="azure-kv"><div class="azure-kv-label">${esc(k)}</div><div class="azure-kv-val">${esc(String(v))}</div></div>`).join('');
+    } else extraRow.style.display='none';
+  }catch(e){
+    connErr.style.display='flex';
+    srvStat.innerHTML='<span class="live-dot off"></span>Offline';
+    srvStat.className='srv-status offline';
+    pingLbl.textContent='Sin respuesta';
+    pingLbl.className='badge badge-red';
+    rawEl.textContent='Error: '+e.message;
   }
 }
 
-/* ─── AZURE STATUS ───────────────────────────────────────── */
-async function loadAzureStatus() {
-  const connErr  = document.getElementById('azure-conn-err');
-  const pingLbl  = document.getElementById('azure-ping-label');
-  const srvStat  = document.getElementById('azure-srv-status');
-  const rawEl    = document.getElementById('azure-raw');
-
-  try {
-    const t0 = Date.now();
-    const res = await fetch(AZURE_STATUS_URL, {
-      method: 'GET',
-      // timeout: no hay fetch timeout nativo, usamos AbortController
-      signal: AbortSignal.timeout(8000)
-    });
-    const ms = Date.now() - t0;
-
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-    const data = await res.json();
-    connErr.style.display = 'none';
-
-    // Actualizar estado del servidor
-    srvStat.innerHTML = '<span class="live-dot"></span>Online';
-    srvStat.className = 'srv-status';
-    pingLbl.textContent = `${ms} ms`;
-    pingLbl.className = 'badge badge-green';
-    rawEl.textContent = JSON.stringify(data, null, 2);
-
-    // Campos principales conocidos (ajusta según tu respuesta real)
-    // Intentamos varios nombres posibles para ser robustos
-    const estado = data.status || data.estado || data.state || 'ok';
-    const proc   = data.en_proceso ?? data.processing ?? data.active ?? data.running ?? '—';
-    const done   = data.completado ?? data.completed   ?? data.done    ?? '—';
-    const errN   = data.error      ?? data.errors      ?? data.failed  ?? '—';
-
-    set('az-estado', estado);
-    set('az-proc',   proc);
-    set('az-done',   done);
-    set('az-err',    errN);
-
-    // Campos extra: cualquier otra clave del JSON que no sea las principales
-    const known = new Set(['status','estado','state','en_proceso','processing','active','running',
-                           'completado','completed','done','error','errors','failed']);
-    const extras = Object.entries(data).filter(([k]) => !known.has(k));
-    const extraRow  = document.getElementById('azure-extra-row');
-    const extraGrid = document.getElementById('azure-extra-kv');
-    if (extras.length) {
-      extraRow.style.display = 'block';
-      extraGrid.innerHTML = extras.map(([k, v]) => `
-        <div class="azure-kv">
-          <div class="azure-kv-label">${esc(k)}</div>
-          <div class="azure-kv-val">${esc(String(v))}</div>
-        </div>`).join('');
-    } else {
-      extraRow.style.display = 'none';
-    }
-
-  } catch (e) {
-    connErr.style.display = 'flex';
-    srvStat.innerHTML = '<span class="live-dot off"></span>Offline';
-    srvStat.className = 'srv-status offline';
-    pingLbl.textContent = 'Sin respuesta';
-    pingLbl.className = 'badge badge-red';
-    rawEl.textContent = 'Error: ' + e.message;
-    console.warn('[azure]', e.message);
-  }
+/* ─── NOTIFICACIONES ────────────────────────────── */
+function pushNotif(title, sub, type='done'){
+  const panel=document.getElementById('notif-panel');
+  const div=document.createElement('div');
+  div.className=`notif notif-${type}`;
+  div.innerHTML=`
+    <div class="notif-icon">${type==='done'?'✅':'🔄'}</div>
+    <div class="notif-body">
+      <div class="notif-title">${esc(title)}</div>
+      <div class="notif-sub">${esc(sub)}</div>
+    </div>
+    <button class="notif-close" onclick="this.closest('.notif').remove()">✕</button>`;
+  panel.appendChild(div);
+  requestAnimationFrame(()=>{ requestAnimationFrame(()=>div.classList.add('show')); });
+  setTimeout(()=>{ div.classList.remove('show'); setTimeout(()=>div.remove(),400); }, 6000);
 }
 
-/* ─── LOAD ALL ───────────────────────────────────────────── */
-async function loadAll() {
-  try {
-    // Llamadas en paralelo: Supabase + Azure
-    const [total, listos, enProc, errores, usrs] = await Promise.all([
-      sb('peliculas', '?select=id'),
-      sb('peliculas', '?estado=eq.completado&select=id'),
-      sb('peliculas', '?estado=eq.en_proceso&select=id,titulo'),
-      sb('peliculas', '?estado=eq.error&select=id,titulo'),
-      sb('usuarios',  '?select=id,email,plan,activo,created_at&order=created_at.desc&limit=200')
+/* ─── LOAD ALL ──────────────────────────────────── */
+async function loadAll(){
+  try{
+    const [
+      pelAll, pelProc, pelDone, pelErr,
+      epiAll, epiProc, epiDone, epiErr,
+      epiArchive, epiPend,
+      usrs
+    ] = await Promise.all([
+      sb('peliculas','?select=id'),
+      sb('peliculas','?select=id&estado=eq.en_proceso'),
+      sb('peliculas','?select=id&estado=eq.completado'),
+      sb('peliculas','?select=id&estado=eq.error'),
+      sb('episodios','?select=id'),
+      sb('episodios','?select=id,titulo,temporada,episodio&estado=eq.en_proceso'),
+      sb('episodios','?select=id,titulo,temporada,episodio&estado=eq.completado&order=id.desc&limit=6'),
+      sb('episodios','?select=id,titulo,temporada,episodio&estado=eq.error'),
+      sb('episodios','?select=id&archive_url=not.is.null'),
+      sb('episodios','?select=id&estado=eq.pendiente'),
+      sb('usuarios','?select=id,nombre,correo,activo,fecha_expiracion,codigo_acceso&order=fecha_expiracion.desc&limit=300')
     ]);
 
-    // Azure en paralelo también (no bloqueante)
     loadAzureStatus();
 
-    const totalN = arr(total).length, listosN = arr(listos).length,
-          procN  = arr(enProc).length, errN = arr(errores).length,
-          usrN   = arr(usrs).length;
+    const pelTotalN=arr(pelAll).length, pelProcN=arr(pelProc).length,
+          pelDoneN=arr(pelDone).length, pelErrN=arr(pelErr).length;
+    const epiTotalN=arr(epiAll).length, epiProcN=arr(epiProc).length,
+          epiDoneN=arr(epiDone).length, epiErrN=arr(epiErr).length,
+          epiArchiveN=arr(epiArchive).length, epiPendN=arr(epiPend).length;
+    const usrN=arr(usrs).length;
 
-    set('stat-total',    totalN);
-    set('stat-proc',     procN);
-    set('stat-listos',   listosN);
-    set('stat-errores',  errN);
+    /* ── Stats ── */
+    set('stat-pel-total',pelTotalN); set('stat-pel-proc',pelProcN);
+    set('stat-pel-done', pelDoneN);  set('stat-pel-err', pelErrN);
+    set('stat-epi-total',epiTotalN); set('stat-epi-proc',epiProcN);
+    set('stat-epi-done', epiDoneN);  set('stat-epi-err', epiErrN);
     set('stat-usuarios', usrN);
-    set('badge-proc',    procN);
+    set('badge-proc', epiProcN);
 
-    // Live dot
-    const now = new Date();
-    document.getElementById('live-dot').className = 'live-dot';
-    set('live-text', 'En vivo · ' + now.toLocaleTimeString('es-PE'));
-    set('last-sync',  now.toLocaleTimeString('es-PE'));
+    /* ── Pendientes HERO ── */
+    set('hero-pendientes', epiPendN.toLocaleString('es-PE'));
+    const pctDone = epiTotalN>0?(epiDoneN/epiTotalN*100).toFixed(2):0;
+    set('hero-pendientes-sub', `${pctDone}% del catálogo completado · ${epiTotalN.toLocaleString('es-PE')} episodios totales`);
+    // ETA: si hay episodios completados y conocemos velocidad histórica (completados en sesión)
+    // Estimamos: promedio 1 episodio cada ~5 min (ajusta según tu tractor real)
+    const minPerEpi = 5;
+    const totalMin  = epiPendN * minPerEpi;
+    set('hero-eta', formatETA(totalMin));
 
-    // Progreso
-    const pct = totalN > 0 ? (listosN / totalN * 100).toFixed(1) : 0;
-    document.getElementById('main-progress').style.width = pct + '%';
-    set('progress-pct',    pct + '%');
-    set('progress-counts', `${listosN} / ${totalN}`);
-    set('progress-text',   `${listosN} completadas · ${procN} en proceso · ${errN} errores · ${totalN - listosN - procN - errN} pendientes`);
+    /* ── Live ── */
+    const now=new Date();
+    document.getElementById('live-dot').className='live-dot';
+    set('live-text','En vivo · '+now.toLocaleTimeString('es-PE'));
+    set('last-sync', now.toLocaleTimeString('es-PE'));
 
-    // Tractor counters (Supabase)
-    set('spd-proc', procN);
-    set('spd-done', listosN);
-    set('spd-err',  errN);
+    /* ── Barras de progreso ── */
+    const pctComp = epiTotalN>0?(epiDoneN/epiTotalN*100).toFixed(1):0;
+    document.getElementById('bar-completado').style.width=pctComp+'%';
+    set('pct-completado', pctComp+'%');
+    set('cnt-completado', `${epiDoneN.toLocaleString()} / ${epiTotalN.toLocaleString()}`);
+    set('txt-completado', `${epiPendN.toLocaleString()} pendientes · ${epiErrN} errores`);
 
-    // Notificar nuevas descargas
-    const newIds = new Set(arr(enProc).map(p => p.id));
-    arr(enProc).forEach(p => { if (!prevProcIds.has(p.id)) toast('Iniciando: ' + p.titulo, true); });
-    prevProcIds = newIds;
+    const pctArc = epiTotalN>0?(epiArchiveN/epiTotalN*100).toFixed(1):0;
+    document.getElementById('bar-archive').style.width=pctArc+'%';
+    set('pct-archive', pctArc+'%');
+    set('cnt-archive', `${epiArchiveN.toLocaleString()} / ${epiTotalN.toLocaleString()}`);
+    set('txt-archive', `episodios con archive_url · ${epiDoneN-epiArchiveN>0?`${epiDoneN-epiArchiveN} completados sin subir aún`:''}`);
 
-    // Listas
-    renderListaProc(arr(enProc).slice(0, 6));
-    renderListaErr(arr(errores).slice(0, 6));
-    renderTractorActivas(arr(enProc));
-    renderTractorErrores(arr(errores));
+    /* ── Tractor counters ── */
+    set('spd-proc',    epiProcN);
+    set('spd-done',    epiDoneN);
+    set('spd-err',     epiErrN);
+    set('spd-archive', epiArchiveN);
 
-    // Usuarios
-    allUsuarios = arr(usrs);
+    /* ── NOTIFICACIONES: detectar cambios ── */
+    if(!firstLoad){
+      // Episodios que pasaron de en_proceso a completado
+      const newProcIds=new Set(arr(epiProc).map(e=>e.id));
+      const newDoneIds=new Set(arr(epiDone).map(e=>e.id));
+
+      // Los que estaban en proceso y ya no están → probablemente completados
+      prevProcIds.forEach(id=>{
+        if(!newProcIds.has(id) && newDoneIds.has(id)){
+          const ep=arr(epiDone).find(e=>e.id===id);
+          if(ep) pushNotif(
+            `✅ Completado: ${ep.titulo||'Episodio'}`,
+            `T${ep.temporada} · E${ep.episodio} · Pasó de en_proceso a completado`,
+            'done'
+          );
+        }
+      });
+
+      // Nuevos en proceso
+      arr(epiProc).forEach(e=>{
+        if(!prevProcIds.has(e.id)) pushNotif(
+          `🔄 Iniciando: ${e.titulo||'Episodio'}`,
+          `T${e.temporada} · E${e.episodio} · Comenzó a descargarse`,
+          'proc'
+        );
+      });
+    }
+    firstLoad=false;
+    prevProcIds=new Set(arr(epiProc).map(e=>e.id));
+    prevDoneIds=new Set(arr(epiDone).map(e=>e.id));
+
+    /* ── Listas dashboard ── */
+    renderListaProc(arr(epiProc));
+    renderListaRecien(arr(epiDone));
+    renderListaErr(arr(epiErr).slice(0,4));
+    renderTractorActivas(arr(epiProc));
+    renderTractorErrores(arr(epiErr));
+
+    /* ── Usuarios ── */
+    allUsuarios=arr(usrs);
     renderUsuarios(allUsuarios);
-    set('usuarios-count', `${usrN} usuarios registrados`);
+    set('usuarios-count',`${usrN} usuarios registrados`);
 
     loadPeliculas();
     loadSeries();
-
-  } catch (e) { console.error('[loadAll]', e); }
+    loadEpisodios();
+  }catch(e){ console.error('[loadAll]',e); }
 }
 
-/* ─── PELÍCULAS ──────────────────────────────────────────── */
-async function loadPeliculas() {
-  const data = await sb('peliculas', '?select=titulo,estado&order=titulo.asc&limit=1000');
-  allPeliculas = arr(data);
-  set('badge-pel', allPeliculas.length);
+/* ─── ETA FORMATTER ─────────────────────────────── */
+function formatETA(totalMin){
+  if(!totalMin||isNaN(totalMin)) return '—';
+  if(totalMin<60) return `~${Math.round(totalMin)} min`;
+  const h=Math.floor(totalMin/60), m=Math.round(totalMin%60);
+  if(h<24) return `~${h}h ${m}m`;
+  const d=Math.floor(h/24), hr=h%24;
+  return `~${d}d ${hr}h`;
+}
+
+/* ─── PELÍCULAS ─────────────────────────────────── */
+async function loadPeliculas(){
+  const data=await sb('peliculas','?select=titulo,genero,estado&order=titulo.asc&limit=2000');
+  allPeliculas=arr(data);
+  set('badge-pel',allPeliculas.length);
   filterPeliculas();
 }
-function filterPeliculas() {
-  const q  = (document.getElementById('search-pel').value || '').toLowerCase();
-  const st = document.getElementById('filter-estado').value;
-  pelFiltered = allPeliculas.filter(p => {
-    const s = p.estado || 'pendiente';
-    return p.titulo.toLowerCase().includes(q) && (!st || s === st);
-  });
-  pelPage = 1; renderPeliculas();
+function filterPeliculas(){
+  const q=(document.getElementById('search-pel').value||'').toLowerCase();
+  const st=document.getElementById('filter-estado-pel').value;
+  pelFiltered=allPeliculas.filter(p=>(p.titulo||'').toLowerCase().includes(q)&&(!st||(p.estado||'pendiente')===st));
+  pelPage=1; renderPeliculas();
 }
-function renderPeliculas() {
-  const total = pelFiltered.length, start = (pelPage - 1) * PER_PAGE,
-        slice = pelFiltered.slice(start, start + PER_PAGE);
-  set('peliculas-count', `${total} películas`);
-  if (!slice.length) {
-    document.getElementById('tbody-peliculas').innerHTML = '<tr><td colspan="3"><div class="empty"><div class="icon">🎬</div><p>Sin resultados</p></div></td></tr>';
-    document.getElementById('peliculas-pagination').innerHTML = ''; return;
-  }
-  document.getElementById('tbody-peliculas').innerHTML = slice.map((p, i) => `
-    <tr>
-      <td style="color:var(--muted);font-family:var(--mono);font-size:12px">${start + i + 1}</td>
-      <td>${esc(p.titulo)}</td>
-      <td>${badgeEstado(p.estado)}</td>
-    </tr>`).join('');
-  const pages = Math.ceil(total / PER_PAGE);
-  document.getElementById('peliculas-pagination').innerHTML = pages > 1 ? `
-    <span>Página ${pelPage} de ${pages} · ${total} resultados</span>
-    <div style="display:flex;gap:6px">
-      <button class="btn btn-sm" onclick="cambiarPag(-1)" ${pelPage === 1 ? 'disabled' : ''}>← Anterior</button>
-      <button class="btn btn-sm" onclick="cambiarPag(1)"  ${pelPage === pages ? 'disabled' : ''}>Siguiente →</button>
-    </div>` : `<span>${total} resultados</span>`;
+function renderPeliculas(){
+  const total=pelFiltered.length,start=(pelPage-1)*PER_PAGE,slice=pelFiltered.slice(start,start+PER_PAGE);
+  set('peliculas-count',`${total.toLocaleString()} películas`);
+  const tbody=document.getElementById('tbody-peliculas');
+  if(!slice.length){ tbody.innerHTML='<tr><td colspan="4"><div class="empty"><div class="icon">🎬</div><p>Sin resultados</p></div></td></tr>';document.getElementById('peliculas-pagination').innerHTML='';return; }
+  tbody.innerHTML=slice.map((p,i)=>`<tr><td style="color:var(--muted);font-family:var(--mono);font-size:12px">${start+i+1}</td><td>${esc(p.titulo)}</td><td style="color:var(--muted);font-size:12px">${esc(p.genero||'—')}</td><td>${badgeEstado(p.estado)}</td></tr>`).join('');
+  renderPag('peliculas-pagination',pelPage,total,'cambiarPelPag');
 }
-function cambiarPag(d) { pelPage += d; renderPeliculas(); }
+function cambiarPelPag(d){ pelPage+=d; renderPeliculas(); }
 
-/* ─── SERIES ─────────────────────────────────────────────── */
-async function loadSeries() {
-  const data = await sb('series', '?select=titulo,estado&order=titulo.asc&limit=500');
-  allSeries = arr(data); filterSeries();
+/* ─── SERIES ────────────────────────────────────── */
+async function loadSeries(){
+  const data=await sb('series','?select=titulo,genero,estado&order=titulo.asc&limit=1000');
+  allSeries=arr(data);
+  set('badge-ser',allSeries.length);
+  filterSeries();
 }
-function filterSeries() {
-  const q  = (document.getElementById('search-ser').value || '').toLowerCase();
-  const st = document.getElementById('filter-estado-ser').value;
-  const list = allSeries.filter(s => {
-    const e = s.estado || 'pendiente';
-    return s.titulo.toLowerCase().includes(q) && (!st || e === st);
-  });
-  if (!list.length) {
-    document.getElementById('tbody-series').innerHTML = '<tr><td colspan="3"><div class="empty"><div class="icon">📺</div><p>Sin series</p></div></td></tr>'; return;
-  }
-  document.getElementById('tbody-series').innerHTML = list.map((s, i) => `
-    <tr>
-      <td style="color:var(--muted);font-family:var(--mono);font-size:12px">${i + 1}</td>
-      <td>${esc(s.titulo)}</td>
-      <td>${badgeEstado(s.estado)}</td>
-    </tr>`).join('');
+function filterSeries(){
+  const q=(document.getElementById('search-ser').value||'').toLowerCase();
+  const st=document.getElementById('filter-estado-ser').value;
+  serFiltered=allSeries.filter(s=>(s.titulo||'').toLowerCase().includes(q)&&(!st||(s.estado||'pendiente')===st));
+  serPage=1; renderSeries();
 }
+function renderSeries(){
+  const total=serFiltered.length,start=(serPage-1)*PER_PAGE,slice=serFiltered.slice(start,start+PER_PAGE);
+  set('series-count',`${total.toLocaleString()} series`);
+  const tbody=document.getElementById('tbody-series');
+  if(!slice.length){ tbody.innerHTML='<tr><td colspan="4"><div class="empty"><div class="icon">📺</div><p>Sin resultados</p></div></td></tr>';document.getElementById('series-pagination').innerHTML='';return; }
+  tbody.innerHTML=slice.map((s,i)=>`<tr><td style="color:var(--muted);font-family:var(--mono);font-size:12px">${start+i+1}</td><td>${esc(s.titulo)}</td><td style="color:var(--muted);font-size:12px">${esc(s.genero||'—')}</td><td>${badgeEstado(s.estado)}</td></tr>`).join('');
+  renderPag('series-pagination',serPage,total,'cambiarSerPag');
+}
+function cambiarSerPag(d){ serPage+=d; renderSeries(); }
 
-/* ─── USUARIOS ───────────────────────────────────────────── */
-function renderUsuarios(list) {
-  if (!list.length) {
-    document.getElementById('tbody-usuarios').innerHTML = '<tr><td colspan="5"><div class="empty"><div class="icon">👥</div><p>Sin usuarios</p></div></td></tr>'; return;
-  }
-  document.getElementById('tbody-usuarios').innerHTML = list.map((u, i) => `
+/* ─── EPISODIOS ─────────────────────────────────── */
+async function loadEpisodios(){
+  const data=await sb('episodios','?select=titulo,temporada,episodio,estado,archive_url&order=temporada.asc,episodio.asc&limit=5000');
+  allEpisodios=arr(data);
+  set('badge-epi',allEpisodios.length);
+  filterEpisodios();
+}
+function filterEpisodios(){
+  const q=(document.getElementById('search-epi').value||'').toLowerCase();
+  const st=document.getElementById('filter-estado-epi').value;
+  epiFiltered=allEpisodios.filter(e=>(e.titulo||'').toLowerCase().includes(q)&&(!st||(e.estado||'pendiente')===st));
+  epiPage=1; renderEpisodios();
+}
+function renderEpisodios(){
+  const total=epiFiltered.length,start=(epiPage-1)*PER_PAGE,slice=epiFiltered.slice(start,start+PER_PAGE);
+  set('episodios-count',`${total.toLocaleString()} episodios`);
+  const tbody=document.getElementById('tbody-episodios');
+  if(!slice.length){ tbody.innerHTML='<tr><td colspan="6"><div class="empty"><div class="icon">🎞️</div><p>Sin resultados</p></div></td></tr>';document.getElementById('episodios-pagination').innerHTML='';return; }
+  tbody.innerHTML=slice.map((e,i)=>`
     <tr>
-      <td style="color:var(--muted);font-family:var(--mono);font-size:12px">${i + 1}</td>
-      <td>${esc(u.email || '—')}</td>
-      <td>${esc(u.plan  || '—')}</td>
-      <td>${u.activo !== undefined
-        ? `<span class="badge ${u.activo ? 'badge-green' : 'badge-red'}">${u.activo ? 'Activo' : 'Inactivo'}</span>`
-        : '<span class="badge badge-gray">N/A</span>'}</td>
-      <td style="font-size:12px;color:var(--muted)">${u.created_at ? new Date(u.created_at).toLocaleDateString('es-PE') : '—'}</td>
+      <td style="color:var(--muted);font-family:var(--mono);font-size:12px">${start+i+1}</td>
+      <td>${esc(e.titulo||'—')}</td>
+      <td style="text-align:center;font-family:var(--mono);font-size:12px">${e.temporada??'—'}</td>
+      <td style="text-align:center;font-family:var(--mono);font-size:12px">${e.episodio??'—'}</td>
+      <td>${e.archive_url?'<span class="badge badge-teal">✓ Archive</span>':'<span class="badge badge-gray">—</span>'}</td>
+      <td>${badgeEstado(e.estado)}</td>
     </tr>`).join('');
+  renderPag('episodios-pagination',epiPage,total,'cambiarEpiPag');
 }
-function filterUsuarios() {
-  const q = (document.getElementById('search-usr').value || '').toLowerCase();
-  renderUsuarios(allUsuarios.filter(u => (u.email || '').toLowerCase().includes(q)));
-}
+function cambiarEpiPag(d){ epiPage+=d; renderEpisodios(); }
 
-/* ─── RENDER HELPERS ─────────────────────────────────────── */
-function renderListaProc(list) {
-  const el = document.getElementById('list-proceso');
-  if (!list.length) { el.innerHTML = '<div class="empty"><div class="icon">😴</div><p>Tractor inactivo</p></div>'; return; }
-  el.innerHTML = list.map(p => `
+/* ─── USUARIOS ──────────────────────────────────── */
+function renderUsuarios(list){
+  const tbody=document.getElementById('tbody-usuarios');
+  if(!list.length){ tbody.innerHTML='<tr><td colspan="6"><div class="empty"><div class="icon">👥</div><p>Sin usuarios</p></div></td></tr>';return; }
+  tbody.innerHTML=list.map((u,i)=>`
+    <tr>
+      <td style="color:var(--muted);font-family:var(--mono);font-size:12px">${i+1}</td>
+      <td>${esc(u.nombre||'—')}</td>
+      <td>${esc(u.correo||'—')}</td>
+      <td>${u.activo!==undefined?`<span class="badge ${u.activo?'badge-green':'badge-red'}">${u.activo?'Activo':'Inactivo'}</span>`:'<span class="badge badge-gray">N/A</span>'}</td>
+      <td style="font-size:12px;color:${expirado(u.fecha_expiracion)?'var(--err)':'var(--muted)'}">
+        ${u.fecha_expiracion?new Date(u.fecha_expiracion).toLocaleDateString('es-PE'):'—'}
+        ${expirado(u.fecha_expiracion)?' <span class="badge badge-red" style="margin-left:4px;font-size:10px">Expirado</span>':''}
+      </td>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--muted)">${esc(u.codigo_acceso||'—')}</td>
+    </tr>`).join('');
+  set('usuarios-count',`${list.length} usuarios`);
+}
+function filterUsuarios(){
+  const q=(document.getElementById('search-usr').value||'').toLowerCase();
+  const activo=document.getElementById('filter-activo').value;
+  renderUsuarios(allUsuarios.filter(u=>{
+    const mQ=(u.correo||'').toLowerCase().includes(q)||(u.nombre||'').toLowerCase().includes(q);
+    const mA=!activo||String(u.activo)===activo;
+    return mQ&&mA;
+  }));
+}
+function expirado(f){ return f&&new Date(f)<new Date(); }
+
+/* ─── RENDER HELPERS ────────────────────────────── */
+function renderListaProc(list){
+  const el=document.getElementById('list-proceso');
+  if(!list.length){ el.innerHTML='<div class="empty"><div class="icon">😴</div><p>Tractor inactivo</p></div>';return; }
+  el.innerHTML=list.map(e=>`
     <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
       <span style="font-size:14px">🔄</span>
-      <span style="font-size:12px;color:#bbb;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.titulo)}</span>
+      <span style="font-size:12px;color:#bbb;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(e.titulo||'Episodio')} <span style="color:var(--muted)">T${e.temporada}·E${e.episodio}</span></span>
       <span class="badge badge-proc">Activo</span>
-    </div>`).join('') + (list.length === 6 ? '<p style="font-size:11px;color:var(--muted);padding-top:8px">+ más en Tractor</p>' : '');
+    </div>`).join('');
 }
-function renderListaErr(list) {
-  const el = document.getElementById('list-errores');
-  if (!list.length) { el.innerHTML = '<div class="empty"><div class="icon">✅</div><p>Sin errores</p></div>'; return; }
-  el.innerHTML = list.map(p => `
+function renderListaRecien(list){
+  const el=document.getElementById('list-recien');
+  if(!list.length){ el.innerHTML='<div class="empty"><div class="icon">⏳</div><p>Aún no hay completados</p></div>';return; }
+  el.innerHTML=list.map(e=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
+      <span style="font-size:14px">✅</span>
+      <span style="font-size:12px;color:#bbb;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(e.titulo||'Episodio')} <span style="color:var(--muted)">T${e.temporada}·E${e.episodio}</span></span>
+      <span class="badge badge-green">Listo</span>
+    </div>`).join('');
+}
+function renderListaErr(list){
+  const el=document.getElementById('list-errores');
+  if(!list.length){ el.innerHTML='<div class="empty"><div class="icon">✅</div><p>Sin errores</p></div>';return; }
+  el.innerHTML=list.map(e=>`
     <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border)">
       <span style="color:var(--err);font-size:14px">✕</span>
-      <span style="font-size:12px;color:#bbb;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(p.titulo)}</span>
-    </div>`).join('') + (list.length === 6 ? '<p style="font-size:11px;color:var(--muted);padding-top:8px">+ más en Tractor</p>' : '');
+      <span style="font-size:12px;color:#bbb;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(e.titulo||'Episodio')} <span style="color:var(--muted)">T${e.temporada}·E${e.episodio}</span></span>
+    </div>`).join('');
 }
-function renderTractorActivas(list) {
-  const el = document.getElementById('tractor-activas');
-  if (!list.length) { el.innerHTML = '<div class="empty"><div class="icon">😴</div><p>El tractor no está descargando nada ahora mismo</p></div>'; return; }
-  el.innerHTML = '<div class="activity-feed">' + list.map(p => `
+function renderTractorActivas(list){
+  const el=document.getElementById('tractor-activas');
+  if(!list.length){ el.innerHTML='<div class="empty"><div class="icon">😴</div><p>El tractor no está descargando nada</p></div>';return; }
+  el.innerHTML='<div class="activity-feed">'+list.map(e=>`
     <div class="activity-item new-item">
       <div class="act-icon">🔄</div>
       <div class="act-body">
-        <div class="act-title">${esc(p.titulo)}</div>
-        <div class="act-sub">en_proceso · Azure 20.213.8.19</div>
+        <div class="act-title">${esc(e.titulo||'Episodio')}</div>
+        <div class="act-sub">T${e.temporada} · E${e.episodio} · Azure 20.213.8.19</div>
       </div>
       <span class="badge badge-proc">Activo</span>
-    </div>`).join('') + '</div>';
+    </div>`).join('')+'</div>';
 }
-function renderTractorErrores(list) {
-  const el = document.getElementById('tractor-errores');
-  if (!list.length) { el.innerHTML = '<div class="empty"><div class="icon">✅</div><p>Sin errores registrados</p></div>'; return; }
-  el.innerHTML = '<div class="activity-feed">' + list.map(p => `
+function renderTractorErrores(list){
+  const el=document.getElementById('tractor-errores');
+  if(!list.length){ el.innerHTML='<div class="empty"><div class="icon">✅</div><p>Sin errores registrados</p></div>';return; }
+  el.innerHTML='<div class="activity-feed">'+list.map(e=>`
     <div class="activity-item">
       <div class="act-icon">❌</div>
       <div class="act-body">
-        <div class="act-title">${esc(p.titulo)}</div>
-        <div class="act-sub">Link caído o archivo no encontrado (404)</div>
+        <div class="act-title">${esc(e.titulo||'Episodio')}</div>
+        <div class="act-sub">T${e.temporada} · E${e.episodio} · Error de descarga</div>
       </div>
       <span class="badge badge-red">Error</span>
-    </div>`).join('') + '</div>';
+    </div>`).join('')+'</div>';
 }
 
-/* ─── UTILS ──────────────────────────────────────────────── */
-function badgeEstado(estado) {
-  const s = estado || 'pendiente';
-  const map = {
-    completado: { cls: 'badge-green', label: 'Completado' },
-    en_proceso: { cls: 'badge-proc',  label: 'En proceso' },
-    pendiente:  { cls: 'badge-amber', label: 'Pendiente'  },
-    error:      { cls: 'badge-red',   label: 'Error'      }
+function renderPag(elId,page,total,fn){
+  const pages=Math.ceil(total/PER_PAGE);
+  const el=document.getElementById(elId); if(!el) return;
+  el.innerHTML=pages>1
+    ?`<span>Página ${page} de ${pages} · ${total.toLocaleString()} resultados</span>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-sm" onclick="${fn}(-1)" ${page===1?'disabled':''}>← Anterior</button>
+        <button class="btn btn-sm" onclick="${fn}(1)"  ${page===pages?'disabled':''}>Siguiente →</button>
+      </div>`
+    :`<span>${total.toLocaleString()} resultados</span>`;
+}
+
+/* ─── UTILS ─────────────────────────────────────── */
+function badgeEstado(estado){
+  const s=estado||'pendiente';
+  const map={
+    completado:{cls:'badge-green',label:'Completado'},
+    en_proceso:{cls:'badge-proc', label:'En proceso'},
+    pendiente: {cls:'badge-amber',label:'Pendiente'},
+    error:     {cls:'badge-red',  label:'Error'}
   };
-  const { cls, label } = map[s] || { cls: 'badge-gray', label: s };
+  const {cls,label}=map[s]||{cls:'badge-gray',label:s};
   return `<span class="badge ${cls}">${label}</span>`;
 }
-function arr(v)  { return Array.isArray(v) ? v : []; }
-function set(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
-function esc(s)  { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function toast(msg, ok = true) {
-  const el = document.getElementById('toast');
-  el.textContent = (ok ? '✓ ' : '✕ ') + msg;
-  el.style.borderLeftColor = ok ? 'var(--green)' : 'var(--err)';
+function arr(v){ return Array.isArray(v)?v:[]; }
+function set(id,val){ const el=document.getElementById(id); if(el) el.textContent=val; }
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function toast(msg,ok=true){
+  const el=document.getElementById('toast');
+  el.textContent=(ok?'✓ ':'✕ ')+msg;
+  el.style.borderLeftColor=ok?'var(--green)':'var(--err)';
   el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 3500);
+  setTimeout(()=>el.classList.remove('show'),3500);
 }
 </script>
 </body>
